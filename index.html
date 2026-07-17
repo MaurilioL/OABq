@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#EDEFEA">
+<meta name="color-scheme" content="light">
+<title>Banca. OAB 1ª fase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap">
+<style>
+  :root{--bg:#EDEFEA;--surface:#FBFCF9;--surface-2:#F3F5F0;--ink:#182029;--ink-soft:#55606B;
+    --line:#DBDFD6;--line-strong:#C6CCBF;--brand:#1F7A54;--brand-deep:#155C3E;
+    --acerto:#1F7A54;--acerto-soft:#E3F0E9;--erro:#A93636;--erro-soft:#F7E7E4;
+    --foco:#8A5B0F;--foco-soft:#F6ECD7;--azul:#27437F;--azul-soft:#EEF3FF;--azul-line:#D9E3FB;
+    --roxo:#553486;--roxo-soft:#F2EEFB;--roxo-line:#E2D9F5;
+    --shadow:0 1px 2px rgba(24,32,41,.04),0 8px 24px rgba(24,32,41,.06);--radius:14px}
+  *{box-sizing:border-box}html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:940px;margin:0 auto;padding:22px 18px 90px}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .skip{position:absolute;left:-999px;top:8px;z-index:300;background:var(--surface);border:1px solid var(--brand);color:var(--brand-deep);padding:9px 14px;border-radius:9px;font-weight:600;font-size:13.5px;text-decoration:none}
+  .skip:focus{left:12px}
+  :focus-visible{outline:2.5px solid var(--azul);outline-offset:2px;border-radius:4px}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+  .brand h1{font-family:'Fraunces',serif;font-weight:600;font-size:25px;letter-spacing:-.01em;margin:0;line-height:1.05}
+  .brand .sub{color:var(--ink-soft);font-size:12.5px}.brand .mark{color:var(--brand)}
+  .rightbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .syncpill{font-size:11.5px;font-weight:500;padding:4px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink-soft);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  .syncpill .dot{width:7px;height:7px;border-radius:50%;background:var(--ink-soft);flex:none}
+  .syncpill.ok{background:var(--acerto-soft);border-color:#bfe0d0;color:var(--brand-deep)}.syncpill.ok .dot{background:var(--brand)}
+  .syncpill.busy{color:var(--azul);background:var(--azul-soft);border-color:var(--azul-line)}.syncpill.busy .dot{background:var(--azul);animation:pulse 1s infinite}
+  .syncpill.err{background:var(--erro-soft);border-color:#eecac6;color:var(--erro)}.syncpill.err .dot{background:var(--erro)}
+  @keyframes pulse{50%{opacity:.3}}
+  nav.tabs{display:flex;gap:4px;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px}
+  nav.tabs button{border:0;background:transparent;color:var(--ink-soft);font:inherit;font-weight:500;font-size:13.5px;padding:7px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:.15s}
+  nav.tabs button:hover{color:var(--ink)}
+  nav.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}.pad{padding:20px}
+  .btn{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);padding:8px 14px;border-radius:9px;cursor:pointer;font:inherit;font-size:13.5px;font-weight:500;transition:.15s}
+  .btn:hover:not(:disabled){border-color:var(--ink-soft)}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.primary:hover:not(:disabled){background:var(--brand-deep)}
+  .btn.danger{background:var(--erro);border-color:var(--erro);color:#fff}
+  .btn.danger:hover:not(:disabled){background:#8a2b2b;border-color:#8a2b2b}
+  .btn.big{padding:12px 20px;font-size:15px}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  input[type=text],input[type=email],input[type=password],select{background:var(--surface);border:1px solid var(--line-strong);border-radius:9px;padding:9px 11px;font:inherit;font-size:13.5px;color:var(--ink);width:100%;transition:border-color .13s}
+  input[type=text]:hover,input[type=email]:hover,input[type=password]:hover,select:hover{border-color:var(--ink-soft)}
+  input::placeholder{color:var(--ink-soft);opacity:.65}
+  input:disabled,select:disabled{background:var(--surface-2);color:var(--ink-soft);cursor:not-allowed}
+  select{appearance:none;-webkit-appearance:none;padding-right:32px;cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%2355606B' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 11px center}
+  fieldset{border:0;padding:0;margin:0 0 20px}
+  legend{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);padding:0;margin-bottom:9px}
+  .chips{display:flex;gap:7px;flex-wrap:wrap}
+  .chip{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-soft);padding:6px 12px;border-radius:999px;cursor:pointer;font:inherit;font-size:13px;font-weight:500;transition:.12s}
+  .chip:hover{border-color:var(--ink-soft);color:var(--ink)}
+  .chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
+  .chip.sm{padding:4px 10px;font-size:12.5px}
+  .chip.st[aria-pressed="true"]{background:var(--azul);border-color:var(--azul)}
+  .count-box{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .count-box .n{font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:var(--brand)}
+  .count-box .bd{font-size:12.5px;color:var(--ink-soft)}
+  .presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .preset{border:1px solid var(--azul-line);background:var(--azul-soft);color:var(--azul);padding:8px 13px;border-radius:10px;cursor:pointer;font:inherit;font-size:13px;font-weight:500}
+  .preset:hover{border-color:var(--azul)}
+  .saved{display:flex;gap:8px;flex-wrap:wrap}
+  .saved .item{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line-strong);background:var(--surface);border-radius:10px;padding:4px 4px 4px 12px;font-size:13px}
+  .saved .item .go{border:0;background:none;font:inherit;font-size:13px;color:var(--ink);cursor:pointer;padding:4px 2px}
+  .saved .item .x{cursor:pointer;color:var(--ink-soft);border:0;background:none;font-size:15px;line-height:1;padding:4px 7px;border-radius:6px}
+  .saved .item .x:hover{background:var(--erro-soft);color:var(--erro)}
+  .runbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .prog{height:6px;background:var(--surface-2);border:1px solid var(--line);border-radius:5px;overflow:hidden;flex:1;min-width:120px}
+  .prog .f{height:100%;background:var(--brand);transition:width .3s}
+  .timer{font-variant-numeric:tabular-nums;font-size:13.5px;color:var(--ink-soft);font-weight:500}
+  .meta-row{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .qtag{display:inline-flex;align-items:center;gap:7px;font-size:12px;flex-wrap:wrap}
+  .metabtns{display:flex;gap:6px;flex:none}
+  .pill{display:inline-block;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:500;color:var(--ink)}
+  .pill.d{background:var(--azul-soft);border-color:var(--azul-line);color:var(--azul)}
+  .pill.t{background:var(--roxo-soft);border-color:var(--roxo-line);color:var(--roxo)}
+  .iconbtn{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-soft);border-radius:8px;min-width:34px;height:32px;cursor:pointer;font-size:14px;line-height:1;padding:0 7px}
+  .iconbtn:hover{border-color:var(--ink-soft);color:var(--ink)}
+  .iconbtn[aria-pressed="true"]{color:var(--foco);border-color:#e0c896;background:var(--foco-soft)}
+  .enunciado{font-size:15.5px;line-height:1.6;white-space:pre-wrap;margin:2px 0 16px}
+  .alts{display:flex;flex-direction:column;gap:8px}
+  .alt{display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:12px 13px;cursor:pointer;font:inherit;font-size:14.5px;line-height:1.5;color:var(--ink);transition:.13s}
+  .alt:hover:not(.locked){border-color:var(--line-strong);background:var(--surface-2)}
+  .alt .key{flex:none;width:24px;height:24px;border-radius:7px;border:1px solid var(--line-strong);display:grid;place-items:center;font-weight:600;font-size:12.5px;color:var(--ink-soft)}
+  .alt[aria-pressed="true"]{border-color:var(--brand);background:var(--acerto-soft)}
+  .alt[aria-pressed="true"] .key{border-color:var(--brand);background:var(--brand);color:#fff}
+  .alt.locked{cursor:default}
+  .alt.correct{border-color:var(--acerto);background:var(--acerto-soft)}.alt.correct .key{border-color:var(--acerto);background:var(--acerto);color:#fff}
+  .alt.wrong{border-color:var(--erro);background:var(--erro-soft)}.alt.wrong .key{border-color:var(--erro);background:var(--erro);color:#fff}
+  /* veredito: relance de 2 segundos, por isso colorido e compacto */
+  .verdict{margin-top:16px;border-radius:11px;padding:11px 14px;font-size:14px;border:1px solid;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .verdict.ok{background:var(--acerto-soft);border-color:#bfe0d0;color:var(--brand-deep)}
+  .verdict.no{background:var(--erro-soft);border-color:#eecac6;color:var(--erro)}
+  .verdict .g{margin-left:auto;font-size:13px;opacity:.9;font-variant-numeric:tabular-nums}
+  /* agendamento: faixa fina entre o veredito e a leitura */
+  .sched{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;padding:9px 12px;border:1px dashed var(--line-strong);border-radius:10px}
+  .sched .lb{font-size:12.5px;color:var(--ink-soft)}
+  /* comentário: leitura de 2 minutos, por isso superfície calma */
+  .cmt{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)}
+  .cmt-head{display:flex;align-items:center;gap:9px;margin-bottom:11px;flex-wrap:wrap}
+  .cmt-head h4{margin:0;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+  .cmt-head .src{margin-left:auto;font-size:11.5px;color:var(--ink-soft);opacity:.75;white-space:nowrap}
+  .cmt-badge{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-weight:600;font-size:12px;background:var(--erro);color:#fff;flex:none}
+  .cmt p{margin:0 0 10px;font-size:14.5px;line-height:1.65}
+  .cmt p:last-child{margin-bottom:0}
+  .cmt .rev{border-left:3px solid var(--brand);background:var(--acerto-soft);padding:9px 12px;border-radius:0 8px 8px 0;font-size:13.5px;margin:12px 0 0;line-height:1.55}
+  .stats{margin-top:12px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stats h4{margin:0 0 11px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+  .stats .rowd{display:flex;align-items:center;gap:9px;margin-bottom:6px;font-size:13px}
+  .stats .rowd:last-child{margin-bottom:0}
+  .stats .k{width:20px;height:20px;border-radius:5px;display:grid;place-items:center;font-weight:600;font-size:11px;border:1px solid var(--line-strong);color:var(--ink-soft);flex:none}
+  .stats .k.cert{background:var(--acerto);border-color:var(--acerto);color:#fff}
+  .stats .k.sua{background:var(--erro);border-color:var(--erro);color:#fff}
+  .stats .bar{flex:1;height:8px;background:var(--surface);border:1px solid var(--line);border-radius:5px;overflow:hidden}
+  .stats .bar i{display:block;height:100%;background:var(--line-strong)}
+  .stats .bar i.cert{background:var(--acerto)}
+  .stats .bar i.sua{background:var(--erro)}
+  .stats .pc{width:38px;text-align:right;color:var(--ink-soft);font-variant-numeric:tabular-nums;font-size:12.5px}
+  .stats .sum{margin:0 0 11px;font-size:13px;color:var(--ink-soft)}
+  .stats .seg{display:inline-flex;gap:3px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px;margin-left:auto}
+  .stats .seg button{border:0;background:transparent;color:var(--ink-soft);font:inherit;font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .stats .seg button[aria-pressed="true"]{background:var(--brand);color:#fff}
+  .stats .top{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+  .stats .top h4{margin:0}
+  .stats .como{margin:11px 0 0;font-size:12px;color:var(--ink-soft);line-height:1.5;border-top:1px solid var(--line);padding-top:9px}
+  .stats .como.mais{border-top:0;padding-top:0;margin-top:7px}
+  .stats .como b{color:var(--ink);font-weight:600}
+  .cmt .att{border-left:3px solid var(--foco);background:var(--foco-soft);padding:9px 12px;border-radius:0 8px 8px 0;font-size:13.5px;margin:9px 0 0;color:#59410c;line-height:1.55}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .actbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}
+  .navbox{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line-strong);background:var(--surface-2);border-radius:10px;padding:5px 10px;font-size:13.5px;color:var(--ink-soft);white-space:nowrap}
+  .navbox input[type=text]{width:52px;text-align:center;padding:5px 4px;border-radius:7px;font-variant-numeric:tabular-nums;font-weight:600;font-size:13.5px}
+  .spinner{width:15px;height:15px;border:2px solid var(--line-strong);border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:-2px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px;box-shadow:var(--shadow)}
+  .stat .n{font-family:'Fraunces',serif;font-weight:600;font-size:30px;line-height:1}.stat .n.g{color:var(--brand)}
+  .stat .l{font-size:12px;color:var(--ink-soft);margin-top:5px}
+  .section-title{font-family:'Fraunces',serif;font-weight:600;font-size:18px;margin:24px 0 4px}
+  .section-note{color:var(--ink-soft);font-size:13px;margin:0 0 14px}
+  .bar-row{padding:11px 0;border-bottom:1px solid var(--line)}.bar-row:last-child{border-bottom:0}
+  .bar-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:5px}
+  .bar-head .name{font-weight:500;font-size:14px}.bar-head .val{font-size:12.5px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+  .foco-tag{margin-left:8px;font-size:10.5px;font-weight:600;color:var(--foco);background:var(--foco-soft);border:1px solid #e0c896;padding:1px 7px;border-radius:999px}
+  .track{height:9px;border-radius:6px;background:var(--surface-2);overflow:hidden;border:1px solid var(--line)}.fill{height:100%;border-radius:6px;transition:width .5s}
+  .focus-box{background:var(--foco-soft);border:1px solid #e0c896;border-radius:var(--radius);padding:16px 18px;margin-bottom:14px}
+  .focus-box h3{margin:0 0 8px;font-size:14px;color:#6d4d0d;font-weight:600}.focus-box p{margin:0;font-size:13.5px;color:#59410c}
+  .spark{display:flex;align-items:flex-end;gap:5px;height:90px;padding:8px 0}
+  .spark .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;min-width:0}
+  .spark .b{width:100%;max-width:34px;border-radius:5px 5px 0 0;background:var(--brand);min-height:3px}
+  .spark .lb{font-size:10px;color:var(--ink-soft);white-space:nowrap}
+  .block{margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+  .block:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+  .field-label{display:block;font-size:13px;font-weight:600;margin:0 0 6px}
+  .hint{font-size:12.5px;color:var(--ink-soft);margin:6px 0 0;line-height:1.5}
+  .res-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+  .res-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;font:inherit;font-size:13.5px;text-align:left;width:100%;color:var(--ink)}
+  .res-item:hover{border-color:var(--line-strong);background:var(--surface-2)}
+  .res-item .badge{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-weight:600;font-size:12px;flex:none;color:#fff}
+  .res-item .badge.ok{background:var(--acerto)}.res-item .badge.no{background:var(--erro)}.res-item .badge.na{background:var(--ink-soft)}
+  .empty{text-align:center;padding:40px 20px;color:var(--ink-soft)}
+  .empty .big{font-family:'Fraunces',serif;font-size:20px;color:var(--ink);margin-bottom:6px}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:10px;font-size:13.5px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.25s;z-index:200;max-width:90vw}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .modal-back{position:fixed;inset:0;background:rgba(24,32,41,.44);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:grid;place-items:center;z-index:100;padding:20px;opacity:0;transition:opacity .18s ease}
+  .modal-back.show{opacity:1}
+  .modal{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 16px 54px rgba(24,32,41,.24);max-width:460px;width:100%;padding:22px 22px 18px;transform:translateY(10px) scale(.985);transition:transform .2s cubic-bezier(.2,.7,.2,1);max-height:88vh;overflow:auto}
+  .modal-back.show .modal{transform:none}
+  .modal h2{font-family:'Fraunces',serif;font-weight:600;font-size:19px;letter-spacing:-.01em;margin:0 0 6px;color:var(--ink)}
+  .modal .mbody{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.55}
+  .modal .mfield{margin-top:16px}
+  .modal .mfield label{display:block;font-size:12px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+  .modal .mfoot{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+  .modal .mlist{display:flex;flex-direction:column;gap:6px;margin-top:16px;max-height:220px;overflow:auto}
+  .modal .mopt{display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;cursor:pointer;font:inherit;font-size:14px;color:var(--ink)}
+  .modal .mopt:hover{border-color:var(--brand);background:var(--acerto-soft)}
+  .modal .mopt .n{font-size:12px;color:var(--ink-soft)}
+  .modal .msep{display:flex;align-items:center;gap:10px;margin-top:16px;color:var(--ink-soft);font-size:12px}
+  .modal .msep:before,.modal .msep:after{content:'';height:1px;background:var(--line);flex:1}
+  .kbd{display:inline-block;border:1px solid var(--line-strong);border-bottom-width:2px;background:var(--surface-2);border-radius:5px;padding:1px 6px;font-size:11.5px;font-weight:600;font-family:ui-monospace,monospace}
+  .kbdlist{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center;font-size:13px;margin-top:14px}
+  /* dica de teclado não serve para quem só tem dedo: some no toque */
+  @media (hover:none),(pointer:coarse){.kbdhint{display:none}}
+  /* sanfona de ajuda: <details> nativo — abre com Enter, é anunciado como
+     "expandido/recolhido" pelo leitor de tela, e não custa uma linha de JS */
+  details.acc{border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+  details.acc+details.acc{margin-top:6px}
+  details.acc>summary{cursor:pointer;padding:10px 13px;font-size:13.5px;font-weight:500;list-style:none;display:flex;align-items:center;gap:8px}
+  details.acc>summary::-webkit-details-marker{display:none}
+  details.acc>summary::after{content:'+';margin-left:auto;color:var(--ink-soft);font-weight:600;font-size:15px;line-height:1}
+  details.acc[open]>summary::after{content:'–'}
+  details.acc[open]>summary{border-bottom:1px solid var(--line)}
+  details.acc>summary:hover{background:var(--surface-2)}
+  details.acc .body{padding:12px 13px;font-size:13px;color:var(--ink-soft);line-height:1.65}
+  details.acc .body p{margin:0 0 9px}
+  details.acc .body p:last-child{margin-bottom:0}
+  details.acc .body b{color:var(--ink);font-weight:600}
+  details.acc .body .kbdlist{margin-top:0}
+  /* selo de sincronização é clicável: ele mesmo explica o que significa */
+  button.syncpill{cursor:pointer;font:inherit;font-size:11.5px;font-weight:500}
+  button.syncpill:hover{border-color:var(--ink-soft)}
+  @media(max-width:560px){.stat-grid{grid-template-columns:1fr 1fr}.brand h1{font-size:22px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Pular para o conteúdo</a>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Banca<span class="mark" aria-hidden="true">.</span> <span style="font-weight:500">OAB 1ª fase</span></h1>
+      <p class="sub" style="margin:0">Exames 32–42 · seletor de questões dirigido</p>
+    </div>
+    <div class="rightbar" id="rightbar" hidden>
+      <button type="button" id="syncpill" class="syncpill"><span class="dot" aria-hidden="true"></span><span id="synctext">pronto</span></button>
+      <button type="button" id="helpbtn" class="iconbtn" aria-label="Como o app funciona" title="Como o app funciona">?</button>
+      <nav class="tabs" role="tablist" aria-label="Seções">
+        <button role="tab" id="tab-estudar" data-view="estudar" aria-selected="true" aria-controls="main">Estudar</button>
+        <button role="tab" id="tab-mapa" data-view="mapa" aria-selected="false" aria-controls="main">Mapa</button>
+        <button role="tab" id="tab-ajustes" data-view="ajustes" aria-selected="false" aria-controls="main">Ajustes</button>
+      </nav>
+    </div>
+  </header>
+  <main id="main" tabindex="-1" role="tabpanel" aria-labelledby="tab-estudar"></main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<div class="sr-only" id="live" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+
+
+
+
+
+
+/* ============================================================
+   Configuração (preencha antes de publicar)
+   ============================================================ */
+const SUPABASE_URL = "https://cfczvuaswyiuywpibvfa.supabase.co";
+const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmY3p2dWFzd3lpdXl3cGlidmZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyNDMwMjgsImV4cCI6MjA5OTgxOTAyOH0.PZr-TMX2bCM60I5kySBQdH8lBQC8YVfLutGudb31wls";
+
+
+
+
+
+
+
+
+const TAX={"Ética Profissional e Estatuto da OAB":["Deontologia e deveres do advogado","Honorários advocatícios","Publicidade profissional","Sigilo profissional","Prerrogativas e imunidade profissional","Infrações e sanções disciplinares","Processo disciplinar","Inscrição, impedimentos e incompatibilidades","Sociedade de advogados","Órgãos da OAB e eleições"],"Filosofia do Direito":["Justiça e equidade","Teoria da norma e do ordenamento","Positivismo e jusnaturalismo","Interpretação e argumentação jurídica","Direito, moral e legitimidade"],"Direito Constitucional":["Controle de constitucionalidade","Remédios constitucionais","Direitos e garantias fundamentais","Organização do Estado e federação","Organização dos Poderes","Processo legislativo","Ordem social","Ordem econômica e financeira","Defesa do Estado e das instituições"],"Direitos Humanos":["Sistema internacional de proteção","Sistema interamericano","Tratados de direitos humanos","Proteção de grupos vulneráveis"],"Direito Internacional":["Direito internacional público","Direito internacional privado","Nacionalidade e condição do estrangeiro","Tratados e organismos internacionais"],"Direito Eleitoral":["Direitos políticos","Sistema eleitoral e inelegibilidades","Partidos políticos","Processo eleitoral e propaganda"],"Direito Financeiro":["Orçamento público","Receita e despesa pública","Repartição de receitas","Responsabilidade fiscal (LRF)"],"Direito Tributário":["Competência e limitações ao poder de tributar","Princípios tributários","Espécies tributárias","Obrigação e crédito tributário","Responsabilidade tributária","Impostos em espécie","Administração e processo tributário"],"Direito Administrativo":["Princípios da Administração","Atos administrativos","Poderes administrativos","Licitações e contratos","Serviços públicos","Agentes públicos","Responsabilidade civil do Estado","Improbidade administrativa","Controle da Administração","Intervenção na propriedade"],"Direito Ambiental":["Princípios do direito ambiental","Política Nacional do Meio Ambiente","Responsabilidade ambiental","Áreas protegidas e licenciamento"],"Direito Civil":["Parte geral (pessoas, bens, fatos jurídicos)","Obrigações","Contratos","Responsabilidade civil","Direitos reais","Direito de família","Direito das sucessões","Prescrição e decadência"],"Direito Processual Civil":["Normas fundamentais e jurisdição","Competência","Sujeitos do processo","Tutela provisória","Procedimento comum e sentença","Recursos","Cumprimento de sentença e execução","Processos nos tribunais"],"Direito Empresarial":["Teoria da empresa e empresário","Sociedades","Títulos de crédito","Falência e recuperação judicial","Propriedade industrial","Contratos empresariais"],"Direito do Consumidor":["Relação de consumo","Responsabilidade e vícios","Práticas comerciais e proteção contratual","Defesa do consumidor em juízo"],"Direito Penal":["Aplicação da lei penal","Teoria do crime","Penas e medidas","Extinção da punibilidade","Crimes contra a pessoa","Crimes contra o patrimônio","Crimes contra a Administração Pública","Legislação penal especial"],"Direito Processual Penal":["Inquérito e ação penal","Provas","Prisões e medidas cautelares","Competência","Procedimentos","Nulidades","Recursos e habeas corpus"],"Direito do Trabalho":["Relação de emprego","Contrato de trabalho","Jornada e remuneração","Alteração, suspensão e interrupção","Extinção do contrato","Segurança e saúde no trabalho","Direito coletivo do trabalho"],"Direito Processual do Trabalho":["Justiça do Trabalho e competência","Procedimentos e audiência","Provas e sentença","Recursos trabalhistas","Execução trabalhista"],"Direito Previdenciário":["Seguridade social e princípios","Segurados e beneficiários","Benefícios previdenciários","Custeio da seguridade"],"Estatuto da Criança e do Adolescente":["Direitos fundamentais da criança e do adolescente","Medidas de proteção","Ato infracional e medidas socioeducativas","Convivência familiar e adoção"]};
+const DISCIPLINAS=Object.keys(TAX);
+const IA_FN="ia";
+
+const LS_CFG="oab_cfg", LS_SESS="oab_auth", LS_RUN="oab_run", LS_BEMVINDO="oab_bemvindo";
+const PAGE=500;              // paginação dos metadados
+const CHUNK=100;             // questões por requisição de conteúdo
+const RUNWAY=50;             // repõe o cache quando sobrar menos que isto à frente
+const CACHE_CAP=1500;        // teto do cache de conteúdo (descarta o menos usado)
+const DB_NAME="banca_oab", DB_VER=2, ST_CONT="content", ST_KV="kv", ST_OUT="outbox";
+
+/* ---------- estado em memória (nada de questões no disco) ---------- */
+let Q=[];                       // questões
+let qById=new Map();            // índice id -> questão (evita busca linear)
+let answers=new Map();          // qid -> {resposta,correta,at}
+let marks=new Set();            // qid
+let cadernos=[];                // {id,nome,items:Set}
+let filtros=[];                 // {id,nome,definicao}
+let inflight=new Map();         // lotes de conteúdo em voo (evita pedir duas vezes)
+let reviews=new Map();          // qid -> {ease,intervalo,reps,lapses,due}
+let ehAdmin=false;              // só admin corrige a classificação do acervo
+let stats=new Map();            // qid -> {p_a..p_d, u_a..u_d} (agregado, sem PII)
+let metrica="p";                // "p" = primeira vez · "u" = resposta atual
+let explan=new Map();           // qid -> {geral:{...}, A:{...}, B:{...}, ...}
+let explLoaded=new Set();       // qid já consultados no servidor
+let semConteudoServidor=new Set(); // ids que o servidor não devolveu: não insistir
+
+let view="estudar", mode="montar", ready=false, loadErr="";
+let filter=blankFilter(), setup={ordem:"prova",modo:"estudo",tamanho:null};
+let run=null, chosen=null, chosenFor=null, busyIA=false, timerInt=null, qErro=null;
+
+function blankFilter(){return{status:[],disciplinas:[],temas:[],exames:[],anos:[],soMarcadas:false,soRevisao:false,incluirAnuladas:false,cadernoId:null}}
+
+/* ============================================================
+   Configuração + autenticação
+   ============================================================ */
+function cfg(){try{return JSON.parse(localStorage.getItem(LS_CFG))||{}}catch(e){return{}}}
+function url(){return(SUPABASE_URL||cfg().url||"").replace(/\/+$/,"")}
+function key(){return SUPABASE_ANON_KEY||cfg().key||""}
+function configured(){return!!(url()&&key())}
+function sess(){try{return JSON.parse(localStorage.getItem(LS_SESS))}catch(e){return null}}
+function saveSess(d){localStorage.setItem(LS_SESS,JSON.stringify({access_token:d.access_token,refresh_token:d.refresh_token,user_id:d.user&&d.user.id,email:d.user&&d.user.email,expires_at:Date.now()+((d.expires_in||3600)*1000)}))}
+function authed(){const s=sess();return!!(s&&s.access_token&&s.user_id)}
+
+async function authPost(path,body){
+  const r=await fetch(url()+path,{method:"POST",headers:{apikey:key(),"Content-Type":"application/json"},body:JSON.stringify(body)});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(d.error_description||d.msg||d.error||("Falha ("+r.status+")"));
+  return d;
+}
+const login=(email,password)=>authPost("/auth/v1/token?grant_type=password",{email,password}).then(d=>{saveSess(d);return d});
+const signup=(email,password)=>authPost("/auth/v1/signup",{email,password}).then(d=>{if(d.access_token)saveSess(d);return d});
+
+async function refresh(){
+  const s=sess(); if(!s||!s.refresh_token)return false;
+  try{const d=await authPost("/auth/v1/token?grant_type=refresh_token",{refresh_token:s.refresh_token});saveSess(d);return true}
+  catch(e){return false}
+}
+/** Sessão inválida: sai com aviso claro em vez de travar em "erro de sync". */
+function forceLogout(msg){
+  localStorage.removeItem(LS_SESS);localStorage.removeItem(LS_RUN);
+  idbClear();   // conteúdo cacheado sai do aparelho junto com a sessão
+  Q=[];qById.clear();answers.clear();marks.clear();reviews.clear();cadernos=[];filtros=[];explan.clear();explLoaded.clear();semConteudoServidor.clear();inflight.clear();pendentes=0;semRede=false;
+  ready=false;run=null;mode="montar";
+  render(); if(msg)toast(msg);
+}
+/** Chamada autenticada à API, com refresh automático e logout em falha real. */
+async function api(path,opts){
+  opts=opts||{};
+  const s=sess(); if(!s)throw new Error("sem sessão");
+  if(Date.now()>s.expires_at-60000)await refresh();
+  const go=()=>{const t=sess();return fetch(url()+path,Object.assign({},opts,{headers:Object.assign({apikey:key(),Authorization:"Bearer "+t.access_token},opts.headers||{})}))};
+  let r=await go();
+  if(r.status===401){ if(await refresh())r=await go(); else {forceLogout("Sua sessão expirou. Entre novamente.");throw new Error("sessão expirada")} }
+  return r;
+}
+async function apiJson(path,opts){
+  const r=await api(path,opts);
+  if(!r.ok){let d={};try{d=await r.json()}catch(e){}throw new Error(d.message||d.hint||("HTTP "+r.status))}
+  return r.status===204?null:r.json().catch(()=>null);
+}
+
+/* ============================================================
+   Sincronização: outbox durável (funciona offline)
+   Toda alteração é aplicada na hora em memória, gravada no
+   snapshot local e enfileirada. A fila é drenada em ordem quando
+   há rede. Nada se perde no metrô.
+   ============================================================ */
+let pendentes=0, drenando=false, semRede=false;
+
+function setSync(){
+  const p=document.getElementById("syncpill"),t=document.getElementById("synctext");
+  if(!p)return;
+  let cls="ok",txt="salvo",diz="Tudo o que você respondeu já está no servidor.";
+  if(!ready){cls="";txt="pronto";diz="Ainda carregando seus dados."}
+  else if(semRede&&pendentes){cls="err";txt="offline · "+pendentes+" pendente"+(pendentes>1?"s":"");
+    diz=plural(pendentes,"alteração está guardada","alterações estão guardadas")+" neste aparelho e sobem sozinhas quando a conexão voltar."}
+  else if(semRede){cls="err";txt="offline";diz="Sem conexão. Você pode continuar respondendo — nada se perde."}
+  else if(pendentes){cls="busy";txt="salvando "+pendentes+"…";diz="Enviando suas últimas respostas ao servidor."}
+  p.className="syncpill "+cls;t.textContent=txt;
+  p.setAttribute("aria-label","Sincronização: "+txt+". "+diz+" Toque para entender.");
+  p.title=diz;
+}
+/** Enfileira uma escrita. O chamador já aplicou o efeito em memória. */
+async function push(req){
+  await outAdd(req);
+  pendentes=await outCount();setSync();
+  salvarSnapshot();
+  drenar();
+}
+/** Erro definitivo (dado inválido) não pode travar a fila para sempre. */
+const erroDefinitivo=st=>st>=400&&st<500&&st!==401&&st!==408&&st!==429;
+
+async function drenar(){
+  if(drenando||!authed())return;
+  drenando=true;
+  try{
+    const itens=await outAll();
+    for(const it of itens){
+      try{
+        const r=await api(it.path,{method:it.method,
+          headers:Object.assign({"Content-Type":"application/json"},it.prefer?{Prefer:it.prefer}:{}),
+          body:it.body?JSON.stringify(it.body):undefined});
+        if(!r.ok&&!erroDefinitivo(r.status))throw new Error("HTTP "+r.status);
+        if(!r.ok)console.warn("descartado (erro definitivo "+r.status+"):",it.path);
+        await outDel(it.id);
+      }catch(e){ semRede=true;break }   // rede caiu: para e tenta depois
+    }
+    const n=await outCount();
+    if(n===0)semRede=false;
+    pendentes=n;
+  }finally{drenando=false;setSync()}
+}
+/** Grava o retrato local do progresso. Agrupado: finalizar um simulado de 80
+ *  questões chama push() ~160 vezes, e serializar o estado inteiro a cada uma
+ *  travava a interface por segundos. O atraso é seguro porque o snapshot é só
+ *  cache de abertura — quem garante a durabilidade é a outbox. */
+let snapT=null;
+function gravarSnapshot(){
+  snapT=null;
+  kvPut("state",{
+    answers:[...answers.entries()],
+    marks:[...marks],
+    reviews:[...reviews.entries()],
+    stats:[...stats.entries()],
+    cadernos:cadernos.map(c=>({id:c.id,nome:c.nome,items:[...c.items]})),
+    filtros
+  });
+}
+function salvarSnapshot(){if(snapT)return;snapT=setTimeout(gravarSnapshot,400)}
+window.addEventListener("online",()=>{semRede=false;setSync();drenar()});
+window.addEventListener("offline",()=>{semRede=true;setSync()});
+// fechar a aba não pode levar o snapshot pendente junto
+window.addEventListener("pagehide",()=>{if(snapT){clearTimeout(snapT);gravarSnapshot()}});
+// a fila é durável, mas avisar é melhor do que deixar a pessoa descobrir depois
+window.addEventListener("beforeunload",e=>{if(pendentes>0){e.preventDefault();e.returnValue=""}});
+
+/* ============================================================
+   Carga de dados (tudo em memória)
+   ============================================================ */
+/** Percorre um recurso paginado.
+ *  O `order` NÃO é opcional: `limit`+`offset` sem ordenação não tem ordem
+ *  garantida no Postgres, e a mesma linha pode aparecer em duas páginas (ou em
+ *  nenhuma). Toda chamada abaixo passa uma chave estável e única. */
+async function fetchAll(path){
+  if(!/[?&]order=/.test(path))throw new Error("fetchAll sem order: "+path);
+  const out=[];
+  for(let from=0;;from+=PAGE){
+    const r=await api(path+(path.includes("?")?"&":"?")+"limit="+PAGE+"&offset="+from);
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    const rows=await r.json();
+    out.push(...rows);
+    if(rows.length<PAGE)break;
+    if(from>50000)break;
+  }
+  return out;
+}
+/** Local-first: abre com o que está no aparelho (instantâneo, funciona offline)
+ *  e revalida contra o servidor em seguida — depois de drenar a fila, para não
+ *  sobrescrever alterações que ainda não subiram. */
+async function loadAll(){
+  loadErr="";
+  const snap=await kvGet("state"), meta=await kvGet("meta");
+  if(meta&&meta.rows&&meta.rows.length){
+    aplicaMeta(meta.rows);
+    if(snap)aplicaSnapshot(snap);
+    ready=true;pendentes=await outCount();setSync();restoreRun();render();
+  }else{render()}
+
+  if(navigator.onLine===false){semRede=true;setSync();
+    if(!ready){loadErr="Sem conexão e nada salvo neste aparelho ainda. Conecte-se uma vez para baixar suas questões.";render()}
+    return;
+  }
+  try{
+    await drenar();
+    if(pendentes>0){setSync();return}          // fila não drenou: mantém o local
+    const s2=sess();
+    const [qs,ans,mk,rv,cds,its,fls,prof,sts]=await Promise.all([
+      loadMeta(),
+      fetchAll("/rest/v1/answers?select=question_id,resposta,correta,answered_at&user_id=eq."+s2.user_id+"&order=question_id.asc"),
+      fetchAll("/rest/v1/marks?select=question_id&user_id=eq."+s2.user_id+"&order=question_id.asc"),
+      fetchAll("/rest/v1/reviews?select=question_id,ease,intervalo,reps,lapses,due&user_id=eq."+s2.user_id+"&order=question_id.asc"),
+      fetchAll("/rest/v1/cadernos?select=id,nome&user_id=eq."+s2.user_id+"&order=nome.asc"),
+      fetchAll("/rest/v1/caderno_items?select=caderno_id,question_id&order=caderno_id.asc,question_id.asc"),
+      fetchAll("/rest/v1/saved_filters?select=id,nome,definicao&user_id=eq."+s2.user_id+"&order=nome.asc"),
+      fetchAll("/rest/v1/profiles?select=role&user_id=eq."+s2.user_id+"&order=user_id.asc"),
+      fetchAll("/rest/v1/question_stats?select=*&order=question_id.asc")
+    ]);
+    if(!qs.length)throw new Error("O banco de questões está vazio no servidor. Rode os arquivos SQL (01, 02 e 03).");
+    aplicaMeta(qs);kvPut("meta",{rows:qs});
+    answers=new Map(ans.map(a=>[a.question_id,{resposta:a.resposta,correta:a.correta,at:a.answered_at}]));
+    marks=new Set(mk.map(m=>m.question_id));
+    reviews=new Map(rv.map(r=>[r.question_id,{ease:r.ease,intervalo:r.intervalo,reps:r.reps,lapses:r.lapses,due:r.due}]));
+    const porCaderno=new Map();
+    its.forEach(i=>{(porCaderno.get(i.caderno_id)||porCaderno.set(i.caderno_id,new Set()).get(i.caderno_id)).add(i.question_id)});
+    cadernos=cds.map(c=>({id:c.id,nome:c.nome,items:porCaderno.get(c.id)||new Set()}));
+    filtros=fls.map(f=>({id:f.id,nome:f.nome,definicao:f.definicao}));
+    ehAdmin=!!(prof&&prof[0]&&prof[0].role==="admin");
+    stats=new Map((sts||[]).map(x=>[x.question_id,x]));
+    semRede=false;ready=true;salvarSnapshot();setSync();restoreRun();render();
+  }catch(e){
+    if(ready){semRede=true;setSync();return}   // já tem dado local: segue offline
+    loadErr=e.message;setSync();render();
+  }
+}
+function aplicaMeta(rows){Q=rows.map(norm);qById=new Map(Q.map(q=>[q.id,q]))}
+function aplicaSnapshot(sn){
+  answers=new Map(sn.answers||[]);
+  marks=new Set(sn.marks||[]);
+  reviews=new Map(sn.reviews||[]);
+  stats=new Map(sn.stats||[]);
+  cadernos=(sn.cadernos||[]).map(c=>({id:c.id,nome:c.nome,items:new Set(c.items||[])}));
+  filtros=sn.filtros||[];
+}
+
+/* ============================================================
+   Repetição espaçada (SM-2, mesma família do Anki)
+   Piso de 1 dia: rever questão de prova em minutos não ajuda.
+   ============================================================ */
+const DIA=86400000;
+const hojeISO=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+function maisDias(n){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+n);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+const venceHoje=r=>!!r&&r.due<=hojeISO();
+function paraRevisar(){return Q.filter(q=>!q.anulada&&venceHoje(reviews.get(q.id)))}
+
+/** nota: 0 = errei/chutei · 1 = acertei · 2 = fácil */
+function agendar(ant,nota){
+  let ease=(ant&&ant.ease)||2.5, intervalo=(ant&&ant.intervalo)||0,
+      reps=(ant&&ant.reps)||0, lapses=(ant&&ant.lapses)||0;
+  if(nota===0){
+    lapses++;reps=0;
+    ease=Math.max(1.3,+(ease-0.2).toFixed(2));
+    intervalo=1;                                   // volta amanhã
+  }else{
+    if(reps===0)intervalo=(nota===2?4:1);
+    else if(reps===1)intervalo=(nota===2?6:3);
+    else intervalo=Math.round(intervalo*ease*(nota===2?1.3:1));
+    if(nota===2)ease=Math.min(3.0,+(ease+0.15).toFixed(2));
+    reps++;
+  }
+  intervalo=Math.max(1,Math.min(intervalo,365));    // teto de 1 ano
+  return{ease,intervalo,reps,lapses,due:maisDias(intervalo)};
+}
+function aplicaRevisao(qid,nota){
+  const r=agendar(reviews.get(qid),nota);
+  reviews.set(qid,r);
+  push({method:"POST",path:"/rest/v1/reviews?on_conflict=user_id,question_id",
+    prefer:"resolution=merge-duplicates,return=minimal",
+    body:{user_id:sess().user_id,question_id:qid,ease:r.ease,intervalo:r.intervalo,
+          reps:r.reps,lapses:r.lapses,due:r.due,updated_at:new Date().toISOString()}});
+  return r;
+}
+function textoIntervalo(n){return n===1?"amanhã":n<30?("em "+n+" dias"):n<365?("em "+Math.round(n/30)+" meses"):"em 1 ano"}
+
+/** Metadado da questão. O conteúdo (enunciado/alternativas/gabarito) chega sob demanda. */
+function norm(q){return{id:q.id,exame:String(q.exame),numero:q.numero,ano:q.ano,
+  anulada:!!q.anulada,disciplina:q.disciplina||"",tema:q.tema||""}}
+const temConteudo=q=>q&&q.enunciado!==undefined;
+
+/** Metadados: sempre revalidados na rede (~9 KB), então novas questões e
+ *  reclassificações aparecem já na abertura seguinte. A cópia local (kv "meta")
+ *  serve só para abrir instantâneo/offline — e sempre acompanhada do snapshot
+ *  das SUAS respostas, senão tudo apareceria como "não respondida". */
+async function loadMeta(){
+  const campos="id,exame,numero,ano,disciplina,tema,anulada";
+  return fetchAll("/rest/v1/questions?select="+campos+"&order=exame.asc,numero.asc");
+}
+
+/** Garante o conteúdo destes ids em memória: cache primeiro, rede só para o que falta. */
+async function ensureContent(ids){
+  const falta=ids.filter(id=>{const q=qById.get(id);return q&&!temConteudo(q)&&!semConteudoServidor.has(id)});
+  if(!falta.length)return;
+  const doCache=await idbGetContent(falta);
+  doCache.forEach(r=>{const q=qById.get(r.id);if(q)aplicaConteudo(q,r)});
+  idbTouch(doCache.map(r=>r.id));
+  const daRede=falta.filter(id=>!temConteudo(qById.get(id)));
+  if(!daRede.length)return;
+  for(let i=0;i<daRede.length;i+=CHUNK){
+    const lote=daRede.slice(i,i+CHUNK);
+    const chave=lote.join(",");
+    if(inflight.has(chave)){await inflight.get(chave);continue}
+    const p=(async()=>{
+      const rows=await apiJson("/rest/v1/questions?select=id,enunciado,alternativas,gabarito&id=in.("+lote.join(",")+")");
+      (rows||[]).forEach(r=>{const q=qById.get(r.id);if(q)aplicaConteudo(q,r)});
+      // o que o servidor não devolveu não existe mais: registra para não pedir em laço
+      const vieram=new Set((rows||[]).map(r=>r.id));
+      lote.forEach(id=>{if(!vieram.has(id))semConteudoServidor.add(id)});
+      idbPutContent(rows||[]);
+    })();
+    inflight.set(chave,p);
+    try{await p}finally{inflight.delete(chave)}
+  }
+}
+function aplicaConteudo(q,r){
+  q.enunciado=String(r.enunciado||"");
+  q.alternativas=r.alternativas||{};
+  q.gabarito=String(r.gabarito||"").toUpperCase();
+}
+/** REGRA ÚNICA de carregamento: se a primeira questão faltante estiver a até RUNWAY
+ *  daqui, busca as próximas CHUNK. Cobre os três casos com o mesmo código:
+ *    abertura  → falta = a própria questão 1 (distância 0)  → busca 100
+ *    pulo      → falta = a questão saltada  (distância 0)   → busca 100
+ *    reposição → falta = a borda do cache   (distância ≤50) → busca 100
+ *  A margem RUNWAY é a histerese: sem ela, cada passo pediria 1 questão avulsa. */
+function ensureAhead(i){
+  if(!run)return Promise.resolve();
+  const ids=run.ids;
+  let falta=-1;
+  for(let k=Math.max(0,i);k<ids.length;k++){const q=qById.get(ids[k]);if(q&&!temConteudo(q)){falta=k;break}}
+  if(falta<0)return Promise.resolve();          // nada faltando até o fim da lista
+  if(falta-i>RUNWAY)return Promise.resolve();   // ainda há pista suficiente carregada
+  return ensureContent(ids.slice(falta,falta+CHUNK));
+}
+
+/* ============================================================
+   Utilidades
+   ============================================================ */
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2600)}
+function announce(m){const l=document.getElementById("live");if(l)l.textContent=m}
+function fmt(ms){const s=Math.max(0,Math.floor(ms/1000));return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+function plural(n,um,muitos){return n+" "+(n===1?um:muitos)}
+/** id gerado no cliente: permite criar caderno/filtro sem rede */
+function uuid(){
+  if(crypto&&crypto.randomUUID)return crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{
+    const r=Math.random()*16|0;return(c==="x"?r:(r&0x3|0x8)).toString(16)});
+}
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
+
+/* ============================================================
+   Cache local (IndexedDB): só conteúdo de questão, apagado no logout.
+   Tudo é best-effort — se o navegador negar, o app segue pela rede.
+   ============================================================ */
+let dbP=null;
+function db(){
+  if(dbP)return dbP;
+  dbP=new Promise((res,rej)=>{
+    if(!("indexedDB" in window))return rej(new Error("sem IndexedDB"));
+    const r=indexedDB.open(DB_NAME,DB_VER);
+    r.onupgradeneeded=()=>{
+      const d=r.result;
+      if(!d.objectStoreNames.contains(ST_CONT)){
+        const st=d.createObjectStore(ST_CONT,{keyPath:"id"});
+        st.createIndex("used","used");
+      }
+      if(!d.objectStoreNames.contains(ST_KV))d.createObjectStore(ST_KV,{keyPath:"k"});
+      if(!d.objectStoreNames.contains(ST_OUT))d.createObjectStore(ST_OUT,{keyPath:"id",autoIncrement:true});
+    };
+    r.onsuccess=()=>res(r.result);
+    r.onerror=()=>rej(r.error);
+  }).catch(e=>{dbP=null;throw e});
+  return dbP;
+}
+function tx(store,mode,fn){
+  return db().then(d=>new Promise((res,rej)=>{
+    const t=d.transaction(store,mode);
+    const out=fn(t.objectStore(store));
+    t.oncomplete=()=>res(out&&out.result!==undefined?out.result:out);
+    t.onerror=()=>rej(t.error);
+    t.onabort=()=>rej(t.error);
+  }));
+}
+async function idbGetContent(ids){
+  try{
+    const d=await db();
+    return await new Promise((res,rej)=>{
+      const t=d.transaction(ST_CONT,"readonly"),st=t.objectStore(ST_CONT),out=[];
+      ids.forEach(id=>{const r=st.get(id);r.onsuccess=()=>{if(r.result)out.push(r.result)}});
+      t.oncomplete=()=>res(out);t.onerror=()=>rej(t.error);
+    });
+  }catch(e){return[]}
+}
+async function idbPutContent(rows){
+  try{
+    const now=Date.now();
+    await tx(ST_CONT,"readwrite",st=>rows.forEach(r=>st.put(Object.assign({},r,{used:now}))));
+    evict();
+  }catch(e){}
+}
+async function idbTouch(ids){
+  try{
+    const now=Date.now();
+    await tx(ST_CONT,"readwrite",st=>ids.forEach(id=>{
+      const g=st.get(id);g.onsuccess=()=>{if(g.result){g.result.used=now;st.put(g.result)}};
+    }));
+  }catch(e){}
+}
+/** Mantém o cache abaixo do teto, descartando o que faz mais tempo que não é usado. */
+async function evict(){
+  try{
+    const d=await db();
+    const n=await new Promise((res,rej)=>{const r=d.transaction(ST_CONT,"readonly").objectStore(ST_CONT).count();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+    if(n<=CACHE_CAP)return;
+    let excedente=n-CACHE_CAP;
+    await new Promise((res,rej)=>{
+      const t=d.transaction(ST_CONT,"readwrite");
+      const cur=t.objectStore(ST_CONT).index("used").openCursor();
+      cur.onsuccess=()=>{const c=cur.result;if(!c||excedente<=0)return;c.delete();excedente--;c.continue()};
+      t.oncomplete=()=>res();t.onerror=()=>rej(t.error);
+    });
+  }catch(e){}
+}
+async function kvGet(k){try{return await tx(ST_KV,"readonly",st=>st.get(k))}catch(e){return null}}
+async function kvPut(k,v){try{await tx(ST_KV,"readwrite",st=>st.put(Object.assign({k},v)))}catch(e){}}
+/* Reserva em memória para a fila: a outbox é o CAMINHO DE ESCRITA de todo o
+   app, não um cache. Se o IndexedDB negar (modo privado, cota de disco), a
+   versão anterior engolia o erro e a resposta se perdia em silêncio — com o
+   selo mostrando "salvo". Com a reserva, a escrita sobrevive na sessão atual
+   e é drenada normalmente; só não resiste a fechar a aba. */
+let memOut=[],memSeq=0;
+async function outAdd(req){
+  try{await tx(ST_OUT,"readwrite",st=>st.add(req))}
+  catch(e){memOut.push(Object.assign({},req,{id:"m"+(++memSeq)}))}
+}
+async function outAll(){
+  let itens=[];
+  try{
+    const d=await db();
+    itens=await new Promise((res,rej)=>{
+      const t=d.transaction(ST_OUT,"readonly"),out=[];
+      t.objectStore(ST_OUT).openCursor().onsuccess=e=>{const c=e.target.result;if(!c)return;out.push(c.value);c.continue()};
+      t.oncomplete=()=>res(out);t.onerror=()=>rej(t.error);
+    });
+  }catch(e){}
+  return itens.concat(memOut);
+}
+async function outDel(id){
+  if(typeof id==="string"&&id.charAt(0)==="m"){memOut=memOut.filter(x=>x.id!==id);return}
+  try{await tx(ST_OUT,"readwrite",st=>st.delete(id))}catch(e){}
+}
+async function outCount(){
+  let n=0;
+  try{const d=await db();n=await new Promise((res,rej)=>{const r=d.transaction(ST_OUT,"readonly").objectStore(ST_OUT).count();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+  catch(e){}
+  return n+memOut.length;
+}
+async function idbClear(){
+  memOut=[];
+  try{await tx(ST_CONT,"readwrite",st=>st.clear());await tx(ST_KV,"readwrite",st=>st.clear());await tx(ST_OUT,"readwrite",st=>st.clear())}catch(e){}
+}
+
+/* ============================================================
+   Modais acessíveis (foco preso, Esc, foco devolvido)
+   ============================================================ */
+let modalOpen=false;
+function openModal(build){
+  return new Promise(resolve=>{
+    const prevFocus=document.activeElement;
+    const back=el("div","modal-back");
+    const m=el("div","modal");
+    m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");
+    const titleId="mt"+Math.random().toString(36).slice(2,8);
+    m.setAttribute("aria-labelledby",titleId);
+    m._titleId=titleId;
+    let done=false;
+    const close=v=>{
+      if(done)return;done=true;modalOpen=false;
+      back.classList.remove("show");document.removeEventListener("keydown",onKey,true);
+      setTimeout(()=>back.remove(),190);
+      if(prevFocus&&prevFocus.focus)try{prevFocus.focus()}catch(e){}
+      resolve(v);
+    };
+    const onKey=e=>{
+      if(e.key==="Escape"){e.preventDefault();e.stopPropagation();close(null);return}
+      if(e.key!=="Tab")return;
+      const f=m.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),summary,[href],[tabindex]:not([tabindex="-1"])');
+      if(!f.length)return;
+      const first=f[0],last=f[f.length-1];
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+    };
+    back.addEventListener("mousedown",e=>{if(e.target===back)close(null)});
+    document.addEventListener("keydown",onKey,true);
+    modalOpen=true;
+    const focusMe=build(m,close);
+    back.append(m);document.body.append(back);
+    requestAnimationFrame(()=>{back.classList.add("show");setTimeout(()=>{const t=focusMe||m.querySelector("button,input");if(t)try{t.focus();if(t.select)t.select()}catch(e){}},60)});
+  });
+}
+function mHead(m,title,body){
+  const h=el("h2",null,title);h.id=m._titleId;m.append(h);
+  if(body)m.append(el("p","mbody",body));
+}
+function mFoot(m,close,okLabel,onOk,danger){
+  const f=el("div","mfoot");
+  const c=el("button","btn","Cancelar");c.type="button";c.onclick=()=>close(null);
+  const ok=el("button","btn "+(danger?"danger":"primary"),okLabel);ok.type="button";ok.onclick=onOk;
+  f.append(c,ok);m.append(f);return ok;
+}
+function askConfirm(title,body,o){
+  o=o||{};
+  return openModal((m,close)=>{mHead(m,title,body);mFoot(m,close,o.okText||"Confirmar",()=>close(true),o.danger);return null})
+    .then(v=>v===true);
+}
+function askText(title,body,o){
+  o=o||{};
+  return openModal((m,close)=>{
+    mHead(m,title,body);
+    const w=el("div","mfield");
+    const id="f"+Math.random().toString(36).slice(2,8);
+    const l=el("label",null,o.label||"Nome");l.htmlFor=id;
+    const i=el("input");i.type="text";i.id=id;i.value=o.value||"";i.placeholder=o.placeholder||"";
+    i.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();const v=i.value.trim();if(v)close(v)}};
+    w.append(l,i);m.append(w);
+    mFoot(m,close,o.okText||"Salvar",()=>{const v=i.value.trim();if(!v){i.focus();return}close(v)});
+    return i;
+  });
+}
+function askChoice(title,body,options,o){
+  o=o||{};
+  return openModal((m,close)=>{
+    mHead(m,title,body);
+    if(options.length){
+      const l=el("div","mlist");
+      options.forEach(x=>{
+        const b=el("button","mopt");b.type="button";
+        b.append(el("span",null,x.label));
+        if(x.hint)b.append(el("span","n",x.hint));
+        b.onclick=()=>close(x.value);l.append(b);
+      });
+      m.append(l);
+    }
+    if(o.novo){
+      if(options.length)m.append(el("div","msep","ou crie um novo"));
+      const w=el("div","mfield");
+      const id="n"+Math.random().toString(36).slice(2,8);
+      const l=el("label",null,"Novo caderno");l.htmlFor=id;
+      const i=el("input");i.type="text";i.id=id;i.placeholder=o.novoPlaceholder||"";
+      i.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();const v=i.value.trim();if(v)close({novo:v})}};
+      w.append(l,i);m.append(w);
+      mFoot(m,close,o.okText||"Criar",()=>{const v=i.value.trim();if(!v){i.focus();return}close({novo:v})});
+      return options.length?null:i;
+    }
+    const f=el("div","mfoot");
+    const c=el("button","btn","Cancelar");c.type="button";c.onclick=()=>close(null);
+    f.append(c);m.append(f);
+    return null;
+  });
+}
+
+/* ============================================================
+   Central de ajuda
+   Um único corpo de texto, servido em dois lugares: a janela do "?" no
+   cabeçalho (e da tecla ?) e a aba Ajustes. Sanfona porque ninguém lê dez
+   tópicos de uma vez — e porque <details> já vem acessível de fábrica.
+   ============================================================ */
+function kbdList(){
+  const kl=el("div","kbdlist");
+  [[["A","D"],"Escolher alternativa","–"],
+   [["1","4"],"Escolher alternativa (igual a A–D)","–"],
+   [["Enter"],"Responder · avançar"],
+   [["←","→"],"Questão anterior · próxima"],
+   [["M"],"Marcar para revisar (★)"],
+   [["?"],"Abrir esta ajuda"],
+   [["Esc"],"Fechar janela"]]
+    .forEach(([keys,d,sep])=>{
+      const kk=el("span");
+      keys.forEach((x,i)=>{if(i)kk.append(document.createTextNode(" "+(sep||"")+" "));kk.append(el("span","kbd",x))});
+      kl.append(kk,el("span",null,d));
+    });
+  return kl;
+}
+const AJUDA=[
+  {id:"sessao",t:"Montar uma sessão",p:[
+    "Os botões azuis do topo começam uma sessão em um clique — é o caminho mais curto se você só quer resolver questão.",
+    "O cartão de montagem é para quando você quer mirar: os filtros se somam (Constitucional + exames 40 e 41 + só as que você errou), e o contador mostra quantas questões sobraram ANTES de começar. Se ficar zero, afrouxe um filtro.",
+    "Uma combinação que você repete toda semana pode virar um filtro salvo. Ele guarda a regra, não a lista: reabra em um mês e ele já reflete o seu progresso novo."]},
+  {id:"modos",t:"Modo estudo × modo simulado",p:[
+    "No modo estudo, cada resposta abre na hora o gabarito, a fundamentação e as estatísticas. É para entender questão por questão — e é onde você aprende.",
+    "No modo simulado, o cronômetro corre, nada é revelado e você navega livre entre as questões, como na prova de verdade. A correção inteira aparece só quando você finaliza. É para treinar ritmo e resistência.",
+    "Terminado o simulado, a lista de revisão deixa você entrar em qualquer questão para ver o gabarito e pedir o comentário — sem perder o resultado."]},
+  {id:"revisao",t:"Revisão espaçada",p:[
+    "É a ideia do Anki adaptada a questões de prova: você lembra melhor de algo quando revê pouco antes de esquecer, não relendo sem parar.",
+    "Automático — toda questão respondida entra no ciclo. Você não marca nada.",
+    "Acertou: ela demora mais para voltar (1 dia → 3 dias → e daí multiplicando, conforme a sua facilidade com ela). Errou: volta amanhã, e passa a crescer mais devagar.",
+    "Depois de responder você pode ajustar: “Chutei” trata o acerto como sorte e traz de volta amanhã; “Fácil” empurra bem mais para frente. Diferente do Anki, aqui nada volta em minutos — questão de prova não se decora em sessão curta."]},
+  {id:"stats",t:"As duas estatísticas",p:[
+    "Depois de responder, você vê como as outras pessoas responderam aquela questão — em duas leituras diferentes, que você troca no seletor.",
+    "Primeira vez conta só a estreia de cada pessoa: a resposta dada antes de ver o gabarito. Nunca muda depois. É a dificuldade real da questão, e o número comparável com a SUA primeira tentativa.",
+    "Resposta atual conta onde cada pessoa está hoje: quem refaz e troca de alternativa move o próprio voto. Mede quanto do público já domina o ponto.",
+    "Pausa de 6 horas: errar e acertar a mesma questão logo em seguida não conta como aprendizado — você acabou de ler o gabarito. Esse acerto rápido não entra em “Resposta atual”; o voto só se move quando você acerta pelo menos 6 horas depois do erro. Errar de novo reinicia a espera.",
+    "Nada aparece antes de 10 respostas: abaixo disso o número não diz nada — e poderia denunciar quem respondeu."]},
+  {id:"mapa",t:"O Mapa: como os números saem",p:[
+    "Vale sempre a sua resposta mais recente de cada questão. Refazer e acertar melhora o número: o Mapa mede onde você está hoje, não o seu histórico.",
+    "O aproveitamento por disciplina e por tema considera só questões que você respondeu — as intocadas não entram nem a favor nem contra.",
+    "A Evolução agrupa por dia local (responder às 22h no Brasil conta como hoje, não como amanhã). Como cada questão guarda só a sua última resposta, refazer hoje uma questão antiga move aquela questão para a coluna de hoje.",
+    "“Onde focar” aponta as disciplinas abaixo de 60% com pelo menos 3 questões respondidas. Abaixo de 3, ainda é ruído."]},
+  {id:"offline",t:"Offline e sincronização",p:[
+    "Tudo o que você faz vale na tela imediatamente e entra numa fila local. Havendo rede, a fila sobe em ordem, sozinha. Você nunca espera o servidor para responder a próxima questão.",
+    "O selo no topo diz em que pé está: salvo (tudo no servidor), salvando N… (subindo agora), offline · N pendentes (guardado aqui, esperando sinal). Toque nele a qualquer momento.",
+    "Perdeu o sinal no metrô? Continue respondendo. Nada se perde e a fila drena quando o sinal voltar. Só evite sair da conta com pendências: sair apaga a fila deste aparelho.",
+    "Os enunciados baixados ficam em cache neste aparelho até você sair, então reabrir é instantâneo. O seu progresso vive no servidor: entre com a mesma conta em qualquer aparelho e ele está lá."]},
+  {id:"atalhos",t:"Atalhos de teclado",p:[
+    "Durante a sessão, sem tirar a mão do teclado. Ficam desativados dentro de campos de texto e janelas."],extra:kbdList},
+  {id:"listas",t:"Marcadas, cadernos e filtros salvos",p:[
+    "★ Marcar é o lembrete rápido: nem toda questão que merece revisão é uma que você errou.",
+    "Caderno é uma lista fixa, montada à mão — junte ali as questões que te derrubaram e volte nelas quando quiser. Excluir um caderno não apaga nada do seu progresso.",
+    "Filtro salvo guarda a combinação de filtros, não as questões. É a diferença que importa: o caderno é uma foto, o filtro é uma regra viva."]},
+  {id:"ia",t:"Os comentários de IA",p:[
+    "São dois: a fundamentação do gabarito e, se você errou, um comentário específico sobre a alternativa que VOCÊ marcou — por que ela atrai e o que exatamente a separa da correta.",
+    "O comentário é do acervo, não da sua conta: gerado uma vez, fica disponível para todo mundo enquanto valer. Por isso abrir um comentário que já existe é instantâneo e não consome nada da sua cota.",
+    "Tudo é raciocinado com a lei vigente NA DATA DA PROVA, não a de hoje — uma norma que mudou depois não torna o gabarito errado. Quando algo mudou desde então, o comentário abre uma linha de “Atenção:” avisando."]},
+  {id:"dados",t:"Seus dados",p:[
+    "Só você lê e grava o seu progresso, e quem garante isso é o banco de dados, não a tela. As estatísticas públicas são agregadas: ninguém vê quem respondeu o quê.",
+    "Você pode baixar tudo em JSON quando quiser, em Ajustes → Exportar. E apagar tudo, também em Ajustes — apagar devolve os seus votos das estatísticas, você some da conta como se nunca tivesse respondido."]}
+];
+function ajudaLista(foco){
+  const w=el("div");
+  AJUDA.forEach(a=>{
+    const d=el("details","acc");
+    if(a.id===foco)d.open=true;
+    d.append(el("summary",null,a.t));
+    const b=el("div","body");
+    a.p.forEach(t=>b.append(el("p",null,t)));
+    if(a.extra)b.append(a.extra());
+    d.append(b);w.append(d);
+  });
+  return w;
+}
+function abrirAjuda(foco){
+  return openModal((m,close)=>{
+    mHead(m,"Como o app funciona","Abra o tópico que interessa. Tudo isto também mora em Ajustes.");
+    const w=ajudaLista(foco);w.style.marginTop="16px";
+    m.append(w);
+    const f=el("div","mfoot");
+    const ok=el("button","btn primary","Fechar");ok.type="button";ok.onclick=()=>close(null);
+    f.append(ok);m.append(f);
+    return ok;
+  });
+}
+
+/* ============================================================
+   Render
+   ============================================================ */
+/** data-fid a focar depois do próximo render, quando o elemento que tinha o
+ *  foco vai deixar de existir (ex.: "Responder" some ao revelar o gabarito). */
+let focoApos=null;
+/** Toda tela é reconstruída do zero a cada render — barato e sem estado morto,
+ *  mas quem navega por teclado perdia o foco para o <body> a cada tecla. Os
+ *  elementos que importam carregam um data-fid estável e o foco volta para o
+ *  equivalente. Se nada tinha foco, nada é roubado. */
+function render(){
+  stopTimer();
+  const ae=document.activeElement;
+  const fid=focoApos||(ae&&ae.dataset&&ae.dataset.fid)||null;
+  focoApos=null;
+  const main=document.getElementById("main");
+  const bar=document.getElementById("rightbar");
+  main.innerHTML="";
+  if(!configured()){bar.hidden=true;main.append(viewConfig());return}
+  if(!authed()){bar.hidden=true;main.append(viewLogin());return}
+  bar.hidden=false;
+  if(!ready){main.append(viewLoading());return}
+  main.append(view==="estudar"?viewEstudar():view==="mapa"?viewMapa():viewAjustes());
+  if(fid){
+    const alvo=main.querySelector('[data-fid="'+fid+'"]');
+    if(alvo&&!alvo.disabled){try{alvo.focus({preventScroll:true})}catch(e){}}
+  }
+}
+function viewLoading(){
+  const w=el("div");const c=el("div","card pad empty");
+  if(loadErr){
+    c.append(el("div","big","Não consegui carregar seus dados"));
+    c.append(el("p",null,loadErr));
+    const b=el("button","btn primary","Tentar de novo");b.style.marginTop="12px";b.onclick=loadAll;c.append(b);
+  }else{
+    const d=el("div","big");d.append(el("span","spinner"));d.append(document.createTextNode(" Carregando…"));
+    c.append(d,el("p",null,"Buscando as questões e o seu progresso no servidor."));
+  }
+  w.append(c);return w;
+}
+function viewConfig(){
+  const w=el("div");const c=el("div","card pad");c.style.maxWidth="460px";c.style.margin="40px auto";
+  const h=el("h2",null,"Configurar servidor");h.style.cssText="font-family:Fraunces,serif;font-weight:600;margin:0 0 4px;font-size:20px";
+  c.append(h,el("p","hint","Informe a URL e a anon key do seu projeto Supabase. O ideal é deixá-las no arquivo antes de publicar."));
+  const k=cfg();
+  const u=field("URL do Supabase",k.url||"","text");u.wrap.style.marginTop="14px";
+  const a=field("anon key",k.key||"","password");a.wrap.style.marginTop="10px";
+  const b=el("button","btn primary","Salvar");b.style.marginTop="14px";
+  b.onclick=()=>{localStorage.setItem(LS_CFG,JSON.stringify({url:u.input.value.trim(),key:a.input.value.trim()}));render()};
+  c.append(u.wrap,a.wrap,b);w.append(c);return w;
+}
+function field(label,value,type){
+  const wrap=el("div");
+  const id="i"+Math.random().toString(36).slice(2,8);
+  const l=el("label","field-label",label);l.htmlFor=id;
+  const input=el("input");input.type=type||"text";input.id=id;input.value=value||"";
+  wrap.append(l,input);return{wrap,input};
+}
+function viewLogin(){
+  const w=el("div");const c=el("div","card pad");c.style.maxWidth="420px";c.style.margin="40px auto";
+  let modo="entrar";
+  const h=el("h2");h.style.cssText="font-family:Fraunces,serif;font-weight:600;margin:0 0 4px;font-size:22px";
+  const sub=el("p","hint");sub.style.margin="0 0 16px";
+  const em=field("E-mail","","email");em.wrap.style.marginBottom="10px";em.input.autocomplete="email";
+  const pw=field("Senha","","password");pw.input.autocomplete="current-password";
+  const submit=e=>{if(e.key==="Enter"){e.preventDefault();btn.click()}};
+  const msg=el("p","hint");msg.style.minHeight="18px";msg.setAttribute("role","alert");
+  const btn=el("button","btn primary big");btn.style.cssText="width:100%;margin-top:8px";
+  const tog=el("button","btn");tog.style.cssText="width:100%;margin-top:8px;border:none;background:none;color:var(--brand)";
+  const paint=()=>{
+    h.textContent=modo==="entrar"?"Entrar":"Criar conta";
+    sub.textContent=modo==="entrar"?"Acesse seu progresso de estudo.":"Crie sua conta para salvar e sincronizar.";
+    btn.textContent=modo==="entrar"?"Entrar":"Criar conta";
+    tog.textContent=modo==="entrar"?"Não tem conta? Criar uma":"Já tem conta? Entrar";
+    pw.input.autocomplete=modo==="entrar"?"current-password":"new-password";
+    msg.textContent="";msg.style.color="var(--erro)";
+  };
+  em.input.onkeydown=submit;pw.input.onkeydown=submit;
+  tog.onclick=()=>{modo=modo==="entrar"?"criar":"entrar";paint()};
+  btn.onclick=async()=>{
+    const e=em.input.value.trim(),p=pw.input.value;
+    if(!e||p.length<6){msg.textContent="Informe um e-mail e uma senha de pelo menos 6 caracteres.";return}
+    btn.disabled=true;const old=btn.textContent;btn.innerHTML='<span class="spinner"></span>';
+    try{
+      if(modo==="criar"){
+        const d=await signup(e,p);
+        if(!d.access_token){msg.style.color="var(--brand-deep)";msg.textContent="Conta criada. Confirme pelo e-mail e depois entre.";modo="entrar";paint();btn.disabled=false;return}
+      }else await login(e,p);
+      await loadAll();render();
+    }catch(err){msg.textContent=err.message;btn.disabled=false;btn.textContent=old}
+  };
+  c.append(h,sub,em.wrap,pw.wrap,msg,btn,tog);paint();w.append(c);return w;
+}
+
+/* ============================================================
+   Filtro
+   ============================================================ */
+const statusOf=q=>{const a=answers.get(q.id);return!a?"nao":(a.correta?"acertei":"errei")};
+function matches(q,f){
+  if(q.anulada&&!f.incluirAnuladas)return false;
+  if(f.soMarcadas&&!marks.has(q.id))return false;
+  if(f.soRevisao&&!venceHoje(reviews.get(q.id)))return false;
+  if(f.disciplinas.length&&!f.disciplinas.includes(q.disciplina))return false;
+  if(f.temas.length&&!f.temas.includes(q.tema))return false;
+  if(f.exames.length&&!f.exames.includes(q.exame))return false;
+  if(f.anos.length&&!f.anos.includes(q.ano))return false;
+  if(f.status.length&&!f.status.includes(statusOf(q)))return false;
+  return true;
+}
+function pool(f){
+  if(f.cadernoId){
+    const c=cadernos.find(x=>x.id===f.cadernoId);
+    if(!c)return[];
+    return Q.filter(q=>c.items.has(q.id));
+  }
+  return Q.filter(q=>matches(q,f));
+}
+
+/* ============================================================
+   Aba Estudar
+   ============================================================ */
+function viewEstudar(){return mode==="rodar"?viewRun():viewMontar()}
+
+/** Primeira visita: quatro linhas dizendo o que o app faz por conta própria.
+ *  Dispensável para sempre em um clique — ninguém quer tutorial toda vez. */
+function bemVindo(){
+  if(localStorage.getItem(LS_BEMVINDO))return null;
+  const c=el("div","card pad");
+  c.style.cssText="margin-bottom:16px;background:var(--azul-soft);border-color:var(--azul-line)";
+  const h=el("h2",null,"Primeira vez por aqui?");
+  h.style.cssText="font-family:Fraunces,serif;font-size:17px;font-weight:600;margin:0 0 6px;color:var(--azul)";
+  const p=el("p",null,"Escolha o que quer resolver, responda, entenda. O resto o app faz sozinho: cada questão respondida entra num ciclo de revisão, tudo salva mesmo sem sinal, e ao responder você vê como as outras pessoas foram naquela questão.");
+  p.style.cssText="margin:0;font-size:13.5px;color:var(--azul);line-height:1.6";
+  const r=el("div");r.style.cssText="display:flex;gap:8px;flex-wrap:wrap;margin-top:13px";
+  const g=el("button","btn primary","Ver como funciona");g.type="button";g.onclick=()=>abrirAjuda("sessao");
+  const x=el("button","btn","Entendi");x.type="button";
+  x.onclick=()=>{try{localStorage.setItem(LS_BEMVINDO,"1")}catch(e){}render()};
+  r.append(g,x);c.append(h,p,r);return c;
+}
+function viewMontar(){
+  const w=el("div");
+  const list=pool(filter);
+  const bv=bemVindo();if(bv)w.append(bv);
+
+  const pres=el("div","presets");
+  const addP=(t,fn)=>{const b=el("button","preset",t);b.onclick=fn;pres.append(b)};
+  addP("▸ Continuar (não respondidas)",()=>{filter=blankFilter();filter.status=["nao"];setup.ordem="prova";start()});
+  addP("✗ Só minhas erradas",()=>{filter=blankFilter();filter.status=["errei"];setup.ordem="aleatoria";start()});
+  addP("★ Revisar marcadas",()=>{filter=blankFilter();filter.soMarcadas=true;start()});
+  const nRev=paraRevisar().length;
+  addP("⏱ Simulado de prova completa",pickSimulado);
+  pres.setAttribute("role","group");pres.setAttribute("aria-label","Começar em um clique");
+  w.append(pres);
+  w.append(Object.assign(el("p","hint","Começos rápidos. Para mirar num ponto específico, monte a sessão no cartão abaixo."),
+    {style:"margin:-10px 0 16px"}));
+
+  // Revisão espaçada: cartão explicativo + entrada para a sessão do dia
+  const rev=el("div","card pad");rev.style.cssText="margin-bottom:16px;background:var(--roxo-soft);border-color:var(--roxo-line)";
+  const rh=el("div");rh.style.cssText="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap";
+  const rt=el("div");
+  const h3=el("h2",null,nRev?"Revisão de hoje: "+plural(nRev,"questão","questões"):"Revisão em dia");
+  h3.style.cssText="font-family:Fraunces,serif;font-size:17px;font-weight:600;margin:0 0 4px;color:var(--roxo)";
+  const p1=el("p",null,nRev
+    ? "Estas questões voltaram no intervalo certo para firmar na memória."
+    : "Nada vencido agora. Responda questões novas — elas entram no ciclo automaticamente.");
+  p1.style.cssText="margin:0;font-size:13.5px;color:var(--roxo)";
+  rt.append(h3,p1);
+  const rb=el("div");rb.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
+  if(nRev){
+    const go=el("button","btn primary","Revisar agora ("+nRev+")");
+    go.onclick=()=>{filter=blankFilter();filter.soRevisao=true;setup.ordem="aleatoria";setup.tamanho=null;start()};
+    rb.append(go);
+  }
+  const cm=el("button","btn","Como funciona?");cm.type="button";cm.onclick=()=>abrirAjuda("revisao");rb.append(cm);
+  rh.append(rt,rb);rev.append(rh);
+  if(nRev||reviews.size){
+    const prox=proximasRevisoes();
+    if(prox)rev.append(Object.assign(el("p","hint",prox),{style:"margin-top:12px;color:var(--roxo);opacity:.85"}));
+  }
+  w.append(rev);
+
+  const card=el("div","card pad");
+  if(filter.cadernoId){
+    const c=cadernos.find(x=>x.id===filter.cadernoId);
+    const bn=el("div","count-box");bn.style.cssText="background:var(--roxo-soft);border-color:var(--roxo-line);margin-bottom:16px";
+    const t=el("div");t.style.color="var(--roxo)";
+    t.append(el("b",null,"Caderno: "+(c?c.nome:"(removido)")));
+    t.append(document.createTextNode(" — os demais filtros ficam desativados enquanto ele estiver ativo."));
+    const x=el("button","btn","Sair do caderno");x.onclick=()=>{filter=blankFilter();render()};
+    bn.append(t,x);card.append(bn);
+  }
+  const form=el("form");form.onsubmit=e=>e.preventDefault();
+
+  form.append(chipSet("Situação da questão",[["nao","Não respondidas"],["errei","Respondi e errei"],["acertei","Respondi e acertei"]],filter.status,v=>toggle(filter.status,v),true));
+  form.append(chipSet("Disciplina",DISCIPLINAS.map(d=>[d,d]),filter.disciplinas,v=>{toggle(filter.disciplinas,v);filter.temas=filter.temas.filter(t=>filter.disciplinas.some(d=>TAX[d].includes(t)))}));
+  if(filter.disciplinas.length){
+    const ts=[];filter.disciplinas.forEach(d=>TAX[d].forEach(t=>ts.push([t,t])));
+    form.append(chipSet("Tema",ts,filter.temas,v=>toggle(filter.temas,v)));
+  }else{
+    const fs=el("fieldset");fs.append(el("legend",null,"Tema"));
+    fs.append(el("p","hint","Selecione uma disciplina para ver os temas."));form.append(fs);
+  }
+  const exames=[...new Set(Q.map(q=>q.exame))].sort((a,b)=>a-b);
+  form.append(chipSet("Exame",exames.map(e=>[e,"Ex "+e]),filter.exames,v=>toggle(filter.exames,v)));
+  const anos=[...new Set(Q.map(q=>q.ano).filter(Boolean))].sort();
+  form.append(chipSet("Ano",anos.map(a=>[a,String(a)]),filter.anos,v=>toggle(filter.anos,v)));
+
+  const fs=el("fieldset");fs.append(el("legend",null,"Refinar"));
+  const cw=el("div","chips");
+  cw.append(toggleChip("★ Só marcadas",filter.soMarcadas,()=>{filter.soMarcadas=!filter.soMarcadas}));
+  cw.append(toggleChip("🔁 Só vencidas para revisão",filter.soRevisao,()=>{filter.soRevisao=!filter.soRevisao}));
+  cw.append(toggleChip("Incluir anuladas",filter.incluirAnuladas,()=>{filter.incluirAnuladas=!filter.incluirAnuladas}));
+  fs.append(cw);form.append(fs);
+  card.append(form);
+
+  const nn=list.filter(q=>statusOf(q)==="nao").length,ne=list.filter(q=>statusOf(q)==="errei").length,na=list.length-nn-ne;
+  const cb=el("div","count-box");
+  const left=el("div");
+  const lbl=el("span",null,"questões no filtro");lbl.style.color="var(--ink-soft)";
+  left.append(el("span","n",String(list.length)),document.createTextNode(" "),lbl);
+  cb.append(left,el("div","bd",`${nn} não respondidas · ${ne} erradas · ${na} certas`));
+  card.append(cb);
+
+  const cfgs=el("fieldset");cfgs.append(el("legend",null,"Como resolver"));
+  const linha=(rot,...bs)=>{const d=el("div","chips");d.style.marginBottom="8px";
+    d.setAttribute("role","group");d.setAttribute("aria-label",rot);d.append(...bs);return d};
+  const r1=linha("Ordem das questões",
+    radio("Ordem da prova",setup.ordem==="prova",()=>{setup.ordem="prova";render()}),
+    radio("Aleatória",setup.ordem==="aleatoria",()=>{setup.ordem="aleatoria";render()}));
+  const r2=linha("Modo de resolução",
+    radio("Modo estudo",setup.modo==="estudo",()=>{setup.modo="estudo";render()}),
+    radio("Modo simulado",setup.modo==="simulado",()=>{setup.modo="simulado";render()}));
+  const r3=linha("Quantas questões",
+    ...[[10,"10"],[20,"20"],[40,"40"],[null,"Tudo"]].map(([v,l])=>radio(l,setup.tamanho===v,()=>{setup.tamanho=v;render()})));
+  r3.style.marginBottom="0";
+  // o que cada modo faz, na hora de escolher — não numa ajuda que ninguém abre
+  const dica=el("p","hint");dica.style.cssText="margin:2px 0 10px";
+  dica.textContent=setup.modo==="simulado"
+    ? "Simulado: cronômetro rodando, sem gabarito nem comentário até o fim. Você navega livre e corrige tudo de uma vez."
+    : "Estudo: cada resposta abre o gabarito, a fundamentação e as estatísticas na hora.";
+  cfgs.append(r1,r2,dica,r3);card.append(cfgs);
+
+  const act=el("div","actions");act.style.marginTop="4px";
+  const go=el("button","btn primary big","Iniciar sessão ("+Math.min(list.length,setup.tamanho||list.length)+")");
+  go.disabled=!list.length;go.onclick=()=>start();
+  const clr=el("button","btn","Limpar filtros");clr.onclick=()=>{filter=blankFilter();render()};
+  const sv=el("button","btn","Salvar filtro");sv.onclick=saveFilter;
+  act.append(go,clr,sv);card.append(act);
+  w.append(card);
+
+  if(filtros.length||cadernos.length){
+    const c2=el("div","card pad");c2.style.marginTop="16px";
+    if(filtros.length){
+      const s=el("fieldset");s.append(el("legend",null,"Filtros salvos"));
+      const box=el("div","saved");
+      filtros.forEach(f=>{
+        const it=el("div","item");
+        const g=el("button","go",f.nome);g.onclick=()=>{filter=Object.assign(blankFilter(),f.definicao);render()};
+        const x=el("button","x","×");x.setAttribute("aria-label","Excluir filtro "+f.nome);
+        x.onclick=async()=>{
+          if(await askConfirm("Excluir filtro","O filtro \""+f.nome+"\" será removido.",{okText:"Excluir",danger:true})){
+            filtros=filtros.filter(x=>x.id!==f.id);render();
+            push({method:"DELETE",path:"/rest/v1/saved_filters?id=eq."+f.id});
+          }
+        };
+        it.append(g,x);box.append(it);
+      });
+      s.append(box);c2.append(s);
+    }
+    if(cadernos.length){
+      const s=el("fieldset");s.style.marginBottom="0";s.append(el("legend",null,"Cadernos"));
+      const box=el("div","saved");
+      cadernos.forEach(c=>{
+        const it=el("div","item");
+        const g=el("button","go",c.nome+" ("+c.items.size+")");g.onclick=()=>startCaderno(c);
+        const x=el("button","x","×");x.setAttribute("aria-label","Excluir caderno "+c.nome);
+        x.onclick=async()=>{
+          if(await askConfirm("Excluir caderno","O caderno \""+c.nome+"\" será removido em todos os aparelhos. As questões continuam no banco e seu progresso nelas é mantido.",{okText:"Excluir",danger:true})){
+            cadernos=cadernos.filter(y=>y.id!==c.id);
+            if(filter.cadernoId===c.id)filter=blankFilter();
+            render();announce("Caderno excluído");
+            push({method:"DELETE",path:"/rest/v1/cadernos?id=eq."+c.id});
+          }
+        };
+        it.append(g,x);box.append(it);
+      });
+      s.append(box);c2.append(s);
+    }
+    w.append(c2);
+  }
+  return w;
+}
+function chipSet(label,options,arr,onToggle,isStatus){
+  const fs=el("fieldset");fs.append(el("legend",null,label));
+  const box=el("div","chips");box.setAttribute("role","group");box.setAttribute("aria-label",label);
+  options.forEach(([val,lab])=>{
+    const b=el("button","chip"+(isStatus?" st":""),lab);b.type="button";
+    b.setAttribute("aria-pressed",arr.includes(val)?"true":"false");
+    b.onclick=()=>{onToggle(val);render()};
+    box.append(b);
+  });
+  fs.append(box);return fs;
+}
+function toggleChip(lab,on,fn){const b=el("button","chip",lab);b.type="button";b.setAttribute("aria-pressed",on?"true":"false");b.onclick=()=>{fn();render()};return b}
+function radio(lab,on,fn){const b=el("button","chip",lab);b.type="button";b.setAttribute("aria-pressed",on?"true":"false");b.onclick=fn;return b}
+function toggle(a,v){const i=a.indexOf(v);if(i<0)a.push(v);else a.splice(i,1)}
+
+async function saveFilter(){
+  const nome=await askText("Salvar filtro","Guarde esta combinação para reaplicar depois com um clique.",{label:"Nome do filtro",placeholder:"Ex.: Constitucional fraco",okText:"Salvar filtro"});
+  if(!nome)return;
+  const def=JSON.parse(JSON.stringify(filter));
+  const ex=filtros.find(f=>f.nome===nome);
+  const id=ex?ex.id:uuid();
+  if(ex)ex.definicao=def; else filtros.push({id,nome,definicao:def});
+  filtros.sort((a,b)=>a.nome.localeCompare(b.nome));
+  toast('Filtro "'+nome+'" salvo');render();
+  push({method:"POST",path:"/rest/v1/saved_filters?on_conflict=user_id,nome",
+    prefer:"resolution=merge-duplicates,return=minimal",
+    body:{id,user_id:sess().user_id,nome,definicao:def}});
+}
+function proximasRevisoes(){
+  if(!reviews.size)return "";
+  const h=hojeISO();let d7=0,d30=0;
+  reviews.forEach(r=>{
+    if(r.due<=h)return;
+    const dias=Math.round((new Date(r.due+"T00:00:00")-new Date(h+"T00:00:00"))/DIA);
+    if(dias<=7)d7++; if(dias<=30)d30++;
+  });
+  return reviews.size+" questões no ciclo · "+d7+" voltam nos próximos 7 dias · "+d30+" em 30 dias";
+}
+/** O simulado exclui as anuladas (sem gabarito, elas contariam como erro),
+ *  então prometer "as 80 questões" era mentira em 8 dos 11 exames. Mostra a
+ *  contagem real de cada um. */
+async function pickSimulado(){
+  const porExame=new Map();
+  Q.forEach(q=>{if(!q.anulada)porExame.set(q.exame,(porExame.get(q.exame)||0)+1)});
+  const exames=[...porExame.keys()].sort((a,b)=>a-b);
+  const e=await askChoice("Simulado de prova completa",
+    "Escolha o exame. Cronômetro rodando, nada revelado até o fim — como na prova. Questões anuladas ficam de fora.",
+    exames.map(x=>({value:x,label:"Exame "+x,hint:plural(porExame.get(x),"questão","questões")})));
+  if(!e)return;
+  filter=blankFilter();filter.exames=[String(e)];setup.ordem="prova";setup.modo="simulado";setup.tamanho=null;start();
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function start(fromList){
+  let list=fromList||pool(filter);
+  if(!list.length){toast("Nenhuma questão nesse filtro");return}
+  list=list.slice();
+  if(setup.ordem==="aleatoria")shuffle(list);
+  else list.sort((a,b)=>(a.exame-b.exame)||(a.numero-b.numero));
+  if(setup.tamanho)list=list.slice(0,setup.tamanho);
+  const ids=list.map(q=>q.id);
+  run={ids,i:0,modo:setup.modo,respostas:{},startedAt:Date.now(),done:false};
+  chosen=null;chosenFor=null;mode="rodar";saveRun();render();
+  announce("Sessão iniciada com "+plural(ids.length,"questão","questões"));
+  ensureAhead(0).then(render).catch(()=>render());
+}
+function startCaderno(c){
+  filter=blankFilter();filter.cadernoId=c.id;
+  setup.ordem="prova";setup.modo="estudo";setup.tamanho=null;
+  start(Q.filter(q=>c.items.has(q.id)));
+}
+const runList=()=>run.ids.map(id=>qById.get(id)).filter(Boolean);
+
+/* --- retomar sessão (só ids e respostas pendentes; nada de enunciado) --- */
+function saveRun(){
+  try{
+    if(!run){localStorage.removeItem(LS_RUN);return}
+    localStorage.setItem(LS_RUN,JSON.stringify(Object.assign({},run,{elapsed:Date.now()-run.startedAt})));
+  }catch(e){}
+}
+function restoreRun(){
+  if(run)return;    // loadAll chama duas vezes (cache e rede): a sessão viva manda
+  try{
+    const r=JSON.parse(localStorage.getItem(LS_RUN));
+    if(r&&r.ids&&r.ids.length){
+      // questões removidas do acervo saem da sessão; antes, UMA id ausente
+      // descartava um simulado de 80 questões pela metade
+      const ids=r.ids.filter(id=>qById.has(id));
+      if(!ids.length){localStorage.removeItem(LS_RUN);return}
+      if(ids.length!==r.ids.length){r.ids=ids;r.i=Math.min(r.i,ids.length-1)}
+      // rebase do cronômetro: o tempo não corre com o app fechado
+      r.startedAt=Date.now()-(r.elapsed||0);delete r.elapsed;
+      run=r;mode="rodar";
+      ensureAhead(run.i).then(render).catch(()=>{});
+    }
+    else localStorage.removeItem(LS_RUN);
+  }catch(e){localStorage.removeItem(LS_RUN)}
+}
+function endRun(){run=null;mode="montar";saveRun();chosen=null;chosenFor=null;render()}
+
+/* ============================================================
+   Sessão em andamento
+   ============================================================ */
+function stopTimer(){if(timerInt){clearInterval(timerInt);timerInt=null}}
+function viewRun(){
+  const list=runList();
+  if(!list.length){endRun();return el("div")}
+  if(run.done)return viewResultado(list);
+  const q=list[run.i];
+  if(!temConteudo(q)){
+    const morta=semConteudoServidor.has(q.id);
+    if(!morta)ensureAhead(run.i).then(render).catch(()=>{qErro=q.id;render()});
+    const w=el("div");const c=el("div","card pad empty");
+    if(morta||qErro===q.id){
+      c.append(el("div","big","Não consegui carregar esta questão"));
+      c.append(el("p",null,morta?"Ela não está mais no banco de questões.":"Verifique a conexão e tente de novo."));
+      if(!morta){const r=el("button","btn primary","Tentar de novo");r.style.margin="12px 6px 0";
+        r.onclick=()=>{qErro=null;ensureAhead(run.i).then(render).catch(()=>{qErro=q.id;render()});render()};c.append(r)}
+      const pl=el("button","btn","Pular esta →");pl.style.margin="12px 6px 0";
+      pl.onclick=()=>{run.i<runList().length-1?goTo(run.i+2):endRun()};c.append(pl);
+    }else{
+      const d=el("div","big");d.append(el("span","spinner"));d.append(document.createTextNode(" Carregando a questão…"));
+      c.append(d,el("p",null,"Buscando o enunciado no servidor."));
+    }
+    const b=el("button","btn","← Encerrar sessão");b.style.margin="12px 6px 0";b.onclick=endRun;c.append(b);
+    w.append(c);return w;
+  }
+  const isSim=run.modo==="simulado";
+  const sel=run.respostas[q.id]||null;
+  const revealed=!isSim&&!!sel;
+  if(chosenFor!==q.id){chosen=sel;chosenFor=q.id}
+  if(isSim)chosen=sel;
+
+  const w=el("div");
+  const bar=el("div","runbar");
+  const back=el("button","btn","← Encerrar");
+  back.onclick=async()=>{if(await askConfirm("Encerrar a sessão?","Suas respostas já dadas continuam salvas. Você volta para a montagem de sessão.",{okText:"Encerrar"}))endRun()};
+  const prog=el("div","prog");
+  prog.setAttribute("role","progressbar");prog.setAttribute("aria-valuemin","1");
+  prog.setAttribute("aria-valuemax",String(list.length));prog.setAttribute("aria-valuenow",String(run.i+1));
+  prog.setAttribute("aria-label","Progresso da sessão");
+  const pf=el("div","f");pf.style.width=((run.i+1)/list.length*100)+"%";prog.append(pf);
+  const right=el("div");right.style.cssText="display:flex;align-items:center;gap:12px";
+  const answeredN=Object.keys(run.respostas).length;
+  right.append(el("span","timer",(run.i+1)+"/"+list.length+(isSim?" · "+answeredN+" resp.":"")));
+  if(isSim){
+    const t=el("span","timer",fmt(Date.now()-run.startedAt));t.id="tmr";
+    t.setAttribute("aria-label","Tempo decorrido");right.append(t);
+    timerInt=setInterval(()=>{const e=document.getElementById("tmr");if(e)e.textContent=fmt(Date.now()-run.startedAt);else stopTimer()},1000);
+  }
+  bar.append(back,prog,right);w.append(bar);
+
+  const card=el("div","card pad");
+  const meta=el("div","meta-row");
+  const tags=el("div","qtag");
+  if(q.disciplina){const p=el("span","pill d",q.disciplina);tags.append(p)}
+  else tags.append(el("span","pill","sem disciplina"));
+  if(q.tema)tags.append(el("span","pill t",q.tema));
+  tags.append(el("span","pill","Exame "+q.exame+" · questão "+q.numero));
+  const mb=el("div","metabtns");
+  if(ehAdmin){
+    const ed=el("button","iconbtn","✎");ed.title="Corrigir disciplina e tema";
+    ed.setAttribute("aria-label","Corrigir disciplina e tema desta questão");
+    ed.onclick=()=>editClassif(q);mb.append(ed);
+  }
+  const st=el("button","iconbtn","★");st.title="Marcar para revisar";st.type="button";st.dataset.fid="marcar";
+  st.setAttribute("aria-label","Marcar questão para revisar");st.setAttribute("aria-pressed",marks.has(q.id)?"true":"false");
+  st.onclick=()=>toggleMark(q);
+  mb.append(st);meta.append(tags,mb);card.append(meta);
+
+  const h=el("h2","sr-only","Questão "+(run.i+1)+" de "+list.length);card.append(h);
+  card.append(el("div","enunciado",q.enunciado));
+
+  const alts=el("div","alts");
+  alts.setAttribute("role","group");alts.setAttribute("aria-label","Alternativas");
+  ["A","B","C","D"].forEach(k=>{
+    if(!q.alternativas[k])return;
+    const b=el("button","alt");b.type="button";b.dataset.fid="alt-"+k;
+    b.append(el("span","key",k),el("span",null,q.alternativas[k]));
+    if(revealed){
+      b.classList.add("locked");b.disabled=true;
+      if(k===q.gabarito){b.classList.add("correct");b.setAttribute("aria-label","Alternativa "+k+", correta: "+q.alternativas[k])}
+      else if(k===sel){b.classList.add("wrong");b.setAttribute("aria-label","Alternativa "+k+", sua resposta, incorreta: "+q.alternativas[k])}
+    }else{
+      b.setAttribute("aria-pressed",chosen===k?"true":"false");
+      b.onclick=()=>{chosen=k;if(isSim){run.respostas[q.id]=k;saveRun()}render()};
+    }
+    alts.append(b);
+  });
+  card.append(alts);
+
+  if(revealed){
+    card.append(verdictBox(q,sel));
+    const sb=schedBox(q);if(sb)card.append(sb);
+    comentarios(q,sel).forEach(c=>card.append(c));
+    const stb=statsBox(q,sel);if(stb)card.append(stb);
+  }
+
+  const actbar=el("div","actbar");
+  const act=el("div","actions");
+  if(isSim){
+    const p=el("button","btn","← Anterior");p.disabled=run.i===0;p.onclick=()=>goTo(run.i);
+    const n=el("button","btn primary",run.i>=list.length-1?"Ir para correção":"Próxima →");
+    n.onclick=()=>{run.i>=list.length-1?finalizeSim(list):goTo(run.i+2)};
+    const f=el("button","btn","Finalizar agora");
+    f.onclick=async()=>{
+      const branco=list.length-answeredN;
+      if(await askConfirm("Finalizar e corrigir?",branco?plural(branco,"questão ficará em branco","questões ficarão em branco")+" e "+(branco===1?"contará":"contarão")+" como não respondidas.":"Todas as questões foram respondidas.",{okText:"Corrigir agora"}))finalizeSim(list);
+    };
+    act.append(p,n,f);
+  }else if(!revealed){
+    const r=el("button","btn primary","Responder");r.type="button";r.dataset.fid="responder";
+    r.disabled=!chosen;r.onclick=()=>answerNow(q);
+    const s=el("button","btn","Pular →");s.type="button";s.onclick=()=>{run.i>=list.length-1?toast("Esta é a última questão da sessão"):goTo(run.i+2)};
+    act.append(r,s);
+  }else{
+    const pk=explan.get(q.id)||{};
+    const errou=sel!==q.gabarito;
+    const falta=!pk.geral||(errou&&!pk[sel]);
+    if(falta){
+      const g=el("button","btn");
+      g.innerHTML=busyIA?'<span class="spinner"></span> Analisando…'
+        :(pk.geral&&errou?"Por que a "+sel+" está errada?":"Explicar com IA");
+      g.disabled=!!busyIA;g.onclick=()=>explainNow(q,errou?sel:null);act.append(g);
+    }
+    const cd=el("button","btn","+ Caderno");cd.type="button";cd.onclick=()=>addToCaderno(q.id);act.append(cd);
+    const p=el("button","btn","← Anterior");p.type="button";p.disabled=run.i===0;p.onclick=()=>goTo(run.i);
+    const n=el("button","btn primary",run.i>=list.length-1?"Concluir":"Próxima →");n.type="button";n.dataset.fid="prox";
+    n.onclick=()=>{run.i>=list.length-1?(run.done=true,run.tempoFinal=run.tempoFinal==null?Date.now()-run.startedAt:run.tempoFinal,saveRun(),render()):goTo(run.i+2)};
+    act.append(p,n);
+  }
+  actbar.append(act,navBox(list.length));card.append(actbar);
+  w.append(card);
+
+  const kb=el("p","hint kbdhint");kb.style.textAlign="center";kb.style.marginTop="14px";
+  kb.innerHTML='Atalhos: <span class="kbd">A</span>–<span class="kbd">D</span> ou <span class="kbd">1</span>–<span class="kbd">4</span> escolher · <span class="kbd">Enter</span> responder/avançar · <span class="kbd">←</span> <span class="kbd">→</span> navegar · <span class="kbd">M</span> marcar · <span class="kbd">?</span> ajuda';
+  w.append(kb);
+  return w;
+}
+/** Veredito: colorido, curto, para bater o olho. */
+function verdictBox(q,sel){
+  const ok=sel===q.gabarito;
+  const v=el("div","verdict "+(ok?"ok":"no"));
+  // sem role=status aqui: announce() já anuncia o resultado, e os dois juntos
+  // faziam o leitor de tela ler o veredito duas vezes
+  v.append(el("b",null,ok?"✓ Você acertou":"✗ Você marcou "+sel));
+  v.append(Object.assign(el("span","g","Gabarito: "+q.gabarito),{}));
+  return v;
+}
+/** Faixa de agendamento da revisão espaçada. */
+function schedBox(q){
+  const rv=reviews.get(q.id);
+  if(!rv)return null;
+  const ok=(answers.get(q.id)||{}).correta;
+  const s=el("div","sched");
+  s.append(el("span","lb","Volta "+textoIntervalo(rv.intervalo)+"."));
+  const chips=el("div","chips");
+  const opt=(t,nota,titulo)=>{const b=el("button","chip sm",t);b.type="button";b.title=titulo;
+    b.onclick=()=>{const r=aplicaRevisao(q.id,nota);toast("Volta "+textoIntervalo(r.intervalo));render()};return b};
+  chips.append(opt("Chutei",0,"Trata como erro: volta amanhã"),
+               opt(ok?"Sabia":"Errei feio",ok?1:0,"Mantém o padrão"),
+               opt("Fácil",2,"Empurra bem mais para frente"));
+  s.append(chips);return s;
+}
+/** Cartão de comentário: superfície calma, com "Revisar:" e "Atenção:" destacados. */
+function cmtCard(r,titulo,letra){
+  const c=el("div","cmt");
+  const h=el("div","cmt-head");
+  if(letra){const b=el("span","cmt-badge",letra);b.setAttribute("aria-hidden","true");h.append(b)}
+  h.append(el("h4",null,titulo));
+  const src=el("span","src");
+  src.textContent=(r.provider==="claude"?"Claude":"Gemini")+
+    (r.created_at?" · "+r.created_at.slice(8,10)+"/"+r.created_at.slice(5,7)+"/"+r.created_at.slice(0,4):"");
+  h.append(src);c.append(h);
+  String(r.texto||"").split(/\n+/).forEach(linha=>{
+    const t=linha.trim();if(!t)return;
+    if(/^Revisar\s*:/i.test(t)||/^Não confunda\s*:/i.test(t))c.append(el("p","rev",t));
+    else if(/^Aten[çc][ãa]o\s*:/i.test(t))c.append(el("p","att","⚠ "+t));
+    else c.append(el("p",null,t));
+  });
+  return c;
+}
+const MIN_AMOSTRA=10;   // abaixo disso o número não diz nada — e poderia identificar quem respondeu
+const METRICAS={
+  p:{rot:"Primeira vez",
+     como:"Conta só a estreia de cada pessoa: a resposta que ela deu antes de ver o gabarito. Nunca muda depois. É a dificuldade real da questão — e o número comparável com a SUA primeira tentativa."},
+  u:{rot:"Resposta atual",
+     como:"Conta onde cada pessoa está hoje: quem refaz a questão e troca de alternativa move o próprio voto. Mede quanto do público já domina o ponto."}
+};
+function statsBox(q,sel){
+  const st=stats.get(q.id);
+  if(!st)return null;
+  const cnt=k=>st[metrica+"_"+k.toLowerCase()]||0;
+  const total=["A","B","C","D"].reduce((a,k)=>a+cnt(k),0);
+  if(total<MIN_AMOSTRA)return null;
+  const box=el("div","stats");
+
+  const top=el("div","top");
+  top.append(el("h4",null,"Como as pessoas responderam"));
+  const seg=el("div","seg");seg.setAttribute("role","group");seg.setAttribute("aria-label","Métrica das estatísticas");
+  ["p","u"].forEach(m=>{
+    const b=el("button",null,METRICAS[m].rot);b.type="button";
+    b.setAttribute("aria-pressed",metrica===m?"true":"false");
+    b.onclick=()=>{metrica=m;render()};
+    seg.append(b);
+  });
+  top.append(seg);box.append(top);
+
+  const acertos=q.gabarito?cnt(q.gabarito):0;
+  const pct=Math.round(acertos/total*100);
+  const nivel=pct>=70?"considerada fácil":pct>=45?"de dificuldade média":"considerada difícil";
+  box.append(el("p","sum",plural(total,"pessoa","pessoas")+" · "+pct+"% de acerto"+(q.gabarito?" — "+nivel:"")+"."));
+
+  ["A","B","C","D"].forEach(k=>{
+    if(!q.alternativas[k])return;
+    const n=cnt(k), p=total?Math.round(n/total*100):0;
+    const cert=k===q.gabarito, sua=k===sel&&!cert;
+    const r=el("div","rowd");
+    const kk=el("span","k"+(cert?" cert":sua?" sua":""),k);
+    const bar=el("div","bar");const i=el("i");i.style.width=p+"%";
+    if(cert)i.className="cert"; else if(sua)i.className="sua";
+    bar.append(i);
+    r.setAttribute("role","img");
+    r.setAttribute("aria-label","Alternativa "+k+(cert?" (correta)":sua?" (a sua)":"")+": "+p+" por cento");
+    r.append(kk,bar,el("span","pc",p+"%"));box.append(r);
+  });
+
+  if(sel!==q.gabarito&&cnt(sel)){
+    const p=Math.round(cnt(sel)/total*100);
+    if(p>=25){const w=el("p","sum","Você não está sozinho: "+p+"% também marcaram "+sel+".");
+      w.style.cssText="margin:11px 0 0;color:var(--erro)";box.append(w)}
+  }
+  box.append(el("p","como",METRICAS[metrica].como));
+  if(metrica==="u"){
+    const x=el("p","como mais");
+    x.append(el("b",null,"Pausa de 6 horas. "));
+    x.append(document.createTextNode("Errar e acertar a mesma questão logo em seguida não é memória — é ter acabado de ler o gabarito. Por isso um acerto dado menos de 6 horas depois do erro não entra nesta conta: o seu voto continua na alternativa errada. Ele só se move quando você acerta pelo menos 6 horas depois. Errar de novo reinicia a espera."));
+    box.append(x);
+  }
+  return box;
+}
+function comentarios(q,sel){
+  const out=[];
+  const ec=explan.get(q.id)||{};
+  if(ec.geral)out.push(cmtCard(ec.geral,"Fundamentação do gabarito"));
+  if(sel!==q.gabarito&&ec[sel])out.push(cmtCard(ec[sel],"Por que a "+sel+" atrai",sel));
+  if(!explLoaded.has(q.id))loadExplan(q.id);
+  return out;
+}
+function navBox(total){
+  const w=el("div","navbox");
+  const id="nav"+Math.random().toString(36).slice(2,7);
+  const l=el("label","sr-only","Ir para a questão número");l.htmlFor=id;
+  const i=el("input");i.type="text";i.id=id;i.inputMode="numeric";i.value=String(run.i+1);
+  i.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();goTo(i.value)}};
+  const t=el("span",null,"/ "+total);
+  w.append(l,i,t);return w;
+}
+function goTo(v){
+  const list=runList();
+  const n=parseInt(String(v).replace(/\D/g,""),10);
+  if(!n||n<1||n>list.length){toast("Digite um número entre 1 e "+list.length);render();return}
+  run.i=n-1;chosen=null;chosenFor=null;saveRun();render();ensureAhead(run.i);
+  const m=document.getElementById("main");if(m)m.focus();
+}
+function answerNow(q){
+  if(!chosen)return;
+  const correta=chosen===q.gabarito;
+  const at=new Date().toISOString();
+  run.respostas[q.id]=chosen;saveRun();
+  answers.set(q.id,{resposta:chosen,correta,at});
+  const r=aplicaRevisao(q.id,correta?1:0);          // acertou = Bom · errou = volta amanhã
+  focoApos="prox";                                 // "Responder" deixa de existir ao revelar
+  render();
+  announce((correta?"Correto. Gabarito "+q.gabarito:"Incorreto. Você marcou "+chosen+". Gabarito "+q.gabarito)+". Revisão "+textoIntervalo(r.intervalo));
+  push({method:"POST",path:"/rest/v1/answers?on_conflict=user_id,question_id",
+    prefer:"resolution=merge-duplicates,return=minimal",
+    body:{user_id:sess().user_id,question_id:q.id,resposta:chosen,correta,answered_at:at}});
+}
+function finalizeSim(list){
+  const at=new Date().toISOString();const rows=[];
+  for(const q of list){
+    const r=run.respostas[q.id];if(!r)continue;
+    const correta=r===q.gabarito;
+    answers.set(q.id,{resposta:r,correta,at});
+    aplicaRevisao(q.id,correta?1:0);
+    rows.push({user_id:sess().user_id,question_id:q.id,resposta:r,correta,answered_at:at});
+  }
+  run.done=true;if(run.tempoFinal==null)run.tempoFinal=Date.now()-run.startedAt;
+  stopTimer();saveRun();render();
+  if(rows.length)push({method:"POST",path:"/rest/v1/answers?on_conflict=user_id,question_id",
+    prefer:"resolution=merge-duplicates,return=minimal",body:rows});
+}
+function toggleMark(q){
+  const on=marks.has(q.id);
+  on?marks.delete(q.id):marks.add(q.id);
+  render();announce(on?"Marcação removida":"Questão marcada para revisar");
+  push(on
+    ? {method:"DELETE",path:"/rest/v1/marks?user_id=eq."+sess().user_id+"&question_id=eq."+q.id}
+    : {method:"POST",path:"/rest/v1/marks?on_conflict=user_id,question_id",
+       prefer:"resolution=merge-duplicates,return=minimal",
+       body:{user_id:sess().user_id,question_id:q.id}});
+}
+function viewResultado(list){
+  const w=el("div");
+  const semConteudo=list.filter(q=>!temConteudo(q));
+  if(semConteudo.length)ensureContent(semConteudo.map(q=>q.id)).then(render).catch(()=>{});
+  const resp=list.filter(q=>run.respostas[q.id]);
+  const ac=resp.filter(q=>run.respostas[q.id]===q.gabarito).length;
+  const err=resp.filter(q=>run.respostas[q.id]!==q.gabarito);
+  const pct=resp.length?Math.round(ac/resp.length*100):0;
+
+  const g=el("div","stat-grid");
+  // tempoFinal congela o cronômetro na conclusão; sem ele, reabrir o resultado
+  // minutos depois mostrava um "Tempo" que continuava correndo
+  g.append(stat(ac+"/"+resp.length,"Acertos",true),stat(pct+"%","Aproveitamento"),stat(fmt(run.tempoFinal!=null?run.tempoFinal:Date.now()-run.startedAt),"Tempo"));
+  w.append(g);
+  announce("Sessão concluída. "+ac+" de "+resp.length+" corretas, "+pct+" por cento.");
+
+  const act=el("div","actions");act.style.marginBottom="16px";
+  if(err.length){
+    const b=el("button","btn primary","Refazer só as erradas ("+err.length+")");
+    b.onclick=()=>{setup.modo="estudo";start(err.slice())};act.append(b);
+  }
+  const nv=el("button","btn","Nova sessão");nv.onclick=endRun;act.append(nv);
+  w.append(act);
+
+  w.append(el("h2","section-title","Revisão"));
+  w.append(el("p","section-note","Toque numa questão para rever o gabarito e pedir o comentário."));
+  const card=el("div","card pad");const box=el("div","res-list");
+  list.forEach((q,idx)=>{
+    const sel=run.respostas[q.id];const ok=sel===q.gabarito;
+    const it=el("button","res-item");it.type="button";
+    const bd=el("span","badge "+(!sel?"na":ok?"ok":"no"),!sel?"–":ok?"✓":"✗");bd.setAttribute("aria-hidden","true");
+    const tx=el("span",null,"Q"+(idx+1)+" · Exame "+q.exame+"/"+q.numero+(q.disciplina?" · "+q.disciplina:""));
+    tx.style.flex="1";
+    const rs=el("span",null,(sel||"—")+" / "+(q.gabarito||"…"));rs.style.color="var(--ink-soft)";
+    it.setAttribute("aria-label","Questão "+(idx+1)+", "+(!sel?"em branco":ok?"acertou":"errou")+(q.gabarito?", gabarito "+q.gabarito:""));
+    it.onclick=()=>{run.done=false;run.modo="estudo";run.i=idx;chosenFor=null;saveRun();render()};
+    it.append(bd,tx,rs);box.append(it);
+  });
+  card.append(box);w.append(card);
+  return w;
+}
+function stat(n,l,green){const s=el("div","stat");const v=el("div","n"+(green?" g":""),n);s.append(v,el("div","l",l));return s}
+
+/* ============================================================
+   Cadernos / classificação / IA
+   ============================================================ */
+async function addToCaderno(qid){
+  const r=await askChoice("Adicionar ao caderno",cadernos.length?"Escolha um caderno existente ou crie um novo.":"Cadernos são listas fixas que você monta à mão — ótimos para juntar as questões que te derrubaram.",
+    cadernos.map(c=>({value:{id:c.id},label:c.nome,hint:plural(c.items.size,"questão","questões")})),
+    {novo:true,novoPlaceholder:"Ex.: Erros de Tributário",okText:"Criar e adicionar"});
+  if(!r)return;
+  let cad=r.id?cadernos.find(c=>c.id===r.id):cadernos.find(c=>c.nome===r.novo);
+  if(!cad){
+    cad={id:uuid(),nome:r.novo,items:new Set()};
+    cadernos.push(cad);cadernos.sort((a,b)=>a.nome.localeCompare(b.nome));
+    push({method:"POST",path:"/rest/v1/cadernos",prefer:"return=minimal",
+      body:{id:cad.id,user_id:sess().user_id,nome:cad.nome}});
+  }
+  if(cad.items.has(qid)){toast('Essa questão já está em "'+cad.nome+'"');return}
+  cad.items.add(qid);render();toast('Adicionada ao caderno "'+cad.nome+'"');
+  push({method:"POST",path:"/rest/v1/caderno_items?on_conflict=caderno_id,question_id",
+    prefer:"resolution=merge-duplicates,return=minimal",
+    body:{caderno_id:cad.id,question_id:qid}});
+}
+async function editClassif(q){
+  const r=await openModal((m,close)=>{
+    mHead(m,"Corrigir classificação","Ajuste a disciplina e o tema desta questão. A mudança vale para o banco inteiro.");
+    const w1=el("div","mfield");
+    const id1="d"+Math.random().toString(36).slice(2,7);
+    const l1=el("label",null,"Disciplina");l1.htmlFor=id1;
+    const sd=el("select");sd.id=id1;
+    DISCIPLINAS.forEach(d=>{const o=el("option",null,d);o.value=d;if(d===q.disciplina)o.selected=true;sd.append(o)});
+    w1.append(l1,sd);
+    const w2=el("div","mfield");
+    const id2="t"+Math.random().toString(36).slice(2,7);
+    const l2=el("label",null,"Tema");l2.htmlFor=id2;
+    const st=el("select");st.id=id2;
+    const fill=()=>{st.innerHTML="";(TAX[sd.value]||[]).forEach(t=>{const o=el("option",null,t);o.value=t;if(t===q.tema)o.selected=true;st.append(o)})};
+    fill();sd.onchange=fill;
+    w2.append(l2,st);
+    m.append(w1,w2);
+    mFoot(m,close,"Salvar",()=>close({d:sd.value,t:st.value}));
+    return sd;
+  });
+  if(!r)return;
+  q.disciplina=r.d;q.tema=r.t;render();toast("Classificação atualizada");
+  push({method:"PATCH",path:"/rest/v1/questions?id=eq."+q.id,prefer:"return=minimal",
+    body:{disciplina:r.d,tema:r.t}});
+}
+/** Comentários são do acervo, não da conta: um geral por questão e um por
+ *  alternativa errada, reaproveitados por todos enquanto valerem. */
+let explErro=new Set();      // permite exatamente uma nova tentativa por questão
+async function loadExplan(qid){
+  explLoaded.add(qid);
+  try{
+    const rows=await apiJson("/rest/v1/explanations?select=alternativa,texto,provider,modelo,created_at,expires_at&question_id=eq."+qid+"&ativo=is.true&order=created_at.desc");
+    if(!rows||!rows.length)return;
+    const agora=new Date(), pack={};
+    rows.forEach(r=>{
+      if(new Date(r.expires_at)<=agora)return;
+      const k=r.alternativa||"geral";
+      if(!pack[k])pack[k]=r;                 // já vem ordenado: o primeiro é o mais novo
+    });
+    if(Object.keys(pack).length){explan.set(qid,Object.assign(explan.get(qid)||{},pack));render()}
+  }catch(e){
+    // falha de rede não pode condenar a questão a nunca mais buscar comentário;
+    // uma segunda chance, e só (senão cada render viraria uma tentativa nova)
+    if(!explErro.has(qid)){explErro.add(qid);explLoaded.delete(qid)}
+  }
+}
+/** Um clique. O servidor decide tudo: geral (Opus) + o da alternativa que você
+ *  marcou (Haiku), caindo para o Gemini só se o Claude estiver sem crédito. */
+async function explainNow(q,alt){
+  busyIA=true;render();
+  try{
+    const s=sess();
+    const r=await fetch(url()+"/functions/v1/"+IA_FN,{method:"POST",
+      headers:{apikey:key(),Authorization:"Bearer "+s.access_token,"Content-Type":"application/json"},
+      body:JSON.stringify({question_id:q.id,alternativa:alt||undefined})});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok||d.error)throw new Error(d.error||("HTTP "+r.status));
+    const pack=explan.get(q.id)||{};
+    if(d.geral)pack.geral=d.geral;
+    if(d.alternativa&&alt)pack[alt]=d.alternativa;
+    explan.set(q.id,pack);
+    if(d.aviso)toast(d.aviso);
+    announce(d.gerou?"Comentário gerado":"Comentário recuperado");
+  }catch(e){toast("Não consegui o comentário: "+e.message)}
+  busyIA=false;render();
+}
+
+/* ============================================================
+   Aba Mapa
+   ============================================================ */
+function viewMapa(){
+  const w=el("div");
+  const ids=[...answers.keys()];
+  if(!ids.length){
+    const c=el("div","card pad empty");
+    c.append(el("div","big","Ainda sem dados"),el("p",null,"Resolva questões em Estudar e seu mapa aparece aqui."));
+    w.append(c);return w;
+  }
+  const ac=ids.filter(id=>answers.get(id).correta).length;
+  const pct=Math.round(ac/ids.length*100);
+  const g=el("div","stat-grid");
+  g.append(stat(pct+"%","Aproveitamento geral",true),stat(String(ids.length),"Questões respondidas"),stat(ac+" / "+ids.length,"Acertos"));
+  w.append(g);
+
+  const ev=evolucao();
+  if(ev.length>=2){
+    w.append(el("h2","section-title","Evolução"));
+    w.append(el("p","section-note","Aproveitamento por dia de estudo (últimos "+ev.length+" dias com atividade), agrupado pelo seu horário local."));
+    const c=el("div","card pad");
+    const sp=el("div","spark");
+    sp.setAttribute("role","img");
+    sp.setAttribute("aria-label","Evolução: "+ev.map(d=>d.label+": "+d.pct+" por cento").join("; "));
+    ev.forEach(d=>{
+      const col=el("div","col");
+      const b=el("div","b");b.style.height=Math.max(3,d.pct*0.72)+"px";
+      b.style.background=d.pct>=70?"var(--acerto)":d.pct>=50?"var(--foco)":"var(--erro)";
+      b.title=d.label+" — "+d.pct+"% ("+d.ok+"/"+d.n+")";
+      col.append(el("span","lb",d.pct+"%"),b,el("span","lb",d.label));
+      sp.append(col);
+    });
+    c.append(sp);w.append(c);
+  }
+
+  if(reviews.size){
+    w.append(el("h2","section-title","Revisão espaçada"));
+    const info=proximasRevisoes();
+    w.append(el("p","section-note",info));
+    const c=el("div","card pad");
+    const n=paraRevisar().length;
+    const linha=el("div");linha.style.cssText="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap";
+    const t=el("div");
+    t.append(el("b",null,n?plural(n,"questão vencida","questões vencidas"):"Nenhuma questão vencida"));
+    const md=[...reviews.values()].reduce((a,r)=>a+r.intervalo,0)/reviews.size;
+    t.append(el("p","hint",n?"Revisar hoje mantém o intervalo crescendo.":"Intervalo médio atual: "+Math.round(md)+" dias."));
+    linha.append(t);
+    if(n){const b=el("button","btn primary","Revisar agora");
+      b.onclick=()=>{filter=blankFilter();filter.soRevisao=true;setup.ordem="aleatoria";setup.tamanho=null;selectTab("estudar");start()};
+      linha.append(b)}
+    c.append(linha);w.append(c);
+  }
+  w.append(grupo("Domínio por disciplina",agg(q=>q.disciplina),true,
+    "Da mais fraca para a mais forte, considerando só o que você já respondeu."));
+  const porTema=agg(q=>q.tema);
+  if(porTema.length)w.append(grupo("Domínio por tema",porTema,false,
+    "O mesmo recorte, um nível abaixo: mostra o ponto exato da disciplina que está pesando."));
+
+  const como=el("div");como.style.marginTop="24px";
+  const d=el("details","acc");
+  d.append(el("summary",null,"Como estes números são calculados"));
+  const b=el("div","body");
+  b.append(el("p",null,"Vale sempre a sua resposta mais recente de cada questão. Refazer e acertar melhora o número: o Mapa mede onde você está hoje, não o seu histórico."),
+           el("p",null,"Só entram questões que você respondeu. As intocadas não contam nem a favor nem contra — por isso o aproveitamento de uma disciplina que você mal começou oscila muito."),
+           el("p",null,"A Evolução agrupa por dia local: responder às 22h no Brasil conta como hoje, não como amanhã. Como cada questão guarda só a sua última resposta, refazer hoje uma questão antiga move aquela questão para a coluna de hoje."),
+           el("p",null,"“Onde focar” aponta as disciplinas abaixo de 60% com pelo menos 3 questões respondidas. Abaixo de 3, o número ainda é ruído."));
+  d.append(b);como.append(d);w.append(como);
+  return w;
+}
+function evolucao(){
+  const by={};
+  answers.forEach(a=>{
+    if(!a.at)return;
+    const dt=new Date(a.at);if(isNaN(dt))return;
+    // dia local: responder 22h no Brasil não pode contar como o dia seguinte (UTC)
+    const d=dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");
+    (by[d]||(by[d]={n:0,ok:0}));by[d].n++;if(a.correta)by[d].ok++;
+  });
+  return Object.entries(by).sort((a,b)=>a[0]<b[0]?-1:1).slice(-14)
+    .map(([d,s])=>({label:d.slice(8,10)+"/"+d.slice(5,7),pct:Math.round(s.ok/s.n*100),ok:s.ok,n:s.n}));
+}
+function agg(keyfn){
+  const by={};
+  answers.forEach((a,id)=>{
+    const q=qById.get(id);if(!q)return;
+    const k=keyfn(q);if(!k)return;
+    (by[k]||(by[k]={n:0,ok:0}));by[k].n++;if(a.correta)by[k].ok++;
+  });
+  return Object.entries(by).map(([area,s])=>({area,n:s.n,ok:s.ok,pct:Math.round(s.ok/s.n*100)}))
+    .sort((a,b)=>a.pct-b.pct||b.n-a.n);
+}
+function grupo(title,rows,foco,nota){
+  const box=el("div");
+  box.append(el("h2","section-title",title));
+  if(foco){
+    const fr=rows.filter(r=>r.pct<60&&r.n>=3);
+    if(fr.length){
+      const fb=el("div","focus-box");
+      fb.append(el("h3",null,"▲ Onde focar"));
+      fb.append(el("p",null,"Abaixo de 60% em: "+fr.slice(0,3).map(r=>r.area).join(", ")+(fr.length>3?" e outras":"")+"."));
+      const b=el("button","btn primary","Treinar a mais fraca");b.style.marginTop="12px";
+      b.onclick=()=>{filter=blankFilter();filter.disciplinas=[fr[0].area];view="estudar";mode="montar";selectTab("estudar")};
+      fb.append(b);box.append(fb);
+    }
+  }
+  box.append(el("p","section-note",nota));
+  const card=el("div","card");card.style.padding="6px 18px";
+  rows.forEach(r=>{
+    const row=el("div","bar-row");
+    const head=el("div","bar-head");
+    const nm=el("div","name",r.area);
+    if(foco&&r.pct<60&&r.n>=3){const t=el("span","foco-tag","FOCO");nm.append(t)}
+    head.append(nm,el("div","val",r.ok+"/"+r.n+" · "+r.pct+"%"));
+    const tr=el("div","track");
+    tr.setAttribute("role","img");tr.setAttribute("aria-label",r.area+": "+r.ok+" de "+r.n+", "+r.pct+" por cento");
+    const f=el("div","fill");f.style.width=r.pct+"%";
+    f.style.background=r.pct>=70?"var(--acerto)":r.pct>=50?"var(--foco)":"var(--erro)";
+    tr.append(f);row.append(head,tr);card.append(row);
+  });
+  box.append(card);return box;
+}
+
+/* ============================================================
+   Aba Ajustes
+   ============================================================ */
+function viewAjustes(){
+  const w=el("div");const card=el("div","card pad");
+  const s=sess()||{};
+  const b1=el("div","block");
+  b1.append(el("p","field-label","Sua conta"));
+  b1.append(el("p","hint","Conectado como "+(s.email||"—")+". Tudo é salvo no servidor: qualquer aparelho onde você entrar com esta conta mostra o mesmo progresso."));
+  const row=el("div");row.style.cssText="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px";
+  const rl=el("button","btn","Recarregar dados");rl.onclick=loadAll;
+  const out=el("button","btn","Sair");
+  out.onclick=async()=>{
+    // sair descarta a fila local: com pendências, avisar é obrigatório
+    const aviso=pendentes?" Atenção: "+plural(pendentes,"alteração ainda não subiu","alterações ainda não subiram")+" ao servidor e será(ão) perdida(s) se você sair agora — aguarde o selo mostrar “salvo”.":"";
+    if(await askConfirm("Sair da conta?","Seu progresso está salvo no servidor e continua lá."+aviso,{okText:"Sair",danger:!!pendentes}))forceLogout()};
+  row.append(rl,out);b1.append(row);card.append(b1);
+
+  const b2=el("div","block");
+  const cls=Q.filter(q=>!q.anulada&&q.disciplina).length;
+  b2.append(el("p","field-label","Banco de questões"));
+  const st=el("div");st.style.cssText="display:flex;gap:22px;flex-wrap:wrap;font-size:13.5px;color:var(--ink-soft)";
+  const mk=(n,l)=>{const d=el("div");const b=el("b",null,String(n));b.style.cssText="color:var(--ink);font-size:16px";d.append(b,document.createTextNode(" "+l));return d};
+  st.append(mk(Q.filter(q=>!q.anulada).length,"válidas"),mk(Q.filter(q=>q.anulada).length,"anuladas"),mk(cls,"classificadas"));
+  b2.append(st);
+  b2.append(el("p","hint","A lista de questões vem do servidor a cada abertura, então novas questões e reclassificações aparecem na hora. O enunciado é baixado sob demanda e fica em cache neste aparelho até você sair. O app precisa de conexão."));
+  card.append(b2);
+
+  const b3=el("div","block");
+  b3.append(el("p","field-label","Exportar"));
+  b3.append(el("p","hint","Baixe uma cópia do seu progresso (respostas, marcadas e cadernos) em JSON."));
+  const ex=el("button","btn","Baixar meu progresso");ex.style.marginTop="10px";ex.onclick=exportar;
+  b3.append(ex);card.append(b3);
+
+  const b4=el("div","block");
+  b4.append(el("p","field-label","Como o app funciona"));
+  b4.append(el("p","hint","O manual inteiro, por tópico. Também abre pelo “?” no topo — ou pela tecla ? durante uma sessão."));
+  const aj=ajudaLista(null);aj.style.marginTop="12px";
+  b4.append(aj);card.append(b4);
+
+  const b5=el("div","block");
+  b5.append(el("p","field-label","Zona de risco"));
+  const rp=el("button","btn danger","Apagar meu progresso");
+  rp.onclick=async()=>{
+    const n=answers.size;
+    if(!n){toast("Não há progresso para apagar");return}
+    if(await askConfirm("Apagar todo o progresso?",plural(n,"resposta será apagada","respostas serão apagadas")+", junto com o agendamento de revisão, em todos os aparelhos. Marcadas, cadernos e a classificação são mantidos. Não dá para desfazer.",{okText:"Apagar progresso",danger:true})){
+      answers.clear();reviews.clear();localStorage.removeItem(LS_RUN);run=null;mode="montar";
+      toast("Progresso apagado");render();
+      push({method:"DELETE",path:"/rest/v1/answers?user_id=eq."+sess().user_id});
+      push({method:"DELETE",path:"/rest/v1/reviews?user_id=eq."+sess().user_id});
+    }
+  };
+  b5.append(rp);card.append(b5);
+  w.append(card);return w;
+}
+function exportar(){
+  const data={exportado_em:new Date().toISOString(),conta:(sess()||{}).email,
+    respostas:[...answers.entries()].map(([id,a])=>({questao:id,resposta:a.resposta,correta:a.correta,em:a.at})),
+    marcadas:[...marks],
+    cadernos:cadernos.map(c=>({nome:c.nome,questoes:[...c.items]}))};
+  const b=new Blob([JSON.stringify(data,null,1)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(b);
+  a.download="banca-oab-progresso-"+new Date().toISOString().slice(0,10)+".json";
+  document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  toast("Arquivo gerado");
+}
+
+/* ============================================================
+   Navegação por abas + teclado
+   ============================================================ */
+function selectTab(v){
+  view=v;
+  document.querySelectorAll("nav.tabs button").forEach(b=>{
+    const on=b.dataset.view===v;
+    b.setAttribute("aria-selected",on?"true":"false");
+    b.tabIndex=on?0:-1;                      // tablist = um único ponto de tabulação
+  });
+  const m=document.getElementById("main");
+  if(m)m.setAttribute("aria-labelledby","tab-"+v);
+  render();
+}
+function wireTabs(){
+  const tabs=[...document.querySelectorAll("nav.tabs button")];
+  tabs.forEach((b,i)=>{
+    b.onclick=()=>selectTab(b.dataset.view);
+    b.onkeydown=e=>{
+      const d=e.key==="ArrowRight"?1:e.key==="ArrowLeft"?-1:0;
+      if(!d)return;e.preventDefault();
+      const n=tabs[(i+d+tabs.length)%tabs.length];n.focus();selectTab(n.dataset.view);
+    };
+  });
+}
+function onKey(e){
+  if(modalOpen||!ready)return;
+  const t=e.target;
+  if(t&&(t.tagName==="INPUT"||t.tagName==="SELECT"||t.tagName==="TEXTAREA"||t.isContentEditable))return;
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(e.key==="?"){e.preventDefault();abrirAjuda("atalhos");return}
+  // sem o teste de aba, teclar "1" no Mapa respondia a questão da sessão aberta
+  // por baixo, sem nada na tela para indicar isso
+  if(view!=="estudar"||mode!=="rodar"||!run||run.done)return;
+  const list=runList();if(!list.length)return;
+  const q=list[run.i];if(!temConteudo(q))return;
+  const isSim=run.modo==="simulado";
+  const sel=run.respostas[q.id]||null;
+  const revealed=!isSim&&!!sel;
+  // 1–4 espelham A–D (ergonomia: a fileira numérica fica sob a mão; as letras
+  // A/B/C/D ficam espalhadas). Cobre teclado principal e numérico, pois e.key
+  // devolve o mesmo dígito nos dois. Os atalhos de letra continuam valendo.
+  let k=e.key.toUpperCase();
+  const NUM={"1":"A","2":"B","3":"C","4":"D"};
+  if(NUM[k])k=NUM[k];
+  if(["A","B","C","D"].includes(k)&&!revealed&&temConteudo(q)&&q.alternativas[k]){
+    e.preventDefault();chosen=k;chosenFor=q.id;
+    if(isSim){run.respostas[q.id]=k;saveRun()}
+    render();announce("Alternativa "+k+" selecionada");return;
+  }
+  if(k==="M"){e.preventDefault();toggleMark(q);return}
+  if(e.key==="ArrowLeft"&&run.i>0){e.preventDefault();goTo(run.i);return}
+  if(e.key==="ArrowRight"&&run.i<list.length-1){e.preventDefault();goTo(run.i+2);return}
+  if(e.key==="Enter"){
+    e.preventDefault();
+    if(!revealed&&chosen&&!isSim){answerNow(q);return}
+    if(run.i<list.length-1){goTo(run.i+2);return}
+    if(!isSim&&revealed){run.done=true;if(run.tempoFinal==null)run.tempoFinal=Date.now()-run.startedAt;saveRun();render()}
+    return;
+  }
+}
+
+/* ============================================================
+   Início
+   ============================================================ */
+function boot(){
+  wireTabs();
+  document.getElementById("helpbtn").onclick=()=>abrirAjuda(null);
+  document.getElementById("syncpill").onclick=()=>abrirAjuda("offline");
+  document.addEventListener("keydown",onKey);
+  render();
+  if(configured()&&authed())loadAll();
+}
+boot();
+</script>
+</body>
+</html>
