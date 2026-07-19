@@ -87,7 +87,46 @@
   .iconbtn{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink-soft);border-radius:8px;min-width:34px;height:32px;cursor:pointer;font-size:14px;line-height:1;padding:0 7px}
   .iconbtn:hover{border-color:var(--ink-soft);color:var(--ink)}
   .iconbtn[aria-pressed="true"]{color:var(--foco);border-color:#e0c896;background:var(--foco-soft)}
-  .enunciado{font-size:15.5px;line-height:1.6;white-space:pre-wrap;margin:2px 0 16px}
+  /* sem white-space:pre-wrap: o Markdown produz <p>, e os dois juntos
+     dobrariam cada quebra de linha */
+  .enunciado{font-size:15.5px;line-height:1.6;margin:2px 0 16px}
+  .enunciado p{margin:0 0 11px}.enunciado p:last-child{margin-bottom:0}
+  .enunciado strong{font-weight:600}
+  .enunciado em{font-style:italic}
+  .enunciado u{text-decoration-thickness:1px;text-underline-offset:2.5px}
+  /* ---- Markdown -------------------------------------------------------
+     Citação SEM barra vertical e SEM fundo: o recuo maior, o serif itálico e
+     as aspas de abertura já dizem "isto é citado" — e dizem com mais elegância
+     do que a listra cinza que todo blog usa. Código SEM fundo: a fonte
+     monoespaçada e a cor bastam para separá-lo do texto; o retângulo cinza é
+     ruído que compete com o enunciado. */
+  .md-quote{margin:14px 0;padding:2px 0 2px 26px;border:0;background:none;position:relative;
+    font-family:'Fraunces',Georgia,serif;font-style:italic;color:var(--ink-soft);font-size:.97em;line-height:1.6}
+  .md-quote::before{content:'\201C';position:absolute;left:0;top:-6px;font-family:'Fraunces',Georgia,serif;
+    font-size:34px;line-height:1;color:var(--line-strong);font-style:normal}
+  .md-quote p{margin:0 0 7px}.md-quote p:last-child{margin-bottom:0}
+  .md-quote strong{color:var(--ink);font-weight:600}
+
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;
+    background:none;padding:0;color:var(--brand-deep);font-weight:500;letter-spacing:-.01em}
+  .md-pre{margin:13px 0;padding:12px 14px;background:none;border:1px solid var(--line-strong);
+    border-radius:9px;overflow-x:auto;position:relative}
+  .md-pre code{color:var(--ink);font-size:12.5px;line-height:1.6;font-weight:400;white-space:pre}
+  .md-pre[data-lang]::after{content:attr(data-lang);position:absolute;top:5px;right:9px;font-size:9.5px;
+    text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);font-family:'Inter',sans-serif}
+
+  .md-img{max-width:100%;height:auto;display:block;margin:13px auto;border-radius:9px;border:1px solid var(--line)}
+  .md-img-erro{display:inline-block;font-size:12px;color:var(--erro);background:var(--erro-soft);
+    border:1px dashed #eecac6;border-radius:6px;padding:2px 8px}
+  .md-table-wrap{overflow-x:auto;margin:13px 0;border:1px solid var(--line);border-radius:9px}
+  .md-table{border-collapse:collapse;width:100%;font-size:.9em}
+  .md-table th{background:var(--surface-2);text-align:left;font-weight:600;padding:8px 11px;
+    border-bottom:1px solid var(--line-strong);white-space:nowrap}
+  .md-table td{padding:8px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  .md-table tr:last-child td{border-bottom:0}
+  .md-list{margin:0 0 11px;padding-left:22px}.md-list li{margin-bottom:4px}
+  .md-list li:last-child{margin-bottom:0}
+
   .alts{display:flex;flex-direction:column;gap:8px}
   .alt{display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:12px 13px;cursor:pointer;font:inherit;font-size:14.5px;line-height:1.5;color:var(--ink);transition:.13s}
   .alt:hover:not(.locked){border-color:var(--line-strong);background:var(--surface-2)}
@@ -189,6 +228,36 @@
   .modal .msep:before,.modal .msep:after{content:'';height:1px;background:var(--line);flex:1}
   .kbd{display:inline-block;border:1px solid var(--line-strong);border-bottom-width:2px;background:var(--surface-2);border-radius:5px;padding:1px 6px;font-size:11.5px;font-weight:600;font-family:ui-monospace,monospace}
   .kbdlist{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center;font-size:13px;margin-top:14px}
+  /* aceite dos termos: alvo grande, o texto inteiro clica junto */
+  .aceite{display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:13px;color:var(--ink-soft);cursor:pointer;line-height:1.5}
+  .aceite input{width:17px;height:17px;margin:1px 0 0;accent-color:var(--brand);flex:0 0 auto;cursor:pointer}
+  .linkbtn{background:none;border:0;padding:0;font:inherit;color:var(--brand);text-decoration:underline;cursor:pointer}
+  .linkbtn:hover{color:var(--brand-deep)}
+  /* chip pequeno marcado: o mesmo verde do resto: escolhido é escolhido */
+  .chip.sm[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
+  .chip.sm[aria-pressed="true"]:hover{background:var(--brand-deep)}
+  /* reticências que respiram enquanto o texto vem do servidor */
+  @keyframes dot{0%,60%,100%{opacity:.25}30%{opacity:1}}
+  .dots i{font-style:normal;animation:dot 1.4s infinite}
+  .dots i:nth-child(2){animation-delay:.2s}
+  .dots i:nth-child(3){animation-delay:.4s}
+  /* cartão de comentário em espera: mesma caixa, conteúdo ainda a caminho */
+  .cmt.aguardando p{color:var(--ink-soft);font-style:italic}
+  @keyframes pulso{0%,100%{opacity:1}50%{opacity:.55}}
+  .cmt.aguardando .cmt-badge{animation:pulso 1.6s infinite}
+  @media (prefers-reduced-motion:reduce){.dots i,.cmt.aguardando .cmt-badge{animation:none}}
+  /* origem da questão: discreta, mas clicável — a ficha completa fica a um toque */
+  .pill.src{cursor:pointer;border-style:dashed}
+  .pill.src:hover{border-color:var(--brand);color:var(--brand);border-style:solid}
+  .ficha{display:grid;grid-template-columns:auto 1fr;gap:7px 14px;font-size:13px;margin-top:14px}
+  .ficha dt{color:var(--ink-soft)}
+  .ficha dd{margin:0;color:var(--ink);font-weight:500}
+  .refbox{margin-top:14px;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:11px 13px;font-size:12.5px;line-height:1.5;color:var(--ink)}
+  /* filtros ativos: o que está ligado, e como desligar, sem caçar chip aceso */
+  .ativos{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .ativos .tag{display:inline-flex;align-items:center;gap:5px;background:var(--brand-soft);border:1px solid var(--brand-line);color:var(--brand-deep);border-radius:999px;padding:3px 6px 3px 10px;font-size:12px}
+  .ativos .tag button{background:none;border:0;color:inherit;cursor:pointer;font-size:14px;line-height:1;padding:0 3px;opacity:.65}
+  .ativos .tag button:hover{opacity:1}
   /* dica de teclado não serve para quem só tem dedo: some no toque */
   @media (hover:none),(pointer:coarse){.kbdhint{display:none}}
   /* sanfona de ajuda: <details> nativo — abre com Enter, é anunciado como
@@ -242,8 +311,6 @@
 
 
 
-
-
 /* ============================================================
    Configuração (preencha antes de publicar)
    ============================================================ */
@@ -254,11 +321,21 @@ const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 
 
-
-
-
-const TAX={"Ética Profissional e Estatuto da OAB":["Deontologia e deveres do advogado","Honorários advocatícios","Publicidade profissional","Sigilo profissional","Prerrogativas e imunidade profissional","Infrações e sanções disciplinares","Processo disciplinar","Inscrição, impedimentos e incompatibilidades","Sociedade de advogados","Órgãos da OAB e eleições"],"Filosofia do Direito":["Justiça e equidade","Teoria da norma e do ordenamento","Positivismo e jusnaturalismo","Interpretação e argumentação jurídica","Direito, moral e legitimidade"],"Direito Constitucional":["Controle de constitucionalidade","Remédios constitucionais","Direitos e garantias fundamentais","Organização do Estado e federação","Organização dos Poderes","Processo legislativo","Ordem social","Ordem econômica e financeira","Defesa do Estado e das instituições"],"Direitos Humanos":["Sistema internacional de proteção","Sistema interamericano","Tratados de direitos humanos","Proteção de grupos vulneráveis"],"Direito Internacional":["Direito internacional público","Direito internacional privado","Nacionalidade e condição do estrangeiro","Tratados e organismos internacionais"],"Direito Eleitoral":["Direitos políticos","Sistema eleitoral e inelegibilidades","Partidos políticos","Processo eleitoral e propaganda"],"Direito Financeiro":["Orçamento público","Receita e despesa pública","Repartição de receitas","Responsabilidade fiscal (LRF)"],"Direito Tributário":["Competência e limitações ao poder de tributar","Princípios tributários","Espécies tributárias","Obrigação e crédito tributário","Responsabilidade tributária","Impostos em espécie","Administração e processo tributário"],"Direito Administrativo":["Princípios da Administração","Atos administrativos","Poderes administrativos","Licitações e contratos","Serviços públicos","Agentes públicos","Responsabilidade civil do Estado","Improbidade administrativa","Controle da Administração","Intervenção na propriedade"],"Direito Ambiental":["Princípios do direito ambiental","Política Nacional do Meio Ambiente","Responsabilidade ambiental","Áreas protegidas e licenciamento"],"Direito Civil":["Parte geral (pessoas, bens, fatos jurídicos)","Obrigações","Contratos","Responsabilidade civil","Direitos reais","Direito de família","Direito das sucessões","Prescrição e decadência"],"Direito Processual Civil":["Normas fundamentais e jurisdição","Competência","Sujeitos do processo","Tutela provisória","Procedimento comum e sentença","Recursos","Cumprimento de sentença e execução","Processos nos tribunais"],"Direito Empresarial":["Teoria da empresa e empresário","Sociedades","Títulos de crédito","Falência e recuperação judicial","Propriedade industrial","Contratos empresariais"],"Direito do Consumidor":["Relação de consumo","Responsabilidade e vícios","Práticas comerciais e proteção contratual","Defesa do consumidor em juízo"],"Direito Penal":["Aplicação da lei penal","Teoria do crime","Penas e medidas","Extinção da punibilidade","Crimes contra a pessoa","Crimes contra o patrimônio","Crimes contra a Administração Pública","Legislação penal especial"],"Direito Processual Penal":["Inquérito e ação penal","Provas","Prisões e medidas cautelares","Competência","Procedimentos","Nulidades","Recursos e habeas corpus"],"Direito do Trabalho":["Relação de emprego","Contrato de trabalho","Jornada e remuneração","Alteração, suspensão e interrupção","Extinção do contrato","Segurança e saúde no trabalho","Direito coletivo do trabalho"],"Direito Processual do Trabalho":["Justiça do Trabalho e competência","Procedimentos e audiência","Provas e sentença","Recursos trabalhistas","Execução trabalhista"],"Direito Previdenciário":["Seguridade social e princípios","Segurados e beneficiários","Benefícios previdenciários","Custeio da seguridade"],"Estatuto da Criança e do Adolescente":["Direitos fundamentais da criança e do adolescente","Medidas de proteção","Ato infracional e medidas socioeducativas","Convivência familiar e adoção"]};
-const DISCIPLINAS=Object.keys(TAX);
+let TAX={"Ética Profissional e Estatuto da OAB":["Deontologia e deveres do advogado","Honorários advocatícios","Publicidade profissional","Sigilo profissional","Prerrogativas e imunidade profissional","Infrações e sanções disciplinares","Processo disciplinar","Inscrição, impedimentos e incompatibilidades","Sociedade de advogados","Órgãos da OAB e eleições"],"Filosofia do Direito":["Justiça e equidade","Teoria da norma e do ordenamento","Positivismo e jusnaturalismo","Interpretação e argumentação jurídica","Direito, moral e legitimidade"],"Direito Constitucional":["Controle de constitucionalidade","Remédios constitucionais","Direitos e garantias fundamentais","Organização do Estado e federação","Organização dos Poderes","Processo legislativo","Ordem social","Ordem econômica e financeira","Defesa do Estado e das instituições"],"Direitos Humanos":["Sistema internacional de proteção","Sistema interamericano","Tratados de direitos humanos","Proteção de grupos vulneráveis"],"Direito Internacional":["Direito internacional público","Direito internacional privado","Nacionalidade e condição do estrangeiro","Tratados e organismos internacionais"],"Direito Eleitoral":["Direitos políticos","Sistema eleitoral e inelegibilidades","Partidos políticos","Processo eleitoral e propaganda"],"Direito Financeiro":["Orçamento público","Receita e despesa pública","Repartição de receitas","Responsabilidade fiscal (LRF)"],"Direito Tributário":["Competência e limitações ao poder de tributar","Princípios tributários","Espécies tributárias","Obrigação e crédito tributário","Responsabilidade tributária","Impostos em espécie","Administração e processo tributário"],"Direito Administrativo":["Princípios da Administração","Atos administrativos","Poderes administrativos","Licitações e contratos","Serviços públicos","Agentes públicos","Responsabilidade civil do Estado","Improbidade administrativa","Controle da Administração","Intervenção na propriedade"],"Direito Ambiental":["Princípios do direito ambiental","Política Nacional do Meio Ambiente","Responsabilidade ambiental","Áreas protegidas e licenciamento"],"Direito Civil":["Parte geral (pessoas, bens, fatos jurídicos)","Obrigações","Contratos","Responsabilidade civil","Direitos reais","Direito de família","Direito das sucessões","Prescrição e decadência"],"Direito Processual Civil":["Normas fundamentais e jurisdição","Competência","Sujeitos do processo","Tutela provisória","Procedimento comum e sentença","Recursos","Cumprimento de sentença e execução","Processos nos tribunais"],"Direito Empresarial":["Teoria da empresa e empresário","Sociedades","Títulos de crédito","Falência e recuperação judicial","Propriedade industrial","Contratos empresariais"],"Direito do Consumidor":["Relação de consumo","Responsabilidade e vícios","Práticas comerciais e proteção contratual","Defesa do consumidor em juízo"],"Direito Penal":["Aplicação da lei penal","Teoria do crime","Penas e medidas","Extinção da punibilidade","Crimes contra a pessoa","Crimes contra o patrimônio","Crimes contra a Administração Pública","Legislação penal especial"],"Direito Processual Penal":["Inquérito e ação penal","Provas","Prisões e medidas cautelares","Competência","Procedimentos","Nulidades","Recursos e habeas corpus"],"Direito do Trabalho":["Relação de emprego","Contrato de trabalho","Jornada e remuneração","Alteração, suspensão e interrupção","Extinção do contrato","Segurança e saúde no trabalho","Direito coletivo do trabalho"],"Direito Processual do Trabalho":["Justiça do Trabalho e competência","Procedimentos e audiência","Provas e sentença","Recursos trabalhistas","Execução trabalhista"],"Direito Previdenciário":["Seguridade social e princípios","Segurados e beneficiários","Benefícios previdenciários","Custeio da seguridade"],"Estatuto da Criança e do Adolescente":["Direitos fundamentais da criança e do adolescente","Medidas de proteção","Ato infracional e medidas socioeducativas","Convivência familiar e adoção"]};
+let DISCIPLINAS=Object.keys(TAX);
+/* TAX acima é o retrato de fábrica — usado enquanto o banco não respondeu, e
+   como rede de segurança se a taxonomia não carregar. Quando `greetings` e a
+   taxonomia chegam no login, este objeto é reconstruído a partir do catálogo
+   real (montaTaxonomia), e o painel passa a ser a fonte da verdade. */
+function montaTaxonomia(disc,temas){
+  if(!disc||!disc.length)return;              // sem dados: fica o de fábrica
+  const nova={};
+  disc.filter(d=>d.ativo).sort((a,b)=>a.ordem-b.ordem).forEach(d=>{
+    nova[d.nome]=(temas||[]).filter(t=>t.discipline_id===d.id&&t.ativo)
+      .sort((a,b)=>a.ordem-b.ordem).map(t=>t.nome);
+  });
+  if(Object.keys(nova).length){TAX=nova;DISCIPLINAS=Object.keys(TAX)}
+}
 const IA_FN="ia";
 
 const LS_CFG="oab_cfg", LS_SESS="oab_auth", LS_RUN="oab_run", LS_BEMVINDO="oab_bemvindo";
@@ -278,6 +355,8 @@ let filtros=[];                 // {id,nome,definicao}
 let inflight=new Map();         // lotes de conteúdo em voo (evita pedir duas vezes)
 let reviews=new Map();          // qid -> {ease,intervalo,reps,lapses,due}
 let ehAdmin=false;              // só admin corrige a classificação do acervo
+let meuNome="";                 // primeiro nome, para as saudações e Ajustes
+let saudacoesDB=[];             // acervo de frases vindo da tabela greetings
 let stats=new Map();            // qid -> {p_a..p_d, u_a..u_d} (agregado, sem PII)
 let metrica="p";                // "p" = primeira vez · "u" = resposta atual
 let explan=new Map();           // qid -> {geral:{...}, A:{...}, B:{...}, ...}
@@ -307,8 +386,22 @@ async function authPost(path,body){
   if(!r.ok)throw new Error(d.error_description||d.msg||d.error||("Falha ("+r.status+")"));
   return d;
 }
-const login=(email,password)=>authPost("/auth/v1/token?grant_type=password",{email,password}).then(d=>{saveSess(d);return d});
-const signup=(email,password)=>authPost("/auth/v1/signup",{email,password}).then(d=>{if(d.access_token)saveSess(d);return d});
+/** Registra o acesso. O IP NÃO vem daqui — de dentro do navegador ele seria
+ *  palpite, e palpite forjável. Quem o lê é a Edge Function, no cabeçalho que
+ *  a borda escreve. Falhar aqui não pode impedir ninguém de entrar: log é
+ *  auditoria, não autenticação. */
+function registraAcesso(evento){
+  const s=sess();if(!s)return;
+  fetch(url()+"/functions/v1/admin",{method:"POST",
+    headers:{apikey:key(),Authorization:"Bearer "+s.access_token,"Content-Type":"application/json"},
+    body:JSON.stringify({acao:"registrar_acesso",evento:evento||"login"})}).catch(()=>{});
+}
+const login=(email,password)=>authPost("/auth/v1/token?grant_type=password",{email,password}).then(d=>{saveSess(d);registraAcesso("login");return d});
+/** `data` vai para raw_user_meta_data e o gatilho handle_new_user copia para
+ *  profiles. O aceite é afirmado aqui, mas quem carimba a hora é o servidor —
+ *  data de consentimento vinda do relógio do cliente não vale como prova. */
+const signup=(email,password,nome)=>authPost("/auth/v1/signup",
+  {email,password,data:{nome:nome||null,aceite_termos:"true"}}).then(d=>{if(d.access_token){saveSess(d);registraAcesso("login")}return d});
 
 async function refresh(){
   const s=sess(); if(!s||!s.refresh_token)return false;
@@ -454,7 +547,7 @@ async function loadAll(){
     await drenar();
     if(pendentes>0){setSync();return}          // fila não drenou: mantém o local
     const s2=sess();
-    const [qs,ans,mk,rv,cds,its,fls,prof,sts]=await Promise.all([
+    const [qs,ans,mk,rv,cds,its,fls,prof,sts,greets,disc,temas]=await Promise.all([
       loadMeta(),
       fetchAll("/rest/v1/answers?select=question_id,resposta,correta,answered_at&user_id=eq."+s2.user_id+"&order=question_id.asc"),
       fetchAll("/rest/v1/marks?select=question_id&user_id=eq."+s2.user_id+"&order=question_id.asc"),
@@ -462,8 +555,13 @@ async function loadAll(){
       fetchAll("/rest/v1/cadernos?select=id,nome&user_id=eq."+s2.user_id+"&order=nome.asc"),
       fetchAll("/rest/v1/caderno_items?select=caderno_id,question_id&order=caderno_id.asc,question_id.asc"),
       fetchAll("/rest/v1/saved_filters?select=id,nome,definicao&user_id=eq."+s2.user_id+"&order=nome.asc"),
-      fetchAll("/rest/v1/profiles?select=role&user_id=eq."+s2.user_id+"&order=user_id.asc"),
-      fetchAll("/rest/v1/question_stats?select=*&order=question_id.asc")
+      fetchAll("/rest/v1/profiles?select=role,nome&user_id=eq."+s2.user_id+"&order=user_id.asc"),
+      fetchAll("/rest/v1/question_stats?select=*&order=question_id.asc"),
+      // ~10 KB, e sem elas a primeira tela abre sem voz
+      fetchAll("/rest/v1/greetings?select=tipo,texto,turnos,dias,min_respostas,max_respostas,peso,ativo&ativo=is.true&order=id.asc"),
+      // taxonomia do catálogo: o que o painel renomeou aparece aqui na abertura
+      fetchAll("/rest/v1/disciplines?select=id,nome,ordem,ativo&order=ordem.asc"),
+      fetchAll("/rest/v1/topics?select=id,discipline_id,nome,ordem,ativo&order=ordem.asc")
     ]);
     if(!qs.length)throw new Error("O banco de questões está vazio no servidor. Rode os arquivos SQL (01, 02 e 03).");
     aplicaMeta(qs);kvPut("meta",{rows:qs});
@@ -475,6 +573,10 @@ async function loadAll(){
     cadernos=cds.map(c=>({id:c.id,nome:c.nome,items:porCaderno.get(c.id)||new Set()}));
     filtros=fls.map(f=>({id:f.id,nome:f.nome,definicao:f.definicao}));
     ehAdmin=!!(prof&&prof[0]&&prof[0].role==="admin");
+    meuNome=(prof&&prof[0]&&prof[0].nome)||"";
+    saudacoesDB=greets||[];
+    montaTaxonomia(disc,temas);    // catálogo do banco vira a taxonomia viva
+    saudacao=null;                 // recalcula na próxima montagem da tela
     stats=new Map((sts||[]).map(x=>[x.question_id,x]));
     semRede=false;ready=true;salvarSnapshot();setSync();restoreRun();render();
   }catch(e){
@@ -521,8 +623,10 @@ function agendar(ant,nota){
   intervalo=Math.max(1,Math.min(intervalo,365));    // teto de 1 ano
   return{ease,intervalo,reps,lapses,due:maisDias(intervalo)};
 }
-function aplicaRevisao(qid,nota){
-  const r=agendar(reviews.get(qid),nota);
+/** `base` é o review de ANTES da resposta. Sem ele, reagendar significaria
+ *  aplicar SM-2 em cima de SM-2 — ver o comentário de schedBox. */
+function aplicaRevisao(qid,nota,base){
+  const r=agendar(base!==undefined?base:reviews.get(qid),nota);
   reviews.set(qid,r);
   push({method:"POST",path:"/rest/v1/reviews?on_conflict=user_id,question_id",
     prefer:"resolution=merge-duplicates,return=minimal",
@@ -534,6 +638,7 @@ function textoIntervalo(n){return n===1?"amanhã":n<30?("em "+n+" dias"):n<365?(
 
 /** Metadado da questão. O conteúdo (enunciado/alternativas/gabarito) chega sob demanda. */
 function norm(q){return{id:q.id,exame:String(q.exame),numero:q.numero,ano:q.ano,
+  banca:q.banca||"FGV",caderno:q.caderno||"",data_prova:q.data_prova||"",
   anulada:!!q.anulada,disciplina:q.disciplina||"",tema:q.tema||""}}
 const temConteudo=q=>q&&q.enunciado!==undefined;
 
@@ -542,7 +647,9 @@ const temConteudo=q=>q&&q.enunciado!==undefined;
  *  serve só para abrir instantâneo/offline — e sempre acompanhada do snapshot
  *  das SUAS respostas, senão tudo apareceria como "não respondida". */
 async function loadMeta(){
-  const campos="id,exame,numero,ano,disciplina,tema,anulada";
+  // banca/caderno/data_prova entram aqui porque a referência da questão não se
+  // monta sem eles, e buscá-los por questão seria uma ida à rede por tela
+  const campos="id,banca,exame,numero,ano,data_prova,caderno,disciplina,tema,anulada";
   return fetchAll("/rest/v1/questions?select="+campos+"&order=exame.asc,numero.asc");
 }
 
@@ -819,6 +926,500 @@ function askChoice(title,body,options,o){
 }
 
 /* ============================================================
+   Markdown — parser único, compartilhado entre o app e o painel
+   ------------------------------------------------------------
+   O banco guarda Markdown puro. A renderização é aqui, no cliente. Isso vale
+   por três razões: o texto continua legível e diffável no banco, o painel edita
+   exatamente o que o app lê, e nunca existe HTML armazenado — o que fecha, de
+   uma vez, a categoria inteira de XSS por conteúdo.
+
+   Sem biblioteca e sem innerHTML: cada pedaço vira nó de texto ou elemento
+   criado por createElement. Um renderizador que aceitasse HTML bruto seria um
+   buraco servido no acervo — o texto é escrito por administrador, mas é lido
+   por todo mundo, e "confio em quem escreve" é a frase que antecede todo
+   incidente.
+
+   Sintaxe suportada
+     **negrito**   *itálico*   ++sublinhado++   `código`
+     ```           bloco de código
+     > citação
+     - item / 1. item          listas
+     | a | b |                 tabela com cabeçalho
+     ![alt](url)               imagem
+     [texto](url)              link
+
+   O sublinhado é regra própria: o Markdown não tem sublinhado, e `__x__` no
+   padrão é negrito — usar isso quebraria texto colado de qualquer outro lugar.
+   `++x++` não colide com nada e é a convenção de várias extensões. Em texto
+   jurídico o sublinhado é frequente (destaque de dispositivo), então valia a
+   regra.
+   ============================================================ */
+
+/** Só https e imagem embutida. `javascript:` e `data:text/html` são execução
+ *  de código disfarçada de endereço; `data:image/svg+xml` é imagem para o
+ *  <img>, mas SVG carrega script em outros contextos e não vale o risco. */
+function mdUrl(u,imagem){
+  const s=String(u||"").trim();
+  if(/^https:\/\/[^\s"'<>]+$/i.test(s))return s;
+  if(imagem&&/^data:image\/(png|jpe?g|gif|webp);base64,[A-Za-z0-9+/=]+$/i.test(s))return s;
+  return null;
+}
+/** Trechos em linha. A ordem do regex importa: ** antes de *, senão o itálico
+ *  come o negrito; imagem antes de link, senão o `!` fica órfão. */
+function mdInline(str,pai){
+  const re=/(!\[[^\]]*\]\([^)\s]+\)|\[[^\]]+\]\([^)\s]+\)|\*\*[^*]+\*\*|\*[^*\n]+\*|\+\+[^+\n]+\+\+|`[^`\n]+`)/g;
+  let i=0,m;
+  while((m=re.exec(str))){
+    if(m.index>i)pai.append(document.createTextNode(str.slice(i,m.index)));
+    const t=m[0];
+    if(t.startsWith("![")){
+      const [,alt,src]=/^!\[([^\]]*)\]\(([^)\s]+)\)$/.exec(t)||[];
+      const ok=mdUrl(src,true);
+      if(ok){
+        const img=document.createElement("img");
+        img.src=ok;img.alt=alt||"";img.loading="lazy";img.className="md-img";
+        pai.append(img);
+      }else{
+        // endereço recusado: mostra o texto alternativo em vez de sumir com a
+        // figura em silêncio — numa questão, a imagem costuma ser o enunciado
+        const s=document.createElement("span");s.className="md-img-erro";
+        s.textContent="[imagem indisponível"+(alt?": "+alt:"")+"]";
+        pai.append(s);
+      }
+    }else if(t.startsWith("[")){
+      const [,txt,href]=/^\[([^\]]+)\]\(([^)\s]+)\)$/.exec(t)||[];
+      const ok=mdUrl(href,false);
+      if(ok){
+        const a=document.createElement("a");
+        a.href=ok;a.textContent=txt;a.target="_blank";a.rel="noopener noreferrer";
+        pai.append(a);
+      }else pai.append(document.createTextNode(txt));
+    }
+    else if(t.startsWith("**")){const e=document.createElement("strong");e.textContent=t.slice(2,-2);pai.append(e)}
+    else if(t.startsWith("++")){const e=document.createElement("u");e.textContent=t.slice(2,-2);pai.append(e)}
+    else if(t.startsWith("`")){const e=document.createElement("code");e.textContent=t.slice(1,-1);pai.append(e)}
+    else {const e=document.createElement("em");e.textContent=t.slice(1,-1);pai.append(e)}
+    i=m.index+t.length;
+  }
+  if(i<str.length)pai.append(document.createTextNode(str.slice(i)));
+  return pai;
+}
+/** Divide uma linha de tabela em células, respeitando | escapado (\|). */
+function mdCelulas(linha){
+  return linha.replace(/^\||\|$/g,"").split(/(?<!\\)\|/).map(c=>c.trim().replace(/\\\|/g,"|"));
+}
+const mdSepTabela=l=>/^\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?$/.test(l.trim());
+
+function markdown(txt,alvo){
+  const linhas=String(txt||"").replace(/\r\n?/g,"\n").split("\n");
+  const cria=(t,c)=>{const e=document.createElement(t);if(c)e.className=c;return e};
+  let i=0;
+  const bloco=(fim)=>{     // renderiza até `fim` (exclusivo), usado pela citação
+    while(i<(fim==null?linhas.length:fim)){
+      const bruta=linhas[i], l=bruta.trim();
+
+      if(!l){i++;continue}
+
+      // ---- bloco de código: tudo lá dentro é literal, inclusive o que
+      // parece Markdown. É o único lugar onde nada é interpretado.
+      if(/^```/.test(l)){
+        const lang=l.slice(3).trim();
+        const corpo=[];i++;
+        while(i<linhas.length&&!/^```/.test(linhas[i].trim())){corpo.push(linhas[i]);i++}
+        i++;                                   // consome o ``` de fechamento
+        const pre=cria("pre","md-pre"), code=cria("code");
+        if(lang)pre.dataset.lang=lang;
+        code.textContent=corpo.join("\n");
+        pre.append(code);alvo.append(pre);
+        continue;
+      }
+
+      // ---- citação: recolhe as linhas com > e renderiza recursivamente,
+      // para que negrito, lista e até tabela funcionem dentro dela
+      if(/^>\s?/.test(l)){
+        const dentro=[];
+        while(i<linhas.length&&/^>\s?/.test(linhas[i].trim())){
+          dentro.push(linhas[i].trim().replace(/^>\s?/,""));i++;
+        }
+        const bq=cria("blockquote","md-quote");
+        markdown(dentro.join("\n"),bq);
+        alvo.append(bq);
+        continue;
+      }
+
+      // ---- tabela: precisa da linha de separação logo abaixo do cabeçalho,
+      // senão é só um parágrafo que por acaso tem barras
+      if(l.includes("|")&&i+1<linhas.length&&mdSepTabela(linhas[i+1])){
+        const cab=mdCelulas(l);
+        i+=2;
+        const tab=cria("table","md-table"), thead=cria("thead"), trh=cria("tr");
+        cab.forEach(c=>{const th=cria("th");mdInline(c,th);trh.append(th)});
+        thead.append(trh);tab.append(thead);
+        const tb=cria("tbody");
+        while(i<linhas.length&&linhas[i].trim().includes("|")&&linhas[i].trim()){
+          const cs=mdCelulas(linhas[i].trim());
+          const tr=cria("tr");
+          for(let k=0;k<cab.length;k++){const td=cria("td");mdInline(cs[k]||"",td);tr.append(td)}
+          tb.append(tr);i++;
+        }
+        tab.append(tb);
+        // rolagem horizontal: tabela larga não pode estourar a coluna no celular
+        const env=cria("div","md-table-wrap");env.append(tab);alvo.append(env);
+        continue;
+      }
+
+      // ---- listas
+      const mUl=/^[-*+]\s+(.*)$/.exec(l), mOl=/^\d+[.)]\s+(.*)$/.exec(l);
+      if(mUl||mOl){
+        const tipo=mUl?"ul":"ol";
+        const ul=cria(tipo,"md-list");
+        if(mOl){const n=parseInt(/^(\d+)/.exec(l)[1],10);if(n!==1)ul.start=n}
+        while(i<linhas.length){
+          const t=linhas[i].trim();
+          const a=/^[-*+]\s+(.*)$/.exec(t), b=/^\d+[.)]\s+(.*)$/.exec(t);
+          if((tipo==="ul"&&!a)||(tipo==="ol"&&!b))break;
+          mdInline((a||b)[1],ul.appendChild(cria("li")));
+          i++;
+        }
+        alvo.append(ul);
+        continue;
+      }
+
+      // ---- parágrafo: junta linhas seguidas até uma vazia ou outro bloco
+      const buf=[];
+      while(i<linhas.length){
+        const t=linhas[i].trim();
+        if(!t||/^```/.test(t)||/^>\s?/.test(t)||/^[-*+]\s+/.test(t)||/^\d+[.)]\s+/.test(t))break;
+        if(t.includes("|")&&i+1<linhas.length&&mdSepTabela(linhas[i+1]))break;
+        buf.push(t);i++;
+      }
+      if(buf.length)mdInline(buf.join(" "),alvo.appendChild(cria("p")));
+    }
+  };
+  bloco(null);
+  return alvo;
+}
+
+/* ============================================================
+   Relatar erro
+   Formulário de cliques: quem achou o erro já gastou atenção achando, e não
+   deve gastar mais redigindo. Nada é obrigatório — inclusive enviar em branco,
+   porque "tem algo errado aqui" já manda o admin olhar, e exigir justificativa
+   faz a pessoa fechar a janela e seguir com o erro no ar.
+
+   Os subníveis só aparecem depois do clique no nível de cima: o formulário
+   inteiro de uma vez tem trinta caixas e assusta; assim ele nasce com cinco.
+   ============================================================ */
+const RELATO=[
+  {id:"texto",  t:"O texto está errado, incompleto ou diferente da prova", subs:[
+    {id:"vicio", t:"Que tipo de problema?", opts:[
+      ["digitacao","Erro de digitação"],["incompleto","Trecho faltando"],
+      ["estranho","Trecho que não é desta questão"],["formatacao","Formatação confusa"]]},
+    {id:"onde", t:"Em que parte?", opts:[
+      ["apoio","Texto de apoio"],["enunciado","Enunciado"],
+      ["alt_A","Alternativa A"],["alt_B","Alternativa B"],
+      ["alt_C","Alternativa C"],["alt_D","Alternativa D"],["outro","Outra parte"]]}
+  ]},
+  {id:"visual", t:"Falta uma imagem (figura, gráfico, charge, tabela…)"},
+  {id:"gabarito", t:"O gabarito indicado está errado"},
+  {id:"classificacao", t:"A disciplina ou o tema estão errados", classif:true},
+  {id:"explicacao", t:"A explicação tem algum problema", subs:[
+    {id:"qual", t:"Qual delas?", opts:"DINAMICO"},
+    {id:"natureza", t:"Qual o problema?", opts:[
+      ["fundamentacao","A fundamentação está errada"],["impreciso","Impreciso"],
+      ["confuso","Confuso ou ambíguo"],["omisso","Deixa de explicar o essencial"],
+      ["inadequado","Inadequado"]]}
+  ]}
+];
+/** Tira controles e espaços de sobra. O app já é imune a HTML (tudo entra por
+ *  textContent), mas o texto vai parar na fila do admin — e caractere invisível
+ *  em fila de moderação é ruído no melhor caso e armadilha no pior. */
+function limpaTexto(t){
+  return String(t||"").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g,"")
+    .replace(/[ \t]+/g," ").replace(/\n{3,}/g,"\n\n").trim().slice(0,2000);
+}
+async function relatarErro(q,sel){
+  const marcado={};                       // {nivel:true} e {nivel_sub:[valores]}
+  const errou=sel&&q.gabarito&&sel!==q.gabarito;
+  const r=await openModal((m,close)=>{
+    mHead(m,"Relatar um problema",
+      "Marque o que notou — pode marcar mais de uma opção, e nenhuma é obrigatória. Se preferir, mande em branco: já vamos olhar a questão.");
+    const corpo=el("div");corpo.style.marginTop="14px";
+    const livre=field("Quer detalhar? (opcional)","","text");
+    const ta=el("textarea");ta.rows=3;ta.maxLength=2000;
+    ta.placeholder="Em poucas palavras. Ex.: falta o parágrafo final do enunciado.";
+    ta.style.cssText="width:100%;font:inherit;font-size:13.5px;padding:9px 11px;border:1px solid var(--line-strong);border-radius:9px;background:var(--surface);resize:vertical;color:var(--ink)";
+    livre.input.replaceWith(ta);
+
+    const pinta=()=>{
+      corpo.innerHTML="";
+      RELATO.forEach(n=>{
+        const fs=el("fieldset");fs.style.marginBottom="10px";
+        const b=el("button","chip",n.t);b.type="button";
+        b.setAttribute("aria-pressed",marcado[n.id]?"true":"false");
+        b.setAttribute("aria-expanded",marcado[n.id]?"true":"false");
+        b.style.cssText="text-align:left;white-space:normal;line-height:1.4";
+        b.onclick=()=>{marcado[n.id]?delete marcado[n.id]:marcado[n.id]=true;pinta()};
+        fs.append(b);
+        if(marcado[n.id]&&n.subs){
+          n.subs.forEach(sub=>{
+            let opts=sub.opts;
+            if(opts==="DINAMICO"){
+              // só oferece o comentário da alternativa se ela existe nesta tela
+              opts=[["geral","A explicação da questão"]];
+              if(errou)opts.push(["alt","A explicação da alternativa "+sel],["ambas","As duas"]);
+              else if(!errou)opts=[["geral","A explicação da questão"]];
+            }
+            const box=el("div");box.style.cssText="margin:9px 0 0 14px;padding-left:12px;border-left:2px solid var(--line)";
+            box.append(Object.assign(el("p","field-label",sub.t),{style:"margin-bottom:6px"}));
+            const ch=el("div","chips");ch.setAttribute("role","group");ch.setAttribute("aria-label",sub.t);
+            const k=n.id+"_"+sub.id;
+            (opts||[]).forEach(([v,lab])=>{
+              const x=el("button","chip sm",lab);x.type="button";
+              x.style.cssText="text-align:left;white-space:normal;line-height:1.35";
+              const on=(marcado[k]||[]).includes(v);
+              x.setAttribute("aria-pressed",on?"true":"false");
+              x.onclick=()=>{marcado[k]=marcado[k]||[];toggle(marcado[k],v);
+                if(!marcado[k].length)delete marcado[k];pinta()};
+              ch.append(x);
+            });
+            box.append(ch);fs.append(box);
+          });
+        }
+        if(marcado[n.id]&&n.classif){
+          const box=el("div");box.style.cssText="margin:9px 0 0 14px;padding-left:12px;border-left:2px solid var(--line)";
+          const w1=el("div","mfield");
+          const i1="rd"+Math.random().toString(36).slice(2,7);
+          const l1=el("label",null,"Qual seria a disciplina?");l1.htmlFor=i1;
+          const sd=el("select");sd.id=i1;
+          // white-space:normal impede que "Direito Internacional Privado" saia
+          // cortado no seletor estreito do celular
+          sd.style.cssText="white-space:normal";
+          const vazio=el("option",null,"— não sei dizer —");vazio.value="";sd.append(vazio);
+          DISCIPLINAS.forEach(d=>{const o=el("option",null,d);o.value=d;sd.append(o)});
+          const outro=el("option",null,"Outra — escrevo no campo de texto abaixo");outro.value="__outro";sd.append(outro);
+          sd.value=(marcado.classificacao_disciplina||"");
+          w1.append(l1,sd);
+          const w2=el("div","mfield");
+          const i2="rt"+Math.random().toString(36).slice(2,7);
+          const l2=el("label",null,"E o tema?");l2.htmlFor=i2;
+          const st=el("select");st.id=i2;st.style.cssText="white-space:normal";
+          const fill=()=>{
+            st.innerHTML="";
+            const v0=el("option",null,"— não sei dizer —");v0.value="";st.append(v0);
+            (TAX[sd.value]||[]).forEach(t=>{const o=el("option",null,t);o.value=t;st.append(o)});
+            const o2=el("option",null,"Outro — escrevo no campo de texto abaixo");o2.value="__outro";st.append(o2);
+            st.value=(marcado.classificacao_tema||"");
+          };
+          fill();
+          sd.onchange=()=>{marcado.classificacao_disciplina=sd.value;delete marcado.classificacao_tema;pinta()};
+          st.onchange=()=>{marcado.classificacao_tema=st.value};
+          w2.append(l2,st);
+          box.append(w1,w2);fs.append(box);
+        }
+        corpo.append(fs);
+      });
+      corpo.append(Object.assign(el("p","field-label","Quer detalhar? (opcional)"),{style:"margin:14px 0 6px"}),ta);
+    };
+    pinta();m.append(corpo);
+
+    const f=el("div","mfoot");
+    const lp=el("button","btn","Limpar");lp.type="button";
+    lp.onclick=()=>{Object.keys(marcado).forEach(k=>delete marcado[k]);ta.value="";pinta()};
+    const ok=el("button","btn primary","Enviar");ok.type="button";
+    ok.onclick=()=>close({dados:marcado,texto:limpaTexto(ta.value)});
+    f.append(lp,ok);m.append(f);
+    return ok;
+  });
+  if(!r)return;
+  const dados=Object.assign({},r.dados,{
+    alternativa_marcada:sel||null,
+    gabarito_na_tela:q.gabarito||null
+  });
+  push({method:"POST",path:"/rest/v1/reports",prefer:"return=minimal",
+    body:{user_id:sess().user_id,question_id:q.id,dados,texto:r.texto||null}});
+  toast("Obrigado pelo aviso. Vamos conferir esta questão.");
+}
+
+/* ============================================================
+   Origem da questão
+   Citar prova de concurso pede cinco dados: banca, exame, ano, caderno e o
+   número DENTRO daquele caderno. O número sozinho não identifica nada — a FGV
+   embaralha a ordem entre os cadernos, então "questão 9" só quer dizer algo
+   junto de "caderno branco".
+   ============================================================ */
+const BANCAS={FGV:"Fundação Getulio Vargas"};
+const ROMANOS=[[1000,"M"],[900,"CM"],[500,"D"],[400,"CD"],[100,"C"],[90,"XC"],
+               [50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]];
+/** A OAB numera os exames em romanos — "XXXII Exame", nunca "Exame 32". */
+function romano(n){
+  n=parseInt(n,10);if(!n||n<1||n>3999)return String(n||"");
+  let out="";ROMANOS.forEach(([v,l])=>{while(n>=v){out+=l;n-=v}});return out;
+}
+const MESES=["janeiro","fevereiro","março","abril","maio","junho","julho",
+             "agosto","setembro","outubro","novembro","dezembro"];
+function dataPorExtenso(iso){
+  if(!iso)return "";
+  const [ano,mes,dia]=iso.split("-");
+  return Number(dia)+" de "+MESES[Number(mes)-1]+" de "+ano;
+}
+function origem(q){
+  const sigla=q.banca||"FGV";
+  return {
+    sigla,
+    banca:(BANCAS[sigla]?BANCAS[sigla]+" ("+sigla+")":sigla),
+    exame:romano(q.exame)+" Exame de Ordem Unificado",
+    fase:"1ª fase (prova objetiva)",
+    ano:q.ano?String(q.ano):"",
+    data:dataPorExtenso(q.data_prova),
+    caderno:q.caderno?("Caderno "+q.caderno):"",
+    numero:String(q.numero),
+    curto:sigla+" · "+romano(q.exame)+" Exame · questão "+q.numero
+  };
+}
+/** Uma linha citável, no formato que os bancos de questões consagraram:
+ *  banca — órgão — exame — fase — caderno — número. */
+function referencia(q){
+  const o=origem(q);
+  return [o.sigla,o.ano,"OAB",o.exame,o.fase,o.caderno,"questão "+o.numero]
+    .filter(Boolean).join(" · ");
+}
+function verOrigem(q){
+  const o=origem(q);
+  return openModal((m,close)=>{
+    mHead(m,"Origem da questão","De onde ela saiu, para você citar ou conferir na fonte.");
+    const dl=el("dl","ficha");
+    const par=(k,v)=>{if(!v)return;dl.append(el("dt",null,k),el("dd",null,v))};
+    par("Banca",o.banca);
+    par("Exame",o.exame);
+    par("Fase",o.fase);
+    par("Aplicação",o.data||o.ano);
+    par("Caderno",o.caderno);
+    par("Questão",o.numero+" (neste caderno)");
+    if(q.disciplina)par("Disciplina",q.disciplina);
+    if(q.tema)par("Tema",q.tema);
+    if(q.anulada)par("Situação","Anulada pela banca");
+    m.append(dl);
+    const rb=el("div","refbox");
+    rb.append(Object.assign(el("div",null,"Referência"),{style:"font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:5px"}));
+    rb.append(el("div",null,referencia(q)));
+    m.append(rb);
+    const f=el("div","mfoot");
+    const cp=el("button","btn","Copiar referência");cp.type="button";
+    cp.onclick=async()=>{
+      try{await navigator.clipboard.writeText(referencia(q));cp.textContent="Copiado ✓"}
+      catch(e){cp.textContent="Não consegui copiar"}
+      setTimeout(()=>{cp.textContent="Copiar referência"},1600);
+    };
+    const ok=el("button","btn primary","Fechar");ok.type="button";ok.onclick=()=>close(null);
+    f.append(cp,ok);m.append(f);
+    return ok;
+  });
+}
+
+/* ============================================================
+   Saudação
+   Nada aqui vai ao servidor: o nome já veio no login, e turno e dia estão no
+   relógio de quem lê. Uma linha, calculada uma vez por sessão — recalcular a
+   cada render faria a frase trocar sozinha a cada clique no filtro, que é
+   exatamente o tipo de detalhe que faz uma tela parecer instável.
+   ============================================================ */
+const TURNOS=[[5,"manha"],[12,"tarde"],[18,"noite"]];
+function contexto(){
+  const d=new Date(), h=d.getHours();
+  let turno="madrugada";
+  TURNOS.forEach(([ini,t])=>{if(h>=ini)turno=t});
+  return {h,turno,dia:d.getDay(),respondidas:answers.size};
+}
+/* Turno com hora cheia: madrugada 0–4 · manhã 5–11 · tarde 12–17 · noite 18–23.
+   "Bom dia" às 4h da manhã seria errado; quem está de pé a essa hora recebe
+   "Boa madrugada" mesmo — é o que a norma pede e o que soa verdadeiro. */
+/* Rede de segurança, não o acervo. As frases de verdade vivem na tabela
+   `greetings` e são editadas pelo painel; estas quatro só existem para o app
+   não abrir mudo se o banco não responder. */
+const SAUDACOES=[
+  {q:c=>c.turno==="manha",     t:"Bom dia"},
+  {q:c=>c.turno==="tarde",     t:"Boa tarde"},
+  {q:c=>c.turno==="noite",     t:"Boa noite"},
+  {q:c=>c.turno==="madrugada", t:"Boa madrugada"},
+];
+/* Regência cuidada: "responder A uma questão" é o padrão culto (verbo
+   transitivo indireto). Nada de "tudo bem?" nem de exclamação em toda linha —
+   a frase aparece todo dia, e entusiasmo repetido cansa rápido. */
+const INCENTIVOS=[
+  {t:"Sempre dá tempo de responder a algumas questões."},
+  {t:"Um pouco todo dia rende mais do que muito de uma vez só."},
+  {t:"Cada questão de hoje é uma surpresa a menos no dia da prova."},
+  {t:"Quinze minutos agora valem mais do que três horas na véspera."},
+  {t:"O caminho é este: uma questão, depois a próxima."},
+  {q:c=>c.turno==="manha", t:"Que tal abrir o dia com algumas questões?"},
+  {q:c=>c.turno==="manha", t:"A cabeça está fresca. Bom momento para o que é difícil."},
+  {q:c=>c.turno==="tarde", t:"Uma pausa produtiva no meio da tarde?"},
+  {q:c=>c.turno==="tarde", t:"Ainda dá tempo de fazer a tarde render."},
+  {q:c=>c.turno==="noite", t:"Pode estar tarde, mas nunca é tarde para responder a algumas questões."},
+  {q:c=>c.turno==="noite", t:"Fechar o dia com algumas questões também conta."},
+  {q:c=>c.turno==="madrugada", t:"A esta hora, só quem leva a sério. Vá com calma."},
+  {q:c=>c.turno==="madrugada", t:"Se o sono deixar, algumas questões antes de dormir."},
+  {q:c=>c.dia===5, t:"Algumas questões para fechar bem a semana?"},
+  {q:c=>c.dia===0||c.dia===6, t:"Fim de semana também rende — no seu ritmo."},
+  {q:c=>c.dia===1, t:"Semana nova. Que tal começar pelo que ficou para trás?"},
+  {q:c=>c.respondidas>=50, t:"Não preciso ver o seu progresso para saber que você está no caminho."},
+  {q:c=>c.respondidas>=200, t:"A esta altura, você já conhece o estilo da banca melhor do que imagina."},
+  {q:c=>c.respondidas===0, t:"A primeira questão é sempre a mais difícil de começar."},
+];
+const primeiroNome=n=>String(n||"").trim().split(/\s+/)[0]||"";
+/** Sorteio com peso: repete a entrada `peso` vezes na urna. Ingênuo e
+ *  suficiente — são dezenas de itens, não milhões. */
+function sorteia(lista,c){
+  const urna=[];
+  lista.forEach(x=>{
+    if(x.q&&!x.q(c))return;
+    const n=Math.max(1,Math.min(10,x.peso||1));
+    for(let i=0;i<n;i++)urna.push(x);
+  });
+  return urna.length?urna[Math.floor(Math.random()*urna.length)]:null;
+}
+/** Traduz uma linha de `greetings` para o formato do sorteio. As condições
+ *  viajam do banco e são aplicadas aqui: escolher no servidor custaria uma ida
+ *  à rede para exibir uma linha. */
+function condicao(g){
+  return c=>{
+    if(g.turnos&&g.turnos.length&&!g.turnos.includes(c.turno))return false;
+    if(g.dias&&g.dias.length&&!g.dias.includes(c.dia))return false;
+    if(g.min_respostas!=null&&c.respondidas<g.min_respostas)return false;
+    if(g.max_respostas!=null&&c.respondidas>g.max_respostas)return false;
+    return true;
+  };
+}
+function doBanco(tipo,padrao){
+  const rows=(saudacoesDB||[]).filter(g=>g.tipo===tipo&&g.ativo);
+  if(!rows.length)return padrao;
+  return rows.map(g=>({q:condicao(g),t:g.texto,peso:g.peso}));
+}
+let saudacao=null;
+function fraseDoDia(){
+  const c=contexto();
+  // recalcula se virou o turno com o app aberto — "Bom dia" às 19h é vexame
+  if(saudacao&&saudacao.turno===c.turno&&saudacao.dia===c.dia)return saudacao;
+  const s=sorteia(doBanco("saudacao",SAUDACOES),c), i=sorteia(doBanco("incentivo",INCENTIVOS),c);
+  const nome=primeiroNome(meuNome);
+  saudacao={turno:c.turno,dia:c.dia,
+    ola:(s?s.t:"Olá")+(nome?", "+nome:"")+"!",
+    frase:i?i.t:""};
+  return saudacao;
+}
+function faixaSaudacao(){
+  if(!meuNome)return null;      // sem nome, "Olá!" sozinho não acrescenta nada
+  const f=fraseDoDia();
+  const w=el("div");w.style.cssText="margin:2px 0 18px";
+  const h=el("h2",null,f.ola);
+  h.style.cssText="font-family:Fraunces,serif;font-size:23px;font-weight:600;margin:0 0 3px;color:var(--ink);letter-spacing:-.01em";
+  const p=el("p",null,f.frase);
+  p.style.cssText="margin:0;font-size:14px;color:var(--ink-soft)";
+  w.append(h,p);return w;
+}
+
+/* ============================================================
    Central de ajuda
    Um único corpo de texto, servido em dois lugares: a janela do "?" no
    cabeçalho (e da tecla ?) e a aba Ajustes. Sanfona porque ninguém lê dez
@@ -872,14 +1473,20 @@ const AJUDA=[
     "Os enunciados baixados ficam em cache neste aparelho até você sair, então reabrir é instantâneo. O seu progresso vive no servidor: entre com a mesma conta em qualquer aparelho e ele está lá."]},
   {id:"atalhos",t:"Atalhos de teclado",p:[
     "Durante a sessão, sem tirar a mão do teclado. Ficam desativados dentro de campos de texto e janelas."],extra:kbdList},
+  {id:"relato",t:"Achei um erro. E agora?",p:[
+    "Use o ⚑ no alto da questão. O formulário é de cliques: marque o que notou e envie. Pode marcar mais de uma coisa, e pode enviar sem marcar nada — “tem algo errado aqui” já faz alguém olhar.",
+    "Vale para tudo: texto diferente da prova, imagem faltando, gabarito que você acha errado, classificação trocada ou explicação imprecisa.",
+    "O campo de texto é opcional. Se souber dizer em poucas palavras o que está errado, ajuda; se não souber, mande assim mesmo."]},
   {id:"listas",t:"Marcadas, cadernos e filtros salvos",p:[
     "★ Marcar é o lembrete rápido: nem toda questão que merece revisão é uma que você errou.",
     "Caderno é uma lista fixa, montada à mão — junte ali as questões que te derrubaram e volte nelas quando quiser. Excluir um caderno não apaga nada do seu progresso.",
     "Filtro salvo guarda a combinação de filtros, não as questões. É a diferença que importa: o caderno é uma foto, o filtro é uma regra viva."]},
-  {id:"ia",t:"Os comentários de IA",p:[
-    "São dois: a fundamentação do gabarito e, se você errou, um comentário específico sobre a alternativa que VOCÊ marcou — por que ela atrai e o que exatamente a separa da correta.",
-    "O comentário é do acervo, não da sua conta: gerado uma vez, fica disponível para todo mundo enquanto valer. Por isso abrir um comentário que já existe é instantâneo e não consome nada da sua cota.",
-    "Tudo é raciocinado com a lei vigente NA DATA DA PROVA, não a de hoje — uma norma que mudou depois não torna o gabarito errado. Quando algo mudou desde então, o comentário abre uma linha de “Atenção:” avisando."]},
+  {id:"ia",t:"As explicações das questões",p:[
+    "São duas: a fundamentação do gabarito e, se você errou, uma análise da alternativa que VOCÊ marcou — por que ela atrai e o que exatamente a separa da correta.",
+    "A explicação é do acervo, não da sua conta: uma vez pronta, fica disponível para todo mundo. Por isso abrir uma que já existe é instantâneo e não consome nada do seu limite diário.",
+    "A fundamentação aparece primeiro e a análise da alternativa logo depois — cada uma entra assim que fica pronta, em vez de você esperar as duas.",
+    "Tudo é fundamentado na lei vigente NA DATA DA PROVA, não a de hoje: uma norma que mudou depois não torna o gabarito errado. Quando algo mudou desde então, a explicação abre uma linha de “Atenção:” avisando.",
+    "É material de apoio e pode conter imprecisão. Se algo parecer errado, use o ⚑ no alto da questão — o aviso vai direto para quem cuida do acervo."]},
   {id:"dados",t:"Seus dados",p:[
     "Só você lê e grava o seu progresso, e quem garante isso é o banco de dados, não a tela. As estatísticas públicas são agregadas: ninguém vê quem respondeu o quê.",
     "Você pode baixar tudo em JSON quando quiser, em Ajustes → Exportar. E apagar tudo, também em Ajustes — apagar devolve os seus votos das estatísticas, você some da conta como se nunca tivesse respondido."]}
@@ -967,40 +1574,118 @@ function field(label,value,type){
   const input=el("input");input.type=type||"text";input.id=id;input.value=value||"";
   wrap.append(l,input);return{wrap,input};
 }
+const TERMOS_VERSAO="1";
+function verTermos(){
+  return openModal((m,close)=>{
+    mHead(m,"Termos de uso e privacidade","Versão "+TERMOS_VERSAO+" — leia antes de aceitar.");
+    const b=el("div");b.style.cssText="margin-top:14px;font-size:13px;line-height:1.65;color:var(--ink-soft)";
+    const it=(t,d)=>{const p=el("p");p.style.margin="0 0 10px";
+      p.append(Object.assign(el("b",null,t),{style:"color:var(--ink)"}),document.createTextNode(" — "+d));return p};
+    b.append(
+      it("O que é","Uma ferramenta de estudo com questões de provas anteriores da OAB. Não é curso preparatório, não é consultoria jurídica e não garante aprovação."),
+      it("O que guardamos","Seu nome, seu e-mail e o seu progresso de estudo. Nada além disso: sem telefone, sem endereço, sem cartão. A senha não fica conosco em texto legível."),
+      it("Quem vê o quê","Só você lê o seu progresso. As estatísticas mostradas nas questões são agregadas e anônimas: ninguém consegue saber quem respondeu o quê."),
+      it("As explicações","São material de apoio, produzido com apoio de sistemas automatizados e revisado por amostragem. Podem conter erro ou desatualização. Não substituem a lei, a jurisprudência nem o seu professor — e se algo parecer errado, use o botão de relatar erro."),
+      it("O gabarito","É o oficial da banca, inclusive quando discutível. Questão anulada aparece marcada como tal."),
+      it("Seus dados","Você pode baixar tudo em JSON ou apagar tudo, a qualquer momento, em Ajustes. Apagar é definitivo."),
+      it("Uso justo","A conta é pessoal. Automatizar acesso, revender ou redistribuir o acervo não é permitido."),
+      it("Mudanças","Se estes termos mudarem de forma relevante, avisaremos e pediremos um novo aceite.")
+    );
+    m.append(b);
+    const f=el("div","mfoot");
+    const ok=el("button","btn primary","Fechar");ok.type="button";ok.onclick=()=>close(null);
+    f.append(ok);m.append(f);
+    return ok;
+  });
+}
 function viewLogin(){
   const w=el("div");const c=el("div","card pad");c.style.maxWidth="420px";c.style.margin="40px auto";
   let modo="entrar";
   const h=el("h2");h.style.cssText="font-family:Fraunces,serif;font-weight:600;margin:0 0 4px;font-size:22px";
   const sub=el("p","hint");sub.style.margin="0 0 16px";
+
+  const nm=field("Como podemos te chamar?","","text");nm.input.autocomplete="given-name";
+  nm.input.maxLength=60;nm.wrap.style.marginBottom="10px";
+  const nmDica=el("p","hint","Aparece só para você, nas saudações.");
+  nmDica.style.cssText="margin:4px 0 0;font-size:11.5px";nm.wrap.append(nmDica);
   const em=field("E-mail","","email");em.wrap.style.marginBottom="10px";em.input.autocomplete="email";
   const pw=field("Senha","","password");pw.input.autocomplete="current-password";
-  const submit=e=>{if(e.key==="Enter"){e.preventDefault();btn.click()}};
+  const pw2=field("Repita a senha","","password");pw2.input.autocomplete="new-password";pw2.wrap.style.marginTop="10px";
+
+  // força da senha: informa, não obriga. O mínimo real é 6 (regra do servidor).
+  const forca=el("p","hint");forca.style.cssText="margin:5px 0 0;font-size:11.5px";
+  const aceite=el("label","aceite");
+  const cb=el("input");cb.type="checkbox";
+  const txt=el("span");
+  txt.append(document.createTextNode("Li e aceito os "));
+  const lk=el("button",null,"termos de uso e privacidade");
+  lk.type="button";lk.className="linkbtn";lk.onclick=verTermos;
+  txt.append(lk,document.createTextNode("."));
+  aceite.append(cb,txt);
+
   const msg=el("p","hint");msg.style.minHeight="18px";msg.setAttribute("role","alert");
   const btn=el("button","btn primary big");btn.style.cssText="width:100%;margin-top:8px";
   const tog=el("button","btn");tog.style.cssText="width:100%;margin-top:8px;border:none;background:none;color:var(--brand)";
-  const paint=()=>{
-    h.textContent=modo==="entrar"?"Entrar":"Criar conta";
-    sub.textContent=modo==="entrar"?"Acesse seu progresso de estudo.":"Crie sua conta para salvar e sincronizar.";
-    btn.textContent=modo==="entrar"?"Entrar":"Criar conta";
-    tog.textContent=modo==="entrar"?"Não tem conta? Criar uma":"Já tem conta? Entrar";
-    pw.input.autocomplete=modo==="entrar"?"current-password":"new-password";
-    msg.textContent="";msg.style.color="var(--erro)";
+  tog.type="button";
+
+  /** Só libera o cadastro com tudo no lugar — e diz o que falta, em vez de
+   *  deixar o botão cinza sem explicação, que é o pior dos dois mundos. */
+  const pendencia=()=>{
+    if(modo==="entrar")return em.input.value.trim()&&pw.input.value?null:"Informe e-mail e senha.";
+    if(!nm.input.value.trim())return "Falta o seu nome.";
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em.input.value.trim()))return "O e-mail não parece completo.";
+    if(pw.input.value.length<6)return "A senha precisa de pelo menos 6 caracteres.";
+    if(pw.input.value!==pw2.input.value)return "As duas senhas não são iguais.";
+    if(!cb.checked)return "Falta aceitar os termos.";
+    return null;
   };
-  em.input.onkeydown=submit;pw.input.onkeydown=submit;
+  const revisar=()=>{
+    const p=pendencia();
+    btn.disabled=!!p;
+    if(modo==="criar"){
+      const n=pw.input.value.length;
+      forca.textContent=!n?"Pelo menos 6 caracteres."
+        :n<6?"Faltam "+(6-n)+" caracteres."
+        :n<10?"Válida. Uma senha mais longa protege melhor."
+        :"Boa.";
+      forca.style.color=n>=10?"var(--brand)":"var(--ink-soft)";
+      // só reclama da confirmação depois que a pessoa começou a digitá-la
+      if(pw2.input.value&&pw.input.value!==pw2.input.value){
+        msg.style.color="var(--erro)";msg.textContent="As senhas não são iguais.";
+      }else if(msg.textContent==="As senhas não são iguais.")msg.textContent="";
+    }
+  };
+  const submit=e=>{if(e.key==="Enter"){e.preventDefault();if(!btn.disabled)btn.click()}};
+  [nm,em,pw,pw2].forEach(f=>{f.input.onkeydown=submit;f.input.oninput=revisar});
+  cb.onchange=revisar;
+
+  const paint=()=>{
+    const criar=modo==="criar";
+    h.textContent=criar?"Criar conta":"Entrar";
+    sub.textContent=criar?"Leva um minuto. Depois é só estudar.":"Acesse seu progresso de estudo.";
+    btn.textContent=criar?"Criar conta":"Entrar";
+    tog.textContent=criar?"Já tem conta? Entrar":"Não tem conta? Criar uma";
+    nm.wrap.hidden=!criar;pw2.wrap.hidden=!criar;aceite.hidden=!criar;forca.hidden=!criar;
+    pw.input.autocomplete=criar?"new-password":"current-password";
+    msg.textContent="";msg.style.color="var(--erro)";
+    revisar();
+  };
   tog.onclick=()=>{modo=modo==="entrar"?"criar":"entrar";paint()};
   btn.onclick=async()=>{
-    const e=em.input.value.trim(),p=pw.input.value;
-    if(!e||p.length<6){msg.textContent="Informe um e-mail e uma senha de pelo menos 6 caracteres.";return}
+    const p=pendencia();
+    if(p){msg.textContent=p;return}
+    const e=em.input.value.trim(),senha=pw.input.value,nome=nm.input.value.trim();
     btn.disabled=true;const old=btn.textContent;btn.innerHTML='<span class="spinner"></span>';
     try{
       if(modo==="criar"){
-        const d=await signup(e,p);
-        if(!d.access_token){msg.style.color="var(--brand-deep)";msg.textContent="Conta criada. Confirme pelo e-mail e depois entre.";modo="entrar";paint();btn.disabled=false;return}
-      }else await login(e,p);
+        const d=await signup(e,senha,nome);
+        if(!d.access_token){msg.style.color="var(--brand-deep)";
+          msg.textContent="Conta criada. Confirme pelo e-mail e depois entre.";modo="entrar";paint();return}
+      }else await login(e,senha);
       await loadAll();render();
-    }catch(err){msg.textContent=err.message;btn.disabled=false;btn.textContent=old}
+    }catch(err){msg.textContent=err.message;btn.textContent=old;revisar()}
   };
-  c.append(h,sub,em.wrap,pw.wrap,msg,btn,tog);paint();w.append(c);return w;
+  c.append(h,sub,nm.wrap,em.wrap,pw.wrap,pw2.wrap,forca,aceite,msg,btn,tog);paint();w.append(c);return w;
 }
 
 /* ============================================================
@@ -1051,6 +1736,7 @@ function bemVindo(){
 function viewMontar(){
   const w=el("div");
   const list=pool(filter);
+  const sd=faixaSaudacao();if(sd)w.append(sd);
   const bv=bemVindo();if(bv)w.append(bv);
 
   const pres=el("div","presets");
@@ -1073,15 +1759,22 @@ function viewMontar(){
   h3.style.cssText="font-family:Fraunces,serif;font-size:17px;font-weight:600;margin:0 0 4px;color:var(--roxo)";
   const p1=el("p",null,nRev
     ? "Estas questões voltaram no intervalo certo para firmar na memória."
-    : "Nada vencido agora. Responda questões novas — elas entram no ciclo automaticamente.");
+    : (reviews.size
+        ? "Nada vencido hoje — você está em dia. Cada questão que responder entra na fila e volta no tempo certo."
+        : "Responda algumas questões e elas passam a voltar sozinhas aqui, no intervalo certo."));
   p1.style.cssText="margin:0;font-size:13.5px;color:var(--roxo)";
   rt.append(h3,p1);
   const rb=el("div");rb.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
-  if(nRev){
-    const go=el("button","btn primary","Revisar agora ("+nRev+")");
-    go.onclick=()=>{filter=blankFilter();filter.soRevisao=true;setup.ordem="aleatoria";setup.tamanho=null;start()};
-    rb.append(go);
-  }
+  // O botão fica SEMPRE na tela: apagado quando não há o que revisar, aceso
+  // quando há. Antes ele simplesmente não existia nos dias vazios, e quem nunca
+  // tinha visto o cartão com pendência não fazia ideia de que existia uma
+  // sessão de revisão — o controle ensinava a si mesmo só para quem já sabia.
+  const goRev=el("button","btn primary",nRev?"Revisar agora ("+nRev+")":"Revisar agora");
+  goRev.type="button";goRev.disabled=!nRev;
+  goRev.title=nRev?"Começa a sessão com as questões vencidas de hoje"
+                  :"Fica disponível assim que alguma questão vencer";
+  if(nRev)goRev.onclick=()=>{filter=blankFilter();filter.soRevisao=true;setup.ordem="aleatoria";setup.tamanho=null;start()};
+  rb.append(goRev);
   const cm=el("button","btn","Como funciona?");cm.type="button";cm.onclick=()=>abrirAjuda("revisao");rb.append(cm);
   rh.append(rt,rb);rev.append(rh);
   if(nRev||reviews.size){
@@ -1102,26 +1795,64 @@ function viewMontar(){
   }
   const form=el("form");form.onsubmit=e=>e.preventDefault();
 
+  // O que está ligado, em uma linha, com o X para desligar. Antes era preciso
+  // varrer seis blocos de chips procurando os acesos — e "Limpar filtros" era
+  // tudo ou nada.
+  const ativos=el("div","ativos");
+  const tag=(rot,off)=>{
+    const t=el("span","tag");t.append(document.createTextNode(rot));
+    const x=el("button",null,"×");x.type="button";x.setAttribute("aria-label","Remover filtro "+rot);
+    x.onclick=()=>{off();render()};t.append(x);ativos.append(t);
+  };
+  const ROT={nao:"Não respondidas",errei:"Errei",acertei:"Acertei"};
+  if(!filter.cadernoId){
+    filter.status.forEach(v=>tag(ROT[v]||v,()=>toggle(filter.status,v)));
+    filter.disciplinas.forEach(v=>tag(v,()=>{toggle(filter.disciplinas,v);
+      filter.temas=filter.temas.filter(t=>filter.disciplinas.some(d=>(TAX[d]||[]).includes(t)))}));
+    filter.temas.forEach(v=>tag(v,()=>toggle(filter.temas,v)));
+    filter.exames.forEach(v=>tag(romano(v)+" Exame",()=>toggle(filter.exames,v)));
+    filter.anos.forEach(v=>tag(String(v),()=>toggle(filter.anos,v)));
+    if(filter.soMarcadas)tag("★ Marcadas",()=>filter.soMarcadas=false);
+    if(filter.soRevisao)tag("Vencidas para revisão",()=>filter.soRevisao=false);
+    if(filter.incluirAnuladas)tag("Com anuladas",()=>filter.incluirAnuladas=false);
+  }
+  if(ativos.children.length){
+    const lp=el("button",null,"limpar tudo");lp.type="button";lp.className="linkbtn";
+    lp.style.fontSize="12px";lp.onclick=()=>{filter=blankFilter();render()};
+    ativos.append(lp);
+    card.append(Object.assign(el("p","field-label","Filtros ativos"),{style:"margin-bottom:8px"}),ativos);
+  }
+
   form.append(chipSet("Situação da questão",[["nao","Não respondidas"],["errei","Respondi e errei"],["acertei","Respondi e acertei"]],filter.status,v=>toggle(filter.status,v),true));
-  form.append(chipSet("Disciplina",DISCIPLINAS.map(d=>[d,d]),filter.disciplinas,v=>{toggle(filter.disciplinas,v);filter.temas=filter.temas.filter(t=>filter.disciplinas.some(d=>TAX[d].includes(t)))}));
+  form.append(chipSet("Disciplina",DISCIPLINAS.map(d=>[d,d]),filter.disciplinas,v=>{toggle(filter.disciplinas,v);filter.temas=filter.temas.filter(t=>filter.disciplinas.some(d=>(TAX[d]||[]).includes(t)))}));
   if(filter.disciplinas.length){
-    const ts=[];filter.disciplinas.forEach(d=>TAX[d].forEach(t=>ts.push([t,t])));
+    const ts=[];filter.disciplinas.forEach(d=>(TAX[d]||[]).forEach(t=>ts.push([t,t])));
     form.append(chipSet("Tema",ts,filter.temas,v=>toggle(filter.temas,v)));
   }else{
     const fs=el("fieldset");fs.append(el("legend",null,"Tema"));
     fs.append(el("p","hint","Selecione uma disciplina para ver os temas."));form.append(fs);
   }
+  // Exame, ano e refinamentos recolhidos: são 17 chips que quase ninguém toca,
+  // e empurravam o contador e o botão de iniciar para fora da tela no celular.
+  // Recolhido não é escondido — a sanfona anuncia quantos estão ligados e abre
+  // sozinha se houver algum.
+  const nMais=filter.exames.length+filter.anos.length+
+    (filter.soMarcadas?1:0)+(filter.soRevisao?1:0)+(filter.incluirAnuladas?1:0);
+  const det=el("details","acc");det.style.margin="4px 0 14px";
+  if(nMais)det.open=true;
+  det.append(el("summary",null,"Exame, ano e outros refinamentos"+(nMais?" · "+nMais+" ativo"+(nMais>1?"s":""):"")));
+  const db=el("div","body");
   const exames=[...new Set(Q.map(q=>q.exame))].sort((a,b)=>a-b);
-  form.append(chipSet("Exame",exames.map(e=>[e,"Ex "+e]),filter.exames,v=>toggle(filter.exames,v)));
+  db.append(chipSet("Exame",exames.map(e=>[e,romano(e)]),filter.exames,v=>toggle(filter.exames,v)));
   const anos=[...new Set(Q.map(q=>q.ano).filter(Boolean))].sort();
-  form.append(chipSet("Ano",anos.map(a=>[a,String(a)]),filter.anos,v=>toggle(filter.anos,v)));
-
-  const fs=el("fieldset");fs.append(el("legend",null,"Refinar"));
+  db.append(chipSet("Ano",anos.map(a=>[a,String(a)]),filter.anos,v=>toggle(filter.anos,v)));
+  const fs=el("fieldset");fs.style.marginBottom="0";fs.append(el("legend",null,"Refinar"));
   const cw=el("div","chips");
   cw.append(toggleChip("★ Só marcadas",filter.soMarcadas,()=>{filter.soMarcadas=!filter.soMarcadas}));
   cw.append(toggleChip("🔁 Só vencidas para revisão",filter.soRevisao,()=>{filter.soRevisao=!filter.soRevisao}));
   cw.append(toggleChip("Incluir anuladas",filter.incluirAnuladas,()=>{filter.incluirAnuladas=!filter.incluirAnuladas}));
-  fs.append(cw);form.append(fs);
+  fs.append(cw);db.append(fs);
+  det.append(db);form.append(det);
   card.append(form);
 
   const nn=list.filter(q=>statusOf(q)==="nao").length,ne=list.filter(q=>statusOf(q)==="errei").length,na=list.length-nn-ne;
@@ -1154,9 +1885,8 @@ function viewMontar(){
   const act=el("div","actions");act.style.marginTop="4px";
   const go=el("button","btn primary big","Iniciar sessão ("+Math.min(list.length,setup.tamanho||list.length)+")");
   go.disabled=!list.length;go.onclick=()=>start();
-  const clr=el("button","btn","Limpar filtros");clr.onclick=()=>{filter=blankFilter();render()};
-  const sv=el("button","btn","Salvar filtro");sv.onclick=saveFilter;
-  act.append(go,clr,sv);card.append(act);
+  const sv=el("button","btn","Salvar filtro");sv.type="button";sv.onclick=saveFilter;
+  act.append(go,sv);card.append(act);
   w.append(card);
 
   if(filtros.length||cadernos.length){
@@ -1358,7 +2088,13 @@ function viewRun(){
   if(q.disciplina){const p=el("span","pill d",q.disciplina);tags.append(p)}
   else tags.append(el("span","pill","sem disciplina"));
   if(q.tema)tags.append(el("span","pill t",q.tema));
-  tags.append(el("span","pill","Exame "+q.exame+" · questão "+q.numero));
+  const og=origem(q);
+  const src=el("button","pill src",og.curto);src.type="button";
+  src.title="Ver a origem completa desta questão";
+  src.setAttribute("aria-label","Origem: "+referencia(q)+". Abrir ficha completa.");
+  src.onclick=()=>verOrigem(q);
+  tags.append(src);
+  if(q.anulada)tags.append(el("span","pill","anulada pela banca"));
   const mb=el("div","metabtns");
   if(ehAdmin){
     const ed=el("button","iconbtn","✎");ed.title="Corrigir disciplina e tema";
@@ -1368,10 +2104,16 @@ function viewRun(){
   const st=el("button","iconbtn","★");st.title="Marcar para revisar";st.type="button";st.dataset.fid="marcar";
   st.setAttribute("aria-label","Marcar questão para revisar");st.setAttribute("aria-pressed",marks.has(q.id)?"true":"false");
   st.onclick=()=>toggleMark(q);
-  mb.append(st);meta.append(tags,mb);card.append(meta);
+  mb.append(st);
+  // Fica na própria questão, não numa página de contato: o momento de avisar é
+  // o momento de estranhar, e qualquer desvio até lá é um erro que não se conta.
+  const rp=el("button","iconbtn","⚑");rp.type="button";rp.title="Relatar um problema nesta questão";
+  rp.setAttribute("aria-label","Relatar um problema nesta questão");
+  rp.onclick=()=>relatarErro(q,sel);mb.append(rp);
+  meta.append(tags,mb);card.append(meta);
 
   const h=el("h2","sr-only","Questão "+(run.i+1)+" de "+list.length);card.append(h);
-  card.append(el("div","enunciado",q.enunciado));
+  card.append(markdown(q.enunciado,el("div","enunciado")));
 
   const alts=el("div","alts");
   alts.setAttribute("role","group");alts.setAttribute("aria-label","Alternativas");
@@ -1421,9 +2163,12 @@ function viewRun(){
     const falta=!pk.geral||(errou&&!pk[sel]);
     if(falta){
       const g=el("button","btn");
-      g.innerHTML=busyIA?'<span class="spinner"></span> Analisando…'
-        :(pk.geral&&errou?"Por que a "+sel+" está errada?":"Explicar com IA");
-      g.disabled=!!busyIA;g.onclick=()=>explainNow(q,errou?sel:null);act.append(g);
+      if(busyIA){
+        g.innerHTML='<span class="spinner"></span> Buscando explicação';
+      }else{
+        g.textContent=pk.geral&&errou?"Ver por que a "+sel+" está incorreta":"Buscar explicação da questão";
+      }
+      g.type="button";g.disabled=!!busyIA;g.onclick=()=>explainNow(q,errou?sel:null);act.append(g);
     }
     const cd=el("button","btn","+ Caderno");cd.type="button";cd.onclick=()=>addToCaderno(q.id);act.append(cd);
     const p=el("button","btn","← Anterior");p.type="button";p.disabled=run.i===0;p.onclick=()=>goTo(run.i);
@@ -1449,19 +2194,46 @@ function verdictBox(q,sel){
   v.append(Object.assign(el("span","g","Gabarito: "+q.gabarito),{}));
   return v;
 }
-/** Faixa de agendamento da revisão espaçada. */
+/** Faixa de agendamento da revisão espaçada.
+ *
+ *  Dois defeitos corrigidos aqui. O primeiro era grave e invisível: cada clique
+ *  chamava aplicaRevisao() sobre o review JÁ atualizado pela resposta, então
+ *  o SM-2 rodava duas vezes e a contagem de repetições subia sozinha —
+ *  "Fácil" depois de acertar mandava a questão para muito mais longe do que a
+ *  tabela previa. Agora o reagendamento parte de `run.revAntes`, o retrato do
+ *  review de antes da resposta, e clicar quantas vezes quiser dá sempre o mesmo
+ *  resultado.
+ *
+ *  O segundo: quando a pessoa errava, "Chutei" e "Errei feio" mandavam a mesma
+ *  nota 0 — dois botões, um efeito, e nenhum jeito de mostrar qual estava
+ *  escolhido. Errar já é nota 0; o que falta a quem errou é dizer "eu sabia,
+ *  foi descuido", que é a única informação nova possível ali. */
 function schedBox(q){
   const rv=reviews.get(q.id);
   if(!rv)return null;
   const ok=(answers.get(q.id)||{}).correta;
+  const base=(run.revAntes||{})[q.id];
+  const atual=(run.notaRev||{})[q.id];
   const s=el("div","sched");
   s.append(el("span","lb","Volta "+textoIntervalo(rv.intervalo)+"."));
   const chips=el("div","chips");
-  const opt=(t,nota,titulo)=>{const b=el("button","chip sm",t);b.type="button";b.title=titulo;
-    b.onclick=()=>{const r=aplicaRevisao(q.id,nota);toast("Volta "+textoIntervalo(r.intervalo));render()};return b};
-  chips.append(opt("Chutei",0,"Trata como erro: volta amanhã"),
-               opt(ok?"Sabia":"Errei feio",ok?1:0,"Mantém o padrão"),
-               opt("Fácil",2,"Empurra bem mais para frente"));
+  const opt=(t,nota,titulo)=>{
+    const b=el("button","chip sm",t);b.type="button";b.title=titulo;
+    b.setAttribute("aria-pressed",atual===nota?"true":"false");
+    b.onclick=()=>{
+      const r=aplicaRevisao(q.id,nota,base);
+      run.notaRev=run.notaRev||{};run.notaRev[q.id]=nota;saveRun();
+      toast("Volta "+textoIntervalo(r.intervalo));render();
+    };
+    return b;
+  };
+  if(ok)chips.append(
+    opt("Chutei",0,"Foi sorte: trata como erro e traz de volta amanhã"),
+    opt("Sabia",1,"O padrão de quem acerta"),
+    opt("Foi fácil",2,"Empurra bem mais para a frente"));
+  else chips.append(
+    opt("Errei feio",0,"O padrão de quem erra: volta amanhã"),
+    opt("Foi descuido",1,"Você sabia a matéria: não reinicia o ciclo"));
   s.append(chips);return s;
 }
 /** Cartão de comentário: superfície calma, com "Revisar:" e "Atenção:" destacados. */
@@ -1470,17 +2242,44 @@ function cmtCard(r,titulo,letra){
   const h=el("div","cmt-head");
   if(letra){const b=el("span","cmt-badge",letra);b.setAttribute("aria-hidden","true");h.append(b)}
   h.append(el("h4",null,titulo));
-  const src=el("span","src");
-  src.textContent=(r.provider==="claude"?"Claude":"Gemini")+
-    (r.created_at?" · "+r.created_at.slice(8,10)+"/"+r.created_at.slice(5,7)+"/"+r.created_at.slice(0,4):"");
-  h.append(src);c.append(h);
-  String(r.texto||"").split(/\n+/).forEach(linha=>{
-    const t=linha.trim();if(!t)return;
-    if(/^Revisar\s*:/i.test(t)||/^Não confunda\s*:/i.test(t))c.append(el("p","rev",t));
-    else if(/^Aten[çc][ãa]o\s*:/i.test(t))c.append(el("p","att","⚠ "+t));
-    else c.append(el("p",null,t));
+  // A procedência é ferramenta de manutenção, não informação de estudo. Para
+  // quem não é admin ela nem chega ao navegador: a view explanations_pub e a
+  // Edge Function devolvem os campos vazios. O teste abaixo é só para não
+  // desenhar um selo vazio — não é ele que protege nada.
+  if(ehAdmin&&r.provider){
+    const src=el("span","src");
+    const d=r.criado_em||r.created_at;
+    src.textContent=(r.provider==="claude"?"Claude":"Gemini")+(r.modelo?" "+r.modelo:"")+
+      (d?" · "+d.slice(8,10)+"/"+d.slice(5,7)+"/"+d.slice(0,4):"");
+    h.append(src);
+  }
+  c.append(h);
+  // As linhas de "Revisar:" e "Atenção:" ganham destaque próprio; o resto do
+  // texto passa inteiro pelo parser, para que lista e tabela funcionem.
+  const corpo=[];
+  const despeja=()=>{if(corpo.length){markdown(corpo.join("\n"),c);corpo.length=0}};
+  String(r.texto||"").split(/\n/).forEach(linha=>{
+    const t=linha.trim();
+    if(/^Revisar\s*:/i.test(t)||/^Não confunda\s*:/i.test(t)){despeja();c.append(mdInline(t,el("p","rev")))}
+    else if(/^Aten[çc][ãa]o\s*:/i.test(t)){despeja();const p=el("p","att");p.append(document.createTextNode("⚠ "));mdInline(t,p);c.append(p)}
+    else corpo.push(linha);
   });
+  despeja();
   return c;
+}
+/** Cartão que ocupa o lugar do texto enquanto ele vem do servidor. Mesma
+ *  moldura do cartão real: a tela não pula quando o conteúdo chega, e a pessoa
+ *  vê onde ele vai aparecer antes de aparecer. */
+function cmtAguardando(titulo,letra,dizer){
+  const c=el("div","cmt aguardando");
+  const h=el("div","cmt-head");
+  if(letra){const b=el("span","cmt-badge",letra);b.setAttribute("aria-hidden","true");h.append(b)}
+  h.append(el("h4",null,titulo));c.append(h);
+  const p=el("p");p.setAttribute("role","status");
+  p.append(document.createTextNode(dizer+", leva alguns segundos"));
+  const d=el("span","dots");d.setAttribute("aria-hidden","true");
+  d.append(el("i",null,"."),el("i",null,"."),el("i",null,"."));
+  p.append(d);c.append(p);return c;
 }
 const MIN_AMOSTRA=10;   // abaixo disso o número não diz nada — e poderia identificar quem respondeu
 const METRICAS={
@@ -1544,8 +2343,13 @@ function statsBox(q,sel){
 function comentarios(q,sel){
   const out=[];
   const ec=explan.get(q.id)||{};
+  const errou=sel!==q.gabarito;
   if(ec.geral)out.push(cmtCard(ec.geral,"Fundamentação do gabarito"));
-  if(sel!==q.gabarito&&ec[sel])out.push(cmtCard(ec[sel],"Por que a "+sel+" atrai",sel));
+  else if(busyIA==="geral")out.push(cmtAguardando("Fundamentação do gabarito",null,"Buscando a fundamentação"));
+  if(errou){
+    if(ec[sel])out.push(cmtCard(ec[sel],"Por que a alternativa "+sel+" está incorreta",sel));
+    else if(busyIA==="alt")out.push(cmtAguardando("Por que a alternativa "+sel+" está incorreta",sel,"Buscando a análise da alternativa "+sel));
+  }
   if(!explLoaded.has(q.id))loadExplan(q.id);
   return out;
 }
@@ -1569,9 +2373,15 @@ function answerNow(q){
   if(!chosen)return;
   const correta=chosen===q.gabarito;
   const at=new Date().toISOString();
-  run.respostas[q.id]=chosen;saveRun();
+  run.respostas[q.id]=chosen;
+  // retrato do agendamento antes desta resposta: é a partir dele que os botões
+  // "Chutei / Sabia / Foi fácil" reagendam, sem empilhar repetições
+  run.revAntes=run.revAntes||{};
+  if(run.revAntes[q.id]===undefined)run.revAntes[q.id]=reviews.get(q.id)||null;
+  run.notaRev=run.notaRev||{};run.notaRev[q.id]=correta?1:0;
+  saveRun();
   answers.set(q.id,{resposta:chosen,correta,at});
-  const r=aplicaRevisao(q.id,correta?1:0);          // acertou = Bom · errou = volta amanhã
+  const r=aplicaRevisao(q.id,correta?1:0,run.revAntes[q.id]);   // acertou = Bom · errou = volta amanhã
   focoApos="prox";                                 // "Responder" deixa de existir ao revelar
   render();
   announce((correta?"Correto. Gabarito "+q.gabarito:"Incorreto. Você marcou "+chosen+". Gabarito "+q.gabarito)+". Revisão "+textoIntervalo(r.intervalo));
@@ -1698,13 +2508,16 @@ let explErro=new Set();      // permite exatamente uma nova tentativa por quest�
 async function loadExplan(qid){
   explLoaded.add(qid);
   try{
-    const rows=await apiJson("/rest/v1/explanations?select=alternativa,texto,provider,modelo,created_at,expires_at&question_id=eq."+qid+"&ativo=is.true&order=created_at.desc");
+    // explanations_pub, não explanations: a view entrega só o vigente e ativo,
+    // e devolve provider/modelo/data vazios para quem não é admin. O filtro de
+    // validade também saiu do navegador — um relógio adiantado escondia texto
+    // bom, um atrasado mostrava vencido.
+    const rows=await apiJson("/rest/v1/explanations_pub?select=alternativa,texto,provider,modelo,criado_em,seq&question_id=eq."+qid+"&order=seq.desc");
     if(!rows||!rows.length)return;
-    const agora=new Date(), pack={};
+    const pack={};
     rows.forEach(r=>{
-      if(new Date(r.expires_at)<=agora)return;
       const k=r.alternativa||"geral";
-      if(!pack[k])pack[k]=r;                 // já vem ordenado: o primeiro é o mais novo
+      if(!pack[k])pack[k]=r;                 // seq desc: o primeiro é o mais novo
     });
     if(Object.keys(pack).length){explan.set(qid,Object.assign(explan.get(qid)||{},pack));render()}
   }catch(e){
@@ -1713,25 +2526,41 @@ async function loadExplan(qid){
     if(!explErro.has(qid)){explErro.add(qid);explLoaded.delete(qid)}
   }
 }
-/** Um clique. O servidor decide tudo: geral (Opus) + o da alternativa que você
- *  marcou (Haiku), caindo para o Gemini só se o Claude estiver sem crédito. */
+async function pedirExplan(qid,alt){
+  const s=sess();
+  const r=await fetch(url()+"/functions/v1/"+IA_FN,{method:"POST",
+    headers:{apikey:key(),Authorization:"Bearer "+s.access_token,"Content-Type":"application/json"},
+    body:JSON.stringify({question_id:qid,alternativa:alt||undefined})});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok||d.error)throw new Error(d.error||("HTTP "+r.status));
+  return d;
+}
+/** Duas idas ao servidor, e não uma.
+ *
+ *  A explicação da questão e a da alternativa levam alguns segundos cada. Vindo
+ *  juntas, a pessoa encarava a tela parada pela soma das duas para só então ver
+ *  a primeira linha. Separadas, a fundamentação entra assim que fica pronta e a
+ *  análise da alternativa ocupa um cartão de espera logo abaixo — o tempo total
+ *  é o mesmo, o tempo até a primeira palavra cai pela metade. */
 async function explainNow(q,alt){
-  busyIA=true;render();
+  const pack=()=>explan.get(q.id)||{};
   try{
-    const s=sess();
-    const r=await fetch(url()+"/functions/v1/"+IA_FN,{method:"POST",
-      headers:{apikey:key(),Authorization:"Bearer "+s.access_token,"Content-Type":"application/json"},
-      body:JSON.stringify({question_id:q.id,alternativa:alt||undefined})});
-    const d=await r.json().catch(()=>({}));
-    if(!r.ok||d.error)throw new Error(d.error||("HTTP "+r.status));
-    const pack=explan.get(q.id)||{};
-    if(d.geral)pack.geral=d.geral;
-    if(d.alternativa&&alt)pack[alt]=d.alternativa;
-    explan.set(q.id,pack);
-    if(d.aviso)toast(d.aviso);
-    announce(d.gerou?"Comentário gerado":"Comentário recuperado");
-  }catch(e){toast("Não consegui o comentário: "+e.message)}
-  busyIA=false;render();
+    if(!pack().geral){
+      busyIA="geral";render();
+      const d=await pedirExplan(q.id,null);
+      if(d.geral){const p=pack();p.geral=d.geral;explan.set(q.id,p)}
+      if(d.aviso&&ehAdmin)toast(d.aviso);
+      announce("Fundamentação carregada");
+    }
+    if(alt&&!pack()[alt]){
+      busyIA="alt";render();
+      const d=await pedirExplan(q.id,alt);
+      if(d.alternativa){const p=pack();p[alt]=d.alternativa;explan.set(q.id,p)}
+      if(d.aviso&&ehAdmin)toast(d.aviso);
+      announce("Análise da alternativa carregada");
+    }
+  }catch(e){toast("Não consegui buscar a explicação: "+e.message)}
+  busyIA=null;render();
 }
 
 /* ============================================================
@@ -1865,8 +2694,13 @@ function viewAjustes(){
   const s=sess()||{};
   const b1=el("div","block");
   b1.append(el("p","field-label","Sua conta"));
-  b1.append(el("p","hint","Conectado como "+(s.email||"—")+". Tudo é salvo no servidor: qualquer aparelho onde você entrar com esta conta mostra o mesmo progresso."));
+  const quem=meuNome?meuNome+" ("+(s.email||"—")+")":(s.email||"—");
+  b1.append(el("p","hint","Conectado como "+quem+". Tudo é salvo no servidor: qualquer aparelho onde você entrar com esta conta mostra o mesmo progresso."));
   const row=el("div");row.style.cssText="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px";
+  if(ehAdmin){
+    const pa=el("a","btn","Painel administrativo");pa.href="admin.html";
+    pa.style.textDecoration="none";row.append(pa);
+  }
   const rl=el("button","btn","Recarregar dados");rl.onclick=loadAll;
   const out=el("button","btn","Sair");
   out.onclick=async()=>{
