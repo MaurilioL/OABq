@@ -228,7 +228,11 @@ const url=()=>(cfg().url||"").replace(/\/+$/,"");
 const key=()=>cfg().key||"";
 
 let view="relatos", eu=null, pronto=false;
+let bootErro=null;   // mensagem quando o boot falhou por SESSÃO, não por falta de papel admin
 let relatos=[], filtroRel="novo", relSel=null;
+// contagem por status da fila inteira — vem da Edge Function, não da lista
+// filtrada que está na tela (ver carregaRelatos)
+let contagemRelatos={novo:0,em_progresso:0,resolvido:0,improcedente:0};
 let questaoAberta=null, comentarios=[], carregandoQ=false;
 let usuarios=[], buscaUser="", userSel=null, acessos=[];
 let saudacoes=[], filtroSaud="todos";
@@ -238,14 +242,74 @@ const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=nu
 const toast=m=>{const t=el("div","toast",m);document.body.append(t);setTimeout(()=>t.remove(),3800)};
 const announce=m=>{const l=document.getElementById("live");if(l)l.textContent=m};
 
-/** Toda chamada passa por aqui. O token vai no cabeçalho; quem decide se você
- *  pode é o servidor. */
-async function adm(acao,extra){
+/* ------------------------------------------------------------
+   Sessão: o access token do Supabase vence em ~1 h, e o painel é ferramenta
+   de trabalho longo — o admin abre, corrige questões por duas horas, salva.
+   Sem renovação, tudo depois da primeira hora falhava com "HTTP 401", e um
+   boot() com token vencido mostrava "Sem acesso" para administrador legítimo,
+   apontando para o diagnóstico errado.
+
+   O formato gravado é EXATAMENTE o do index.html: as duas páginas dividem a
+   mesma sessão no localStorage, e quem renovar primeiro serve as duas.
+   ------------------------------------------------------------ */
+class SessaoExpirada extends Error{}
+const MSG_EXPIRADA="Sua sessão expirou. Entre novamente pelo app e reabra o painel.";
+function saveSess(d){
+  const ant=sess()||{};
+  // preserva o que a resposta de refresh puder não trazer (user/email)
+  localStorage.setItem(LS_SESS,JSON.stringify({
+    access_token:d.access_token,
+    refresh_token:d.refresh_token||ant.refresh_token,
+    user_id:(d.user&&d.user.id)||ant.user_id,
+    email:(d.user&&d.user.email)||ant.email,
+    expires_at:Date.now()+((d.expires_in||3600)*1000)}));
+}
+/** Uma renovação por vez: o painel dispara várias chamadas em paralelo (métricas,
+ *  taxonomia, resumo) e N refreshes simultâneos com o mesmo refresh_token fariam
+ *  o GoTrue invalidar os concorrentes. Todos esperam a mesma promessa. */
+let refreshP=null;
+function refresh(){
+  if(refreshP)return refreshP;
+  refreshP=(async()=>{
+    const s=sess();
+    if(!s||!s.refresh_token)return false;
+    try{
+      const r=await fetch(url()+"/auth/v1/token?grant_type=refresh_token",{method:"POST",
+        headers:{apikey:key(),"Content-Type":"application/json"},
+        body:JSON.stringify({refresh_token:s.refresh_token})});
+      if(!r.ok)return false;
+      const d=await r.json().catch(()=>null);
+      if(!d||!d.access_token)return false;
+      saveSess(d);return true;
+    }catch(e){return false}
+  })();
+  refreshP.finally(()=>{refreshP=null});
+  return refreshP;
+}
+/** Token válido na mão, renovando por antecedência quando falta menos de um
+ *  minuto. Lança SessaoExpirada quando não há como recuperar. */
+async function tokenFresco(){
   const s=sess();
-  if(!s)throw new Error("sessão ausente — entre pelo app primeiro");
-  const r=await fetch(url()+"/functions/v1/admin",{method:"POST",
-    headers:{apikey:key(),Authorization:"Bearer "+s.access_token,"Content-Type":"application/json"},
+  if(!s||!s.access_token)throw new SessaoExpirada("Entre pelo app com a conta de administrador e volte.");
+  // refresh que falha é veredito, não tentativa: mandar o token vencido assim
+  // mesmo só rende um 401 previsível e uma requisição a mais.
+  if(s.expires_at&&Date.now()>s.expires_at-60000&&!await refresh())throw new SessaoExpirada(MSG_EXPIRADA);
+  const s2=sess();
+  if(!s2||!s2.access_token)throw new SessaoExpirada(MSG_EXPIRADA);
+  return s2.access_token;
+}
+/** Toda chamada passa por aqui. O token vai no cabeçalho; quem decide se você
+ *  pode é o servidor. O 401 ganha UMA segunda chance com token renovado —
+ *  além de vencer, o token pode ter sido invalidado do outro lado. */
+async function adm(acao,extra){
+  const chamar=tk=>fetch(url()+"/functions/v1/admin",{method:"POST",
+    headers:{apikey:key(),Authorization:"Bearer "+tk,"Content-Type":"application/json"},
     body:JSON.stringify(Object.assign({acao},extra||{}))});
+  let r=await chamar(await tokenFresco());
+  if(r.status===401){
+    if(!await refresh())throw new SessaoExpirada(MSG_EXPIRADA);
+    r=await chamar(await tokenFresco());
+  }
   const d=await r.json().catch(()=>({}));
   if(!r.ok||d.error)throw new Error(d.error||("HTTP "+r.status));
   return d;
@@ -254,10 +318,14 @@ async function adm(acao,extra){
  *  (saudações: select para todos, escrita só admin). Não vale a pena passar
  *  pela Edge Function o que o banco já sabe recusar. */
 async function rest(path,init){
-  const s=sess();
-  const r=await fetch(url()+"/rest/v1/"+path,Object.assign({},init,{
-    headers:Object.assign({apikey:key(),Authorization:"Bearer "+s.access_token,
+  const chamar=tk=>fetch(url()+"/rest/v1/"+path,Object.assign({},init,{
+    headers:Object.assign({apikey:key(),Authorization:"Bearer "+tk,
       "Content-Type":"application/json"},(init&&init.headers)||{})}));
+  let r=await chamar(await tokenFresco());
+  if(r.status===401){
+    if(!await refresh())throw new SessaoExpirada(MSG_EXPIRADA);
+    r=await chamar(await tokenFresco());
+  }
   if(!r.ok)throw new Error("HTTP "+r.status+" — "+(await r.text()).slice(0,120));
   if(r.status===204)return null;
   return r.json().catch(()=>null);
@@ -458,9 +526,16 @@ let modalAberto=false;
 function modal(build){
   return new Promise(res=>{
     modalAberto=true;
+    // Quem tinha o foco antes de abrir. Sem devolvê-lo no fechamento, o foco
+    // cai no <body> e quem navega por teclado recomeça a tabular do zero — no
+    // painel, que é ferramenta de uso intensivo por teclado. O openModal() do
+    // index.html já fazia isso; a cópia para cá tinha perdido o detalhe.
+    const focoAnterior=document.activeElement;
     const back=el("div","modal-back"), m=el("div","modal");
     m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");
-    const fim=v=>{modalAberto=false;back.remove();document.removeEventListener("keydown",esc,true);res(v)};
+    const fim=v=>{modalAberto=false;back.remove();document.removeEventListener("keydown",esc,true);
+      if(focoAnterior&&focoAnterior.focus)try{focoAnterior.focus()}catch(e){}
+      res(v)};
     const esc=e=>{
       if(e.key==="Escape"){e.preventDefault();fim(null)}
       if(e.key==="Tab"){
@@ -527,10 +602,16 @@ async function comSync(fn){
 /* ============================================================
    Aba — Visão geral (métricas)
    ============================================================ */
-let metricas=null, janelaMetrica=30;
+let metricas=null, janelaMetrica=30, metricasErro="", metricasBusy=false;
 async function carregaMetricas(){
-  try{const d=await adm("metricas",{dias:janelaMetrica});metricas=d.metricas}
-  catch(e){toast(e.message);metricas=null}
+  if(metricasBusy)return;          // uma requisição em voo já basta
+  metricasBusy=true;
+  const dias=janelaMetrica;
+  try{const d=await adm("metricas",{dias});metricas=d.metricas;metricasErro=""}
+  catch(e){toast(e.message);metricas=null;metricasErro=e.message||"não consegui calcular"}
+  metricasBusy=false;
+  // a janela mudou enquanto a resposta viajava: o dado é de outra pergunta
+  if(janelaMetrica!==dias){metricas=null;carregaMetricas();return}
   render();
 }
 function mnum(n){return n==null?"—":String(n).replace(/\B(?=(\d{3})+(?!\d))/g,".")}
@@ -545,12 +626,22 @@ function viewPainel(){
   const sel=el("select");sel.style.width="auto";
   [[7,"7 dias"],[30,"30 dias"],[90,"90 dias"],[365,"1 ano"]].forEach(([v,l])=>{
     const o=el("option",null,l);o.value=v;if(v===janelaMetrica)o.selected=true;sel.append(o)});
-  sel.onchange=()=>{janelaMetrica=parseInt(sel.value,10);metricas=null;carregaMetricas()};
+  sel.onchange=()=>{janelaMetrica=parseInt(sel.value,10);metricas=null;metricasErro="";carregaMetricas()};
   h.append(sel);cab.append(h);w.append(cab);
 
   if(!metricas){
+    // Estado de erro EXPLÍCITO: sem ele, "falhou → render → pede de novo →
+    // falha" virava um laço infinito de requisições e toasts. Falhou uma vez,
+    // para; quem decide tentar de novo é o clique.
+    if(metricasErro){
+      const c=el("div","card pad empty");
+      c.append(el("p","hint","Não consegui calcular as métricas: "+metricasErro));
+      const b=el("button","btn primary","Tentar de novo");b.style.marginTop="10px";
+      b.onclick=()=>{metricasErro="";render()};   // o render repinta o spinner e ele mesmo dispara a busca
+      c.append(b);w.append(c);return w;
+    }
     const c=el("div","card pad empty");c.append(el("span","spinner"),document.createTextNode(" Calculando…"));
-    w.append(c);if(!metricas)carregaMetricas();return w;
+    w.append(c);carregaMetricas();return w;
   }
   const m=metricas;
 
@@ -713,6 +804,10 @@ async function carregaRelatos(){
   try{
     const d=await adm("relatos",filtroRel==="todos"?{}:{status:filtroRel});
     relatos=d.relatos||[];
+    // As contagens vêm da fila INTEIRA (a Edge Function as calcula por status,
+    // com count=exact). Derivar de `relatos` era errado: essa lista já chega
+    // filtrada, e todo segmento que não fosse o ativo mostrava zero.
+    if(d.contagens)contagemRelatos=d.contagens;
   }catch(e){toast("Não consegui carregar os relatos: "+e.message);relatos=[]}
   render();
 }
@@ -728,7 +823,16 @@ async function abreQuestao(qid){
 async function mudaStatus(ids,status){
   try{
     await comSync(()=>adm("status_relato",{ids,status}));
-    relatos.forEach(r=>{if(ids.includes(r.id))r.status=status});
+    // Move a contagem junto com o relato. Sem isto, mudar o status no filtro
+    // "Todos" (que não recarrega) deixaria os números congelados no que veio
+    // do servidor — a contagem antes vinha da lista em memória e acompanhava
+    // sozinha; agora vem de fora e precisa ser mantida à mão.
+    relatos.forEach(r=>{
+      if(!ids.includes(r.id)||r.status===status)return;
+      contagemRelatos[r.status]=Math.max(0,(contagemRelatos[r.status]||0)-1);
+      contagemRelatos[status]=(contagemRelatos[status]||0)+1;
+      r.status=status;
+    });
     toast("Marcado como "+STATUS[status].toLowerCase()+".");
     if(filtroRel!=="todos"&&filtroRel!==status)await carregaRelatos(); else render();
     atualizaBadge();
@@ -745,7 +849,7 @@ function viewRelatos(){
   cab.append(el("p","hint","Do mais recente para o mais antigo, agrupados por questão. Concluídos ficam no histórico — nada é apagado."));
   const segs=el("div","segs");segs.style.marginTop="11px";
   Object.keys(STATUS).concat("todos").forEach(k=>{
-    const n=k==="todos"?null:relatos.filter(r=>r.status===k).length;
+    const n=k==="todos"?null:(contagemRelatos[k]||0);
     const b=el("button",null,(k==="todos"?"Todos":STATUS[k])+(n?" ("+n+")":""));
     b.type="button";b.setAttribute("aria-pressed",filtroRel===k?"true":"false");
     b.onclick=()=>{filtroRel=k;carregaRelatos()};
@@ -934,9 +1038,14 @@ function painelQuestao(){
     bs.disabled=true;const rot=bs.textContent;bs.innerHTML='<span class="spinner"></span> Salvando';
     try{
       const alts={};Object.keys(campos).forEach(k=>alts[k]=campos[k].value.trim());
+      // Enunciado vazio era substituído em silêncio pelo texto antigo: a tela
+      // dizia "✓ Salvo" e nada tinha mudado. Se apagar foi engano, avisar é
+      // melhor; se foi de propósito, restaurar por baixo do pano é pior ainda.
+      const enun=ta.value.trim();
+      if(!enun){toast("O enunciado não pode ficar vazio.");bs.textContent=rot;bs.disabled=false;return}
       const d=await comSync(()=>adm("salvar_questao",{question_id:q.id,disciplina:sd.value,tema:st.value,
-        enunciado:ta.value.trim()||q.enunciado,alternativas:alts}));
-      questaoAberta=d.questao;comentarios=comentarios;   // preserva
+        enunciado:enun,alternativas:alts}));
+      questaoAberta=d.questao;
       // feedback no lugar: o preview pisca "✓ salvo", sem recarregar a página
       repinta();flash.style.transition="opacity .2s";flash.style.opacity="1";
       setTimeout(()=>{flash.style.opacity="0"},2200);
@@ -1057,10 +1166,17 @@ async function forcarAnalise(q,alt){
     {ok:"Pedir agora"}))return;
   toast("Pedindo… isso leva alguns segundos.");
   try{
-    const s=sess();
-    const r=await fetch(url()+"/functions/v1/ia",{method:"POST",
-      headers:{apikey:key(),Authorization:"Bearer "+s.access_token,"Content-Type":"application/json"},
+    // A função `ia` não passa por adm(), mas a sessão é a mesma: sem
+    // tokenFresco, um pedido de análise depois de 1 h de painel aberto
+    // morreria em "HTTP 401" parecendo defeito da IA.
+    const chamar=tk=>fetch(url()+"/functions/v1/ia",{method:"POST",
+      headers:{apikey:key(),Authorization:"Bearer "+tk,"Content-Type":"application/json"},
       body:JSON.stringify({question_id:q.id,alternativa:alt||undefined,forcar:true})});
+    let r=await chamar(await tokenFresco());
+    if(r.status===401){
+      if(!await refresh())throw new SessaoExpirada(MSG_EXPIRADA);
+      r=await chamar(await tokenFresco());
+    }
     const d=await r.json().catch(()=>({}));
     if(!r.ok||d.error)throw new Error(d.error||("HTTP "+r.status));
     toast("Pronto. Versão nova no topo.");
@@ -1427,14 +1543,17 @@ function viewSaudacoes(){
     const c5=el("td");c5.style.textAlign="right";
     const ba=el("button","btn sm",s.ativo?"Desligar":"Ligar");
     ba.onclick=async()=>{
-      try{await rest("greetings?id=eq."+s.id,{method:"PATCH",headers:{Prefer:"return=minimal"},
-        body:JSON.stringify({ativo:!s.ativo})});carregaSaudacoes()}catch(e){toast(e.message)}
+      // comSync: RECURSOS 64 — toda mutação do painel passa por ele, para a
+      // pílula de sincronização refletir a verdade (inclusive o erro, que
+      // sozinho vira só um toast que some em 4 segundos)
+      try{await comSync(()=>rest("greetings?id=eq."+s.id,{method:"PATCH",headers:{Prefer:"return=minimal"},
+        body:JSON.stringify({ativo:!s.ativo})}));carregaSaudacoes()}catch(e){toast(e.message)}
     };
     const be=el("button","btn sm","Editar");be.onclick=()=>editaSaudacao(s);
     const bd=el("button","btn sm danger","×");bd.title="Excluir";
     bd.onclick=async()=>{
       if(!await confirmar("Excluir esta saudação?","“"+s.texto+"”. Se quiser só tirar do ar por um tempo, use Desligar.",{ok:"Excluir",danger:true}))return;
-      try{await rest("greetings?id=eq."+s.id,{method:"DELETE",headers:{Prefer:"return=minimal"}});toast("Excluída.");carregaSaudacoes()}
+      try{await comSync(()=>rest("greetings?id=eq."+s.id,{method:"DELETE",headers:{Prefer:"return=minimal"}}));toast("Excluída.");carregaSaudacoes()}
       catch(e){toast(e.message)}
     };
     const rw=el("div","row");rw.style.justifyContent="flex-end";rw.append(ba,be,bd);
@@ -1526,8 +1645,8 @@ function editaSaudacao(s){
         peso:Math.min(10,Math.max(1,parseInt(iPes.value,10)||2))};
       ok.disabled=true;
       try{
-        if(novo)await rest("greetings",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});
-        else await rest("greetings?id=eq."+d.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});
+        if(novo)await comSync(()=>rest("greetings",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)}));
+        else await comSync(()=>rest("greetings?id=eq."+d.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)}));
         toast("Salvo.");fim(true);
       }catch(e){toast(e.message);ok.disabled=false}
     };
@@ -1548,10 +1667,13 @@ function render(){
     m.append(c);return;
   }
   if(!eu){
+    // Duas causas MUITO diferentes caíam no mesmo cartão: token vencido e
+    // conta sem papel de admin. Dizer "Sem acesso" para quem só precisa
+    // entrar de novo manda o dono do projeto caçar um problema que não existe.
     const c=el("div","card pad");c.style.cssText="max-width:440px;margin:60px auto";
-    c.append(el("h2","sec","Sem acesso"));
-    c.append(el("p","hint","Esta área é restrita. Se você deveria estar aqui, entre pelo app com a conta de administrador e volte."));
-    const a=el("a","btn primary","Ir para o app");a.href="index.html";
+    c.append(el("h2","sec",bootErro?"Você precisa entrar novamente":"Sem acesso"));
+    c.append(el("p","hint",bootErro||"Esta área é restrita. Se você deveria estar aqui, entre pelo app com a conta de administrador e volte."));
+    const a=el("a","btn primary",bootErro?"Entrar novamente":"Ir para o app");a.href="index.html";
     a.style.cssText="display:inline-block;margin-top:14px;text-decoration:none";
     c.append(a);m.append(c);return;
   }
@@ -1579,7 +1701,12 @@ async function atualizaBadge(){
 }
 async function boot(){
   document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>selectTab(b.dataset.v));
-  if(!cfg().url||!sess()){pronto=true;render();return}
+  // Sem sessão nenhuma (nunca entrou, ou saiu pelo app) não é "sem acesso":
+  // é falta de login. Só a ausência de configuração cai no cartão genérico.
+  if(!cfg().url||!sess()){
+    if(cfg().url&&!sess())bootErro="Entre pelo app com a conta de administrador e volte.";
+    pronto=true;render();return;
+  }
   try{
     // O portão real está no servidor. Isto aqui é só para não desenhar um
     // painel inteiro para quem vai levar 404 em toda ação.
@@ -1598,6 +1725,9 @@ async function boot(){
     carregaTaxonomia();
     await carregaMetricas();
   }catch(e){
+    // "Sem acesso" fica reservado para o 404 do portão de admin. Sessão
+    // vencida/ausente é outro diagnóstico e merece outra mensagem.
+    bootErro=(e instanceof SessaoExpirada)?e.message:null;
     pronto=true;eu=null;render();
   }
 }
