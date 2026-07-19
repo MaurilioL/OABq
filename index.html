@@ -12,6 +12,10 @@
 <style>
   :root{--bg:#EDEFEA;--surface:#FBFCF9;--surface-2:#F3F5F0;--ink:#182029;--ink-soft:#55606B;
     --line:#DBDFD6;--line-strong:#C6CCBF;--brand:#1F7A54;--brand-deep:#155C3E;
+    /* mesmos valores do admin.html: as etiquetas de "Filtros ativos" usavam as
+       duas e elas não existiam aqui — com var() inválido, a declaração inteira
+       caía para o valor inicial (sem fundo, borda na cor do texto) */
+    --brand-soft:#E3F0E9;--brand-line:#BFE0D0;
     --acerto:#1F7A54;--acerto-soft:#E3F0E9;--erro:#A93636;--erro-soft:#F7E7E4;
     --foco:#8A5B0F;--foco-soft:#F6ECD7;--azul:#27437F;--azul-soft:#EEF3FF;--azul-line:#D9E3FB;
     --roxo:#553486;--roxo-soft:#F2EEFB;--roxo-line:#E2D9F5;
@@ -140,6 +144,8 @@
   .verdict{margin-top:16px;border-radius:11px;padding:11px 14px;font-size:14px;border:1px solid;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .verdict.ok{background:var(--acerto-soft);border-color:#bfe0d0;color:var(--brand-deep)}
   .verdict.no{background:var(--erro-soft);border-color:#eecac6;color:var(--erro)}
+  /* anulada: nem acerto nem erro — cinza, para não sugerir veredito nenhum */
+  .verdict.na{background:var(--surface-2);border-color:var(--line);color:var(--ink-soft)}
   .verdict .g{margin-left:auto;font-size:13px;opacity:.9;font-variant-numeric:tabular-nums}
   /* agendamento: faixa fina entre o veredito e a leitura */
   .sched{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;padding:9px 12px;border:1px dashed var(--line-strong);border-radius:10px}
@@ -306,21 +312,11 @@
 
 <script>
 "use strict";
-
-
-
-
-
 /* ============================================================
    Configuração (preencha antes de publicar)
    ============================================================ */
-const SUPABASE_URL = "https://cfczvuaswyiuywpibvfa.supabase.co";
-const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNmY3p2dWFzd3lpdXl3cGlidmZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyNDMwMjgsImV4cCI6MjA5OTgxOTAyOH0.PZr-TMX2bCM60I5kySBQdH8lBQC8YVfLutGudb31wls";
-
-
-
-
-
+const SUPABASE_URL="";
+const SUPABASE_ANON_KEY="";
 let TAX={"Ética Profissional e Estatuto da OAB":["Deontologia e deveres do advogado","Honorários advocatícios","Publicidade profissional","Sigilo profissional","Prerrogativas e imunidade profissional","Infrações e sanções disciplinares","Processo disciplinar","Inscrição, impedimentos e incompatibilidades","Sociedade de advogados","Órgãos da OAB e eleições"],"Filosofia do Direito":["Justiça e equidade","Teoria da norma e do ordenamento","Positivismo e jusnaturalismo","Interpretação e argumentação jurídica","Direito, moral e legitimidade"],"Direito Constitucional":["Controle de constitucionalidade","Remédios constitucionais","Direitos e garantias fundamentais","Organização do Estado e federação","Organização dos Poderes","Processo legislativo","Ordem social","Ordem econômica e financeira","Defesa do Estado e das instituições"],"Direitos Humanos":["Sistema internacional de proteção","Sistema interamericano","Tratados de direitos humanos","Proteção de grupos vulneráveis"],"Direito Internacional":["Direito internacional público","Direito internacional privado","Nacionalidade e condição do estrangeiro","Tratados e organismos internacionais"],"Direito Eleitoral":["Direitos políticos","Sistema eleitoral e inelegibilidades","Partidos políticos","Processo eleitoral e propaganda"],"Direito Financeiro":["Orçamento público","Receita e despesa pública","Repartição de receitas","Responsabilidade fiscal (LRF)"],"Direito Tributário":["Competência e limitações ao poder de tributar","Princípios tributários","Espécies tributárias","Obrigação e crédito tributário","Responsabilidade tributária","Impostos em espécie","Administração e processo tributário"],"Direito Administrativo":["Princípios da Administração","Atos administrativos","Poderes administrativos","Licitações e contratos","Serviços públicos","Agentes públicos","Responsabilidade civil do Estado","Improbidade administrativa","Controle da Administração","Intervenção na propriedade"],"Direito Ambiental":["Princípios do direito ambiental","Política Nacional do Meio Ambiente","Responsabilidade ambiental","Áreas protegidas e licenciamento"],"Direito Civil":["Parte geral (pessoas, bens, fatos jurídicos)","Obrigações","Contratos","Responsabilidade civil","Direitos reais","Direito de família","Direito das sucessões","Prescrição e decadência"],"Direito Processual Civil":["Normas fundamentais e jurisdição","Competência","Sujeitos do processo","Tutela provisória","Procedimento comum e sentença","Recursos","Cumprimento de sentença e execução","Processos nos tribunais"],"Direito Empresarial":["Teoria da empresa e empresário","Sociedades","Títulos de crédito","Falência e recuperação judicial","Propriedade industrial","Contratos empresariais"],"Direito do Consumidor":["Relação de consumo","Responsabilidade e vícios","Práticas comerciais e proteção contratual","Defesa do consumidor em juízo"],"Direito Penal":["Aplicação da lei penal","Teoria do crime","Penas e medidas","Extinção da punibilidade","Crimes contra a pessoa","Crimes contra o patrimônio","Crimes contra a Administração Pública","Legislação penal especial"],"Direito Processual Penal":["Inquérito e ação penal","Provas","Prisões e medidas cautelares","Competência","Procedimentos","Nulidades","Recursos e habeas corpus"],"Direito do Trabalho":["Relação de emprego","Contrato de trabalho","Jornada e remuneração","Alteração, suspensão e interrupção","Extinção do contrato","Segurança e saúde no trabalho","Direito coletivo do trabalho"],"Direito Processual do Trabalho":["Justiça do Trabalho e competência","Procedimentos e audiência","Provas e sentença","Recursos trabalhistas","Execução trabalhista"],"Direito Previdenciário":["Seguridade social e princípios","Segurados e beneficiários","Benefícios previdenciários","Custeio da seguridade"],"Estatuto da Criança e do Adolescente":["Direitos fundamentais da criança e do adolescente","Medidas de proteção","Ato infracional e medidas socioeducativas","Convivência familiar e adoção"]};
 let DISCIPLINAS=Object.keys(TAX);
 /* TAX acima é o retrato de fábrica — usado enquanto o banco não respondeu, e
@@ -339,6 +335,10 @@ function montaTaxonomia(disc,temas){
 const IA_FN="ia";
 
 const LS_CFG="oab_cfg", LS_SESS="oab_auth", LS_RUN="oab_run", LS_BEMVINDO="oab_bemvindo";
+// De quem é a fila guardada neste aparelho. Mora no localStorage (e não no
+// store KV) de propósito: o KV é apagado no logout, e esta marca precisa
+// justamente sobreviver a ele para valer alguma coisa no login seguinte.
+const LS_OUTDONO="oab_outbox_dono";
 const PAGE=500;              // paginação dos metadados
 const CHUNK=100;             // questões por requisição de conteúdo
 const RUNWAY=50;             // repõe o cache quando sobrar menos que isto à frente
@@ -391,10 +391,13 @@ async function authPost(path,body){
  *  a borda escreve. Falhar aqui não pode impedir ninguém de entrar: log é
  *  auditoria, não autenticação. */
 function registraAcesso(evento){
-  const s=sess();if(!s)return;
-  fetch(url()+"/functions/v1/admin",{method:"POST",
-    headers:{apikey:key(),Authorization:"Bearer "+s.access_token,"Content-Type":"application/json"},
-    body:JSON.stringify({acao:"registrar_acesso",evento:evento||"login"})}).catch(()=>{});
+  if(!sess())return;
+  // tokenFresco() também aqui: um log de auditoria que só funciona na primeira
+  // hora registra menos do que promete. O catch continua engolindo tudo — log
+  // é auditoria, não autenticação, e não pode travar ninguém na porta.
+  tokenFresco().then(tk=>fetch(url()+"/functions/v1/admin",{method:"POST",
+    headers:{apikey:key(),Authorization:"Bearer "+tk,"Content-Type":"application/json"},
+    body:JSON.stringify({acao:"registrar_acesso",evento:evento||"login"})})).catch(()=>{});
 }
 const login=(email,password)=>authPost("/auth/v1/token?grant_type=password",{email,password}).then(d=>{saveSess(d);registraAcesso("login");return d});
 /** `data` vai para raw_user_meta_data e o gatilho handle_new_user copia para
@@ -408,13 +411,34 @@ async function refresh(){
   try{const d=await authPost("/auth/v1/token?grant_type=refresh_token",{refresh_token:s.refresh_token});saveSess(d);return true}
   catch(e){return false}
 }
-/** Sessão inválida: sai com aviso claro em vez de travar em "erro de sync". */
-function forceLogout(msg){
+/** Sessão inválida: sai com aviso claro em vez de travar em "erro de sync".
+ *  `manterOutbox` existe porque há DOIS logouts muito diferentes:
+ *   · voluntário (botão "Sair") — a pessoa escolheu, já foi avisada das
+ *     pendências, e leva tudo embora do aparelho;
+ *   · forçado (sessão expirada dentro de api()) — ninguém escolheu nada. Apagar
+ *     a fila aqui destruía respostas que só existiam neste aparelho, no pior
+ *     momento possível (estudo offline longo + refresh token vencido). */
+function forceLogout(msg,opts){
+  const manter=!!(opts&&opts.manterOutbox);
   localStorage.removeItem(LS_SESS);localStorage.removeItem(LS_RUN);
-  idbClear();   // conteúdo cacheado sai do aparelho junto com a sessão
-  Q=[];qById.clear();answers.clear();marks.clear();reviews.clear();cadernos=[];filtros=[];explan.clear();explLoaded.clear();semConteudoServidor.clear();inflight.clear();pendentes=0;semRede=false;
+  if(!manter){localStorage.removeItem(LS_OUTDONO);outDono=null}
+  idbClear({manterOutbox:manter});   // conteúdo cacheado sai junto com a sessão
+  Q=[];qById.clear();answers.clear();marks.clear();reviews.clear();cadernos=[];filtros=[];explan.clear();explLoaded.clear();semConteudoServidor.clear();inflight.clear();pendentes=0;semRede=false;descartes=0;
   ready=false;run=null;mode="montar";
+  // a fila continua lá: o contador volta a dizer a verdade (e o aviso de
+  // "você tem alterações pendentes" ao fechar a aba segue valendo)
+  if(manter)outCount().then(n=>{pendentes=n;setSync()}).catch(()=>{});
   render(); if(msg)toast(msg);
+}
+/** Token válido na mão, renovando por antecedência quando falta menos de um
+ *  minuto. É a mesma regra que api() sempre aplicou, agora nomeada para poder
+ *  ser usada também por quem fala com as Edge Functions (pedirExplan,
+ *  registraAcesso) — que antes mandavam o token cru e falhavam em 401. */
+async function tokenFresco(){
+  const s=sess(); if(!s)throw new Error("sem sessão");
+  if(Date.now()>s.expires_at-60000)await refresh();
+  const s2=sess(); if(!s2)throw new Error("sem sessão");
+  return s2.access_token;
 }
 /** Chamada autenticada à API, com refresh automático e logout em falha real. */
 async function api(path,opts){
@@ -423,7 +447,7 @@ async function api(path,opts){
   if(Date.now()>s.expires_at-60000)await refresh();
   const go=()=>{const t=sess();return fetch(url()+path,Object.assign({},opts,{headers:Object.assign({apikey:key(),Authorization:"Bearer "+t.access_token},opts.headers||{})}))};
   let r=await go();
-  if(r.status===401){ if(await refresh())r=await go(); else {forceLogout("Sua sessão expirou. Entre novamente.");throw new Error("sessão expirada")} }
+  if(r.status===401){ if(await refresh())r=await go(); else {forceLogout("Sua sessão expirou. Entre novamente — suas alterações pendentes serão enviadas depois do login.",{manterOutbox:true});throw new Error("sessão expirada")} }
   return r;
 }
 async function apiJson(path,opts){
@@ -438,7 +462,7 @@ async function apiJson(path,opts){
    snapshot local e enfileirada. A fila é drenada em ordem quando
    há rede. Nada se perde no metrô.
    ============================================================ */
-let pendentes=0, drenando=false, semRede=false;
+let pendentes=0, drenando=false, semRede=false, descartes=0;
 
 function setSync(){
   const p=document.getElementById("syncpill"),t=document.getElementById("synctext");
@@ -449,12 +473,17 @@ function setSync(){
     diz=plural(pendentes,"alteração está guardada","alterações estão guardadas")+" neste aparelho e sobem sozinhas quando a conexão voltar."}
   else if(semRede){cls="err";txt="offline";diz="Sem conexão. Você pode continuar respondendo — nada se perde."}
   else if(pendentes){cls="busy";txt="salvando "+pendentes+"…";diz="Enviando suas últimas respostas ao servidor."}
+  // Recusa do servidor NÃO é "salvo": o estado persiste até um recarregamento
+  // bem-sucedido, senão a pessoa perde dado com o selo verde na cara.
+  else if(descartes){cls="err";txt=plural(descartes,"alteração não salva","alterações não salvas");
+    diz="O servidor recusou "+(descartes===1?"uma alteração":"algumas alterações")+" — normalmente por dado inválido. Recarregue os dados (Ajustes → Recarregar) para ver o estado real do seu progresso."}
   p.className="syncpill "+cls;t.textContent=txt;
   p.setAttribute("aria-label","Sincronização: "+txt+". "+diz+" Toque para entender.");
   p.title=diz;
 }
 /** Enfileira uma escrita. O chamador já aplicou o efeito em memória. */
 async function push(req){
+  marcaDonoFila();          // a fila passa a ter dono declarado
   await outAdd(req);
   pendentes=await outCount();setSync();
   salvarSnapshot();
@@ -467,6 +496,10 @@ async function drenar(){
   if(drenando||!authed())return;
   drenando=true;
   try{
+    // Ponto único de saída da fila: é aqui que se confere o dono, e não em
+    // loadAll, para valer também para o drenar disparado por push() e pelo
+    // evento "online".
+    await conferirDonoDaFila();
     const itens=await outAll();
     for(const it of itens){
       try{
@@ -474,7 +507,15 @@ async function drenar(){
           headers:Object.assign({"Content-Type":"application/json"},it.prefer?{Prefer:it.prefer}:{}),
           body:it.body?JSON.stringify(it.body):undefined});
         if(!r.ok&&!erroDefinitivo(r.status))throw new Error("HTTP "+r.status);
-        if(!r.ok)console.warn("descartado (erro definitivo "+r.status+"):",it.path);
+        if(!r.ok){
+          // Descartar continua certo (um item inválido não pode travar a fila
+          // para sempre) — mas descartar EM SILÊNCIO não: o usuário via o selo
+          // "salvo" com a resposta perdida. Agora o descarte conta, avisa e
+          // mantém o selo em erro até um recarregamento bem-sucedido.
+          console.warn("descartado (erro definitivo "+r.status+"):",it.path,it.body);
+          descartes++;
+          toast("Uma alteração foi recusada pelo servidor e não pôde ser salva. Recarregue os dados para conferir o seu progresso.");
+        }
         await outDel(it.id);
       }catch(e){ semRede=true;break }   // rede caiu: para e tenta depois
     }
@@ -557,11 +598,17 @@ async function loadAll(){
       fetchAll("/rest/v1/saved_filters?select=id,nome,definicao&user_id=eq."+s2.user_id+"&order=nome.asc"),
       fetchAll("/rest/v1/profiles?select=role,nome&user_id=eq."+s2.user_id+"&order=user_id.asc"),
       fetchAll("/rest/v1/question_stats?select=*&order=question_id.asc"),
-      // ~10 KB, e sem elas a primeira tela abre sem voz
-      fetchAll("/rest/v1/greetings?select=tipo,texto,turnos,dias,min_respostas,max_respostas,peso,ativo&ativo=is.true&order=id.asc"),
+      // ~10 KB, e sem elas a primeira tela abre sem voz.
+      // As três cargas abaixo são OPCIONAIS: greetings/disciplines/topics só
+      // nascem nas migrações 04/05, e o app tem fallback embutido para as três
+      // (SAUDACOES e TAX estáticos). O .catch(()=>[]) impede que um banco que
+      // ainda não rodou essas migrações derrube o Promise.all inteiro — antes,
+      // uma instalação limpa parada no 02 abria com "Não consegui carregar
+      // seus dados", com as 880 questões perfeitamente disponíveis.
+      fetchAll("/rest/v1/greetings?select=tipo,texto,turnos,dias,min_respostas,max_respostas,peso,ativo&ativo=is.true&order=id.asc").catch(()=>[]),
       // taxonomia do catálogo: o que o painel renomeou aparece aqui na abertura
-      fetchAll("/rest/v1/disciplines?select=id,nome,ordem,ativo&order=ordem.asc"),
-      fetchAll("/rest/v1/topics?select=id,discipline_id,nome,ordem,ativo&order=ordem.asc")
+      fetchAll("/rest/v1/disciplines?select=id,nome,ordem,ativo&order=ordem.asc").catch(()=>[]),
+      fetchAll("/rest/v1/topics?select=id,discipline_id,nome,ordem,ativo&order=ordem.asc").catch(()=>[])
     ]);
     if(!qs.length)throw new Error("O banco de questões está vazio no servidor. Rode os arquivos SQL (01, 02 e 03).");
     aplicaMeta(qs);kvPut("meta",{rows:qs});
@@ -578,7 +625,7 @@ async function loadAll(){
     montaTaxonomia(disc,temas);    // catálogo do banco vira a taxonomia viva
     saudacao=null;                 // recalcula na próxima montagem da tela
     stats=new Map((sts||[]).map(x=>[x.question_id,x]));
-    semRede=false;ready=true;salvarSnapshot();setSync();restoreRun();render();
+    semRede=false;descartes=0;ready=true;salvarSnapshot();setSync();restoreRun();render();
   }catch(e){
     if(ready){semRede=true;setSync();return}   // já tem dado local: segue offline
     loadErr=e.message;setSync();render();
@@ -821,9 +868,39 @@ async function outCount(){
   catch(e){}
   return n+memOut.length;
 }
-async function idbClear(){
-  memOut=[];
-  try{await tx(ST_CONT,"readwrite",st=>st.clear());await tx(ST_KV,"readwrite",st=>st.clear());await tx(ST_OUT,"readwrite",st=>st.clear())}catch(e){}
+/** Limpa o que está guardado no aparelho. `manterOutbox` preserva a FILA (e a
+ *  reserva em memória): o conteúdo cacheado e o snapshot saem, as escritas que
+ *  ainda não subiram ficam. Serve ao logout FORÇADO — ver forceLogout. */
+async function idbClear(opts){
+  const manter=!!(opts&&opts.manterOutbox);
+  if(!manter)memOut=[];
+  try{
+    await tx(ST_CONT,"readwrite",st=>st.clear());
+    await tx(ST_KV,"readwrite",st=>st.clear());
+    if(!manter)await tx(ST_OUT,"readwrite",st=>st.clear());
+  }catch(e){}
+}
+/* A fila passou a sobreviver ao logout forçado, então é preciso saber de QUEM
+   ela é. Sem isso, entrar com OUTRA conta no mesmo aparelho drenaria escritas
+   alheias: a RLS as recusaria (elas carregam o user_id de origem), viraria
+   descarte visível, e a segunda pessoa veria o alarme de "alterações não
+   salvas" por um dado que nunca foi dela. Marca-se o dono na primeira escrita
+   e confere-se antes de drenar, no login. */
+let outDono=null;
+function marcaDonoFila(){
+  const s=sess();if(!s||!s.user_id)return;
+  if(outDono===s.user_id)return;                  // já marcado nesta sessão
+  outDono=s.user_id;try{localStorage.setItem(LS_OUTDONO,s.user_id)}catch(e){}
+}
+async function conferirDonoDaFila(){
+  const s=sess();if(!s||!s.user_id)return;
+  let dono=null;try{dono=localStorage.getItem(LS_OUTDONO)}catch(e){}
+  if(dono&&dono!==s.user_id){
+    memOut=[];
+    try{await tx(ST_OUT,"readwrite",st=>st.clear())}catch(e){}
+    pendentes=0;descartes=0;
+  }
+  outDono=s.user_id;try{localStorage.setItem(LS_OUTDONO,s.user_id)}catch(e){}
 }
 
 /* ============================================================
@@ -1168,7 +1245,6 @@ async function relatarErro(q,sel){
               // só oferece o comentário da alternativa se ela existe nesta tela
               opts=[["geral","A explicação da questão"]];
               if(errou)opts.push(["alt","A explicação da alternativa "+sel],["ambas","As duas"]);
-              else if(!errou)opts=[["geral","A explicação da questão"]];
             }
             const box=el("div");box.style.cssText="margin:9px 0 0 14px;padding-left:12px;border-left:2px solid var(--line)";
             box.append(Object.assign(el("p","field-label",sub.t),{style:"margin-bottom:6px"}));
@@ -1470,6 +1546,7 @@ const AJUDA=[
     "Tudo o que você faz vale na tela imediatamente e entra numa fila local. Havendo rede, a fila sobe em ordem, sozinha. Você nunca espera o servidor para responder a próxima questão.",
     "O selo no topo diz em que pé está: salvo (tudo no servidor), salvando N… (subindo agora), offline · N pendentes (guardado aqui, esperando sinal). Toque nele a qualquer momento.",
     "Perdeu o sinal no metrô? Continue respondendo. Nada se perde e a fila drena quando o sinal voltar. Só evite sair da conta com pendências: sair apaga a fila deste aparelho.",
+    "Se o servidor recusar uma alteração, o selo avisa (“não salva”) e fica assim até você recarregar os dados em Ajustes — aí a tela volta a mostrar exatamente o que está salvo.",
     "Os enunciados baixados ficam em cache neste aparelho até você sair, então reabrir é instantâneo. O seu progresso vive no servidor: entre com a mesma conta em qualquer aparelho e ele está lá."]},
   {id:"atalhos",t:"Atalhos de teclado",p:[
     "Durante a sessão, sem tirar a mão do teclado. Ficam desativados dentro de campos de texto e janelas."],extra:kbdList},
@@ -1691,7 +1768,14 @@ function viewLogin(){
 /* ============================================================
    Filtro
    ============================================================ */
-const statusOf=q=>{const a=answers.get(q.id);return!a?"nao":(a.correta?"acertei":"errei")};
+/* "anulada" é categoria própria, e de propósito: uma anulada respondida não é
+   acerto nem erro (não há gabarito), então ela não deve aparecer no filtro
+   "erradas" — que serve para refazer o que se errou — nem voltar para sempre
+   em "não respondidas". Como nenhum dos três seletores de situação usa esse
+   valor, a anulada respondida simplesmente fica de fora quando há filtro de
+   situação ativo; sem filtro, ela aparece normalmente (governada pelo chip
+   "Incluir anuladas"). É a mesma regra do Mapa — ver entraNaEstatistica. */
+const statusOf=q=>{const a=answers.get(q.id);return!a?"nao":(q.anulada?"anulada":(a.correta?"acertei":"errei"))};
 function matches(q,f){
   if(q.anulada&&!f.incluirAnuladas)return false;
   if(f.soMarcadas&&!marks.has(q.id))return false;
@@ -2147,10 +2231,7 @@ function viewRun(){
     const n=el("button","btn primary",run.i>=list.length-1?"Ir para correção":"Próxima →");
     n.onclick=()=>{run.i>=list.length-1?finalizeSim(list):goTo(run.i+2)};
     const f=el("button","btn","Finalizar agora");
-    f.onclick=async()=>{
-      const branco=list.length-answeredN;
-      if(await askConfirm("Finalizar e corrigir?",branco?plural(branco,"questão ficará em branco","questões ficarão em branco")+" e "+(branco===1?"contará":"contarão")+" como não respondidas.":"Todas as questões foram respondidas.",{okText:"Corrigir agora"}))finalizeSim(list);
-    };
+    f.onclick=()=>confirmaFinalizaSim(list);
     act.append(p,n,f);
   }else if(!revealed){
     const r=el("button","btn primary","Responder");r.type="button";r.dataset.fid="responder";
@@ -2159,7 +2240,10 @@ function viewRun(){
     act.append(r,s);
   }else{
     const pk=explan.get(q.id)||{};
-    const errou=sel!==q.gabarito;
+    // Sem gabarito não existe "alternativa incorreta" para analisar — e a Edge
+    // Function recusa esse pedido, devolvendo só o geral. Oferecer o botão de
+    // alternativa aqui criava um botão que não fazia nada ao ser clicado.
+    const errou=!!q.gabarito&&sel!==q.gabarito;
     const falta=!pk.geral||(errou&&!pk[sel]);
     if(falta){
       const g=el("button","btn");
@@ -2186,6 +2270,15 @@ function viewRun(){
 }
 /** Veredito: colorido, curto, para bater o olho. */
 function verdictBox(q,sel){
+  // Anulada não tem gabarito. Pintar de vermelho e escrever "Gabarito: " vazio
+  // era errado duas vezes: dizia que a pessoa errou (não há como errar) e
+  // parecia defeito da tela.
+  if(!q.gabarito){
+    const v=el("div","verdict na");
+    v.append(el("b",null,"— Questão anulada pela banca"));
+    v.append(el("span","g","sem gabarito; sua resposta não entra nas suas estatísticas"));
+    return v;
+  }
   const ok=sel===q.gabarito;
   const v=el("div","verdict "+(ok?"ok":"no"));
   // sem role=status aqui: announce() já anuncia o resultado, e os dois juntos
@@ -2209,6 +2302,9 @@ function verdictBox(q,sel){
  *  escolhido. Errar já é nota 0; o que falta a quem errou é dizer "eu sabia,
  *  foi descuido", que é a única informação nova possível ali. */
 function schedBox(q){
+  // anulada não entra no ciclo (answerNow nem cria review); a guarda cobre
+  // bancos com review antigo, de antes desta regra
+  if(q.anulada)return null;
   const rv=reviews.get(q.id);
   if(!rv)return null;
   const ok=(answers.get(q.id)||{}).correta;
@@ -2307,10 +2403,15 @@ function statsBox(q,sel){
   });
   top.append(seg);box.append(top);
 
-  const acertos=q.gabarito?cnt(q.gabarito):0;
-  const pct=Math.round(acertos/total*100);
-  const nivel=pct>=70?"considerada fácil":pct>=45?"de dificuldade média":"considerada difícil";
-  box.append(el("p","sum",plural(total,"pessoa","pessoas")+" · "+pct+"% de acerto"+(q.gabarito?" — "+nivel:"")+"."));
+  // Sem gabarito não há "% de acerto" — dizer "0% de acerto" numa anulada seria
+  // um número inventado, e o pior tipo: um que parece medido.
+  if(q.gabarito){
+    const pct=Math.round(cnt(q.gabarito)/total*100);
+    const nivel=pct>=70?"considerada fácil":pct>=45?"de dificuldade média":"considerada difícil";
+    box.append(el("p","sum",plural(total,"pessoa","pessoas")+" · "+pct+"% de acerto — "+nivel+"."));
+  }else{
+    box.append(el("p","sum",plural(total,"pessoa","pessoas")+" · questão anulada, sem gabarito para comparar."));
+  }
 
   ["A","B","C","D"].forEach(k=>{
     if(!q.alternativas[k])return;
@@ -2371,31 +2472,65 @@ function goTo(v){
 }
 function answerNow(q){
   if(!chosen)return;
-  const correta=chosen===q.gabarito;
+  // Anulada não tem resposta certa (recurso 3). A resposta é registrada — as
+  // estatísticas públicas são por ALTERNATIVA e o gatilho do banco só olha
+  // `resposta`, então elas seguem válidas —, mas a questão não entra no ciclo
+  // de revisão nem nas contas do Mapa (ver entraNaEstatistica).
+  const semGabarito=!q.gabarito;
+  const correta=!semGabarito&&chosen===q.gabarito;
   const at=new Date().toISOString();
   run.respostas[q.id]=chosen;
-  // retrato do agendamento antes desta resposta: é a partir dele que os botões
-  // "Chutei / Sabia / Foi fácil" reagendam, sem empilhar repetições
-  run.revAntes=run.revAntes||{};
-  if(run.revAntes[q.id]===undefined)run.revAntes[q.id]=reviews.get(q.id)||null;
-  run.notaRev=run.notaRev||{};run.notaRev[q.id]=correta?1:0;
+  let r=null;
+  if(!semGabarito){
+    // retrato do agendamento antes desta resposta: é a partir dele que os botões
+    // "Chutei / Sabia / Foi fácil" reagendam, sem empilhar repetições
+    run.revAntes=run.revAntes||{};
+    if(run.revAntes[q.id]===undefined)run.revAntes[q.id]=reviews.get(q.id)||null;
+    run.notaRev=run.notaRev||{};run.notaRev[q.id]=correta?1:0;
+  }
   saveRun();
   answers.set(q.id,{resposta:chosen,correta,at});
-  const r=aplicaRevisao(q.id,correta?1:0,run.revAntes[q.id]);   // acertou = Bom · errou = volta amanhã
+  if(!semGabarito)r=aplicaRevisao(q.id,correta?1:0,run.revAntes[q.id]);   // acertou = Bom · errou = volta amanhã
   focoApos="prox";                                 // "Responder" deixa de existir ao revelar
   render();
-  announce((correta?"Correto. Gabarito "+q.gabarito:"Incorreto. Você marcou "+chosen+". Gabarito "+q.gabarito)+". Revisão "+textoIntervalo(r.intervalo));
+  announce(semGabarito
+    ? "Questão anulada, sem gabarito. Sua resposta não entra nas estatísticas."
+    : (correta?"Correto. Gabarito "+q.gabarito:"Incorreto. Você marcou "+chosen+". Gabarito "+q.gabarito)+". Revisão "+textoIntervalo(r.intervalo));
   push({method:"POST",path:"/rest/v1/answers?on_conflict=user_id,question_id",
     prefer:"resolution=merge-duplicates,return=minimal",
     body:{user_id:sess().user_id,question_id:q.id,resposta:chosen,correta,answered_at:at}});
 }
+/** Finaliza o simulado PERGUNTANDO antes, dizendo quantas ficam em branco.
+ *  Usada pelo botão "Finalizar agora" e pelo Enter na última questão — o
+ *  Enter não pode corrigir um simulado por acidente. O botão "Ir para
+ *  correção" continua direto: ali a intenção é explícita. */
+async function confirmaFinalizaSim(list){
+  const branco=list.length-Object.keys(run.respostas).length;
+  if(await askConfirm("Finalizar e corrigir?",
+    branco?plural(branco,"questão ficará em branco","questões ficarão em branco")+" e "+(branco===1?"contará":"contarão")+" como não respondidas."
+          :"Todas as questões foram respondidas.",
+    {okText:"Corrigir agora"}))finalizeSim(list);
+}
 function finalizeSim(list){
   const at=new Date().toISOString();const rows=[];
+  // O mesmo retrato pré-resposta que answerNow grava: é a base dos chips
+  // "Chutei / Sabia / Foi fácil" quando a pessoa reabre a questão pela tela
+  // de resultado. Sem ele, o schedBox caía no review JÁ atualizado e o SM-2
+  // rodava em cima do SM-2 — o exato bug que o comentário de schedBox
+  // documenta como corrigido, vivo só neste caminho.
+  run.revAntes=run.revAntes||{};run.notaRev=run.notaRev||{};
   for(const q of list){
     const r=run.respostas[q.id];if(!r)continue;
-    const correta=r===q.gabarito;
+    // `pickSimulado` já exclui anuladas; a guarda mantém os DOIS caminhos de
+    // resposta com a mesma regra, que é a lição do bug do SM-2 em dobro.
+    const semGabarito=!q.gabarito;
+    const correta=!semGabarito&&r===q.gabarito;
     answers.set(q.id,{resposta:r,correta,at});
-    aplicaRevisao(q.id,correta?1:0);
+    if(!semGabarito){
+      if(run.revAntes[q.id]===undefined)run.revAntes[q.id]=reviews.get(q.id)||null;
+      run.notaRev[q.id]=correta?1:0;
+      aplicaRevisao(q.id,correta?1:0,run.revAntes[q.id]);
+    }
     rows.push({user_id:sess().user_id,question_id:q.id,resposta:r,correta,answered_at:at});
   }
   run.done=true;if(run.tempoFinal==null)run.tempoFinal=Date.now()-run.startedAt;
@@ -2527,10 +2662,16 @@ async function loadExplan(qid){
   }
 }
 async function pedirExplan(qid,alt){
-  const s=sess();
-  const r=await fetch(url()+"/functions/v1/"+IA_FN,{method:"POST",
-    headers:{apikey:key(),Authorization:"Bearer "+s.access_token,"Content-Type":"application/json"},
+  // Esta chamada não passa por api() (é Edge Function, não PostgREST), mas
+  // precisa da MESMA disciplina de token: com a aba aberta por mais de uma
+  // hora, o clique em "Buscar explicação" falhava com "HTTP 401" e parecia
+  // defeito da IA — e voltava a funcionar sozinho assim que qualquer outra
+  // ação renovava a sessão. Falso negativo intermitente, impossível de relatar.
+  const chamar=tk=>fetch(url()+"/functions/v1/"+IA_FN,{method:"POST",
+    headers:{apikey:key(),Authorization:"Bearer "+tk,"Content-Type":"application/json"},
     body:JSON.stringify({question_id:qid,alternativa:alt||undefined})});
+  let r=await chamar(await tokenFresco());
+  if(r.status===401&&await refresh())r=await chamar(await tokenFresco());
   const d=await r.json().catch(()=>({}));
   if(!r.ok||d.error)throw new Error(d.error||("HTTP "+r.status));
   return d;
@@ -2566,9 +2707,13 @@ async function explainNow(q,alt){
 /* ============================================================
    Aba Mapa
    ============================================================ */
+/** Anulada não tem resposta certa; se entrasse na conta, sujaria o
+ *  aproveitamento — é a razão declarada do recurso 3. Vale para o Mapa
+ *  inteiro: totais, Evolução e domínio por disciplina/tema. */
+const entraNaEstatistica=id=>{const q=qById.get(id);return!!q&&!q.anulada};
 function viewMapa(){
   const w=el("div");
-  const ids=[...answers.keys()];
+  const ids=[...answers.keys()].filter(entraNaEstatistica);
   if(!ids.length){
     const c=el("div","card pad empty");
     c.append(el("div","big","Ainda sem dados"),el("p",null,"Resolva questões em Estudar e seu mapa aparece aqui."));
@@ -2629,13 +2774,15 @@ function viewMapa(){
   b.append(el("p",null,"Vale sempre a sua resposta mais recente de cada questão. Refazer e acertar melhora o número: o Mapa mede onde você está hoje, não o seu histórico."),
            el("p",null,"Só entram questões que você respondeu. As intocadas não contam nem a favor nem contra — por isso o aproveitamento de uma disciplina que você mal começou oscila muito."),
            el("p",null,"A Evolução agrupa por dia local: responder às 22h no Brasil conta como hoje, não como amanhã. Como cada questão guarda só a sua última resposta, refazer hoje uma questão antiga move aquela questão para a coluna de hoje."),
-           el("p",null,"“Onde focar” aponta as disciplinas abaixo de 60% com pelo menos 3 questões respondidas. Abaixo de 3, o número ainda é ruído."));
+           el("p",null,"“Onde focar” aponta as disciplinas abaixo de 60% com pelo menos 3 questões respondidas. Abaixo de 3, o número ainda é ruído."),
+           el("p",null,"Questões anuladas pela banca não entram em nenhuma destas contas. Elas não têm resposta certa — se contassem, só puxariam o seu aproveitamento para baixo sem dizer nada sobre o que você sabe."));
   d.append(b);como.append(d);w.append(como);
   return w;
 }
 function evolucao(){
   const by={};
-  answers.forEach(a=>{
+  answers.forEach((a,id)=>{
+    if(!entraNaEstatistica(id))return;      // anuladas ficam de fora (recurso 3)
     if(!a.at)return;
     const dt=new Date(a.at);if(isNaN(dt))return;
     // dia local: responder 22h no Brasil não pode contar como o dia seguinte (UTC)
@@ -2648,7 +2795,7 @@ function evolucao(){
 function agg(keyfn){
   const by={};
   answers.forEach((a,id)=>{
-    const q=qById.get(id);if(!q)return;
+    const q=qById.get(id);if(!q||q.anulada)return;   // anuladas ficam de fora (recurso 3)
     const k=keyfn(q);if(!k)return;
     (by[k]||(by[k]={n:0,ok:0}));by[k].n++;if(a.correta)by[k].ok++;
   });
@@ -2816,6 +2963,10 @@ function onKey(e){
     e.preventDefault();
     if(!revealed&&chosen&&!isSim){answerNow(q);return}
     if(run.i<list.length-1){goTo(run.i+2);return}
+    // Última questão do simulado: antes o Enter era engolido e a pessoa
+    // precisava alcançar o mouse para "Ir para correção" — justo no fim de
+    // uma sessão inteira de teclado. Vai pelo caminho com confirmação.
+    if(isSim){confirmaFinalizaSim(list);return}
     if(!isSim&&revealed){run.done=true;if(run.tempoFinal==null)run.tempoFinal=Date.now()-run.startedAt;saveRun();render()}
     return;
   }
