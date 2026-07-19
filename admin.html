@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#182029">
+<meta name="robots" content="noindex, nofollow">
+<title>Banca. — painel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* Mesma paleta do app, densidade diferente: aqui é ferramenta de trabalho,
+     não lugar de estudar. Mais informação por tela, menos respiro. A faixa
+     escura no topo existe para você nunca confundir as duas coisas. */
+  :root{--bg:#EDEFEA;--surface:#FBFCF9;--surface-2:#F3F5F0;--ink:#182029;--ink-soft:#55606B;
+    --line:#DBDFD6;--line-strong:#C6CCBF;--brand:#1F7A54;--brand-deep:#155C3E;
+    --brand-soft:#E3F0E9;--brand-line:#BFE0D0;
+    --acerto:#1F7A54;--acerto-soft:#E3F0E9;--erro:#A93636;--erro-soft:#F7E7E4;
+    --foco:#8A5B0F;--foco-soft:#F6ECD7;--azul:#27437F;--azul-soft:#EEF3FF;--azul-line:#D9E3FB;
+    --roxo:#553486;--roxo-soft:#F2EEFB;--roxo-line:#E2D9F5;
+    --shadow:0 1px 2px rgba(24,32,41,.04),0 8px 24px rgba(24,32,41,.06);--radius:14px}
+  *{box-sizing:border-box}html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  :focus-visible{outline:2.5px solid var(--azul);outline-offset:2px;border-radius:4px}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+
+  header.top{background:var(--ink);color:#fff;padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;position:sticky;top:0;z-index:50}
+  header.top h1{font-family:'Fraunces',serif;font-weight:600;font-size:17px;margin:0;letter-spacing:-.01em}
+  header.top h1 .mark{color:#7FD1A8}
+  header.top .quem{font-size:12px;opacity:.75}
+  nav.tabs{display:flex;gap:3px;background:rgba(255,255,255,.08);border-radius:999px;padding:3px}
+  nav.tabs button{border:0;background:transparent;color:rgba(255,255,255,.7);font:inherit;font-weight:500;font-size:13px;padding:6px 13px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:.15s}
+  nav.tabs button:hover{color:#fff}
+  nav.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink)}
+  nav.tabs .badge{background:var(--erro);color:#fff;border-radius:999px;padding:0 5px;font-size:10.5px;margin-left:5px;font-weight:600}
+  .wrap{max-width:1340px;margin:0 auto;padding:18px}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .pad{padding:16px}
+  h2.sec{font-family:'Fraunces',serif;font-weight:600;font-size:17px;margin:0 0 3px}
+  .hint{color:var(--ink-soft);font-size:12.5px;margin:0}
+  .btn{font:inherit;font-size:13px;font-weight:500;padding:7px 12px;border-radius:9px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);cursor:pointer;transition:.15s;white-space:nowrap}
+  .btn:hover:not(:disabled){border-color:var(--ink-soft)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.primary:hover:not(:disabled){background:var(--brand-deep)}
+  .btn.danger{color:var(--erro);border-color:#eecac6}
+  .btn.danger:hover:not(:disabled){background:var(--erro);color:#fff;border-color:var(--erro)}
+  .btn.sm{font-size:12px;padding:4px 9px}
+  input,select,textarea{font:inherit;font-size:13.5px;padding:7px 10px;border:1px solid var(--line-strong);border-radius:8px;background:var(--surface);color:var(--ink);width:100%}
+  textarea{resize:vertical;line-height:1.55}
+  label.lb{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .spinner{width:13px;height:13px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;display:inline-block;animation:spin .7s linear infinite;vertical-align:-2px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .empty{text-align:center;color:var(--ink-soft);padding:34px 16px;font-size:13px}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tbody tr:hover{background:var(--surface-2)}
+  .tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink-soft);white-space:nowrap}
+  .tag.on{background:var(--brand-soft);border-color:var(--brand-line);color:var(--brand-deep)}
+  .tag.warn{background:var(--foco-soft);border-color:#e6d3a8;color:var(--foco)}
+  .tag.off{background:var(--erro-soft);border-color:#eecac6;color:var(--erro)}
+  .tag.adm{background:var(--roxo-soft);border-color:var(--roxo-line);color:var(--roxo)}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+
+  /* master-detail: a lista rola sozinha, o detalhe também. Duas colunas que
+     não se empurram — em telas estreitas viram uma. */
+  .split{display:grid;grid-template-columns:380px 1fr;gap:14px;align-items:start}
+  @media (max-width:1000px){.split{grid-template-columns:1fr}}
+  .lista{max-height:calc(100vh - 190px);overflow:auto}
+  .item{padding:11px 13px;border-bottom:1px solid var(--line);cursor:pointer;transition:.12s}
+  .item:hover{background:var(--surface-2)}
+  .item[aria-current="true"]{background:var(--azul-soft);box-shadow:inset 3px 0 0 var(--azul)}
+  .item .qid{font-family:ui-monospace,monospace;font-size:11.5px;color:var(--ink-soft)}
+  .item .quando{font-size:11px;color:var(--ink-soft)}
+  .item h4{margin:3px 0;font-size:13px;font-weight:600;line-height:1.35}
+  .grupo{background:var(--surface-2);padding:5px 13px;font-size:11px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;gap:8px}
+  .segs{display:flex;gap:3px;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:3px}
+  .segs button{flex:1;border:0;background:transparent;font:inherit;font-size:12px;font-weight:500;color:var(--ink-soft);padding:5px 8px;border-radius:7px;cursor:pointer;white-space:nowrap}
+  .segs button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+
+  /* alternativa correta em verde: privilégio de quem administra */
+  .alt{display:flex;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;margin-bottom:6px;font-size:13.5px;line-height:1.5;background:var(--surface)}
+  .alt .k{font-weight:700;width:19px;height:19px;border-radius:5px;background:var(--surface-2);color:var(--ink-soft);display:grid;place-items:center;font-size:11.5px;flex:none;margin-top:1px}
+  .alt.ok{background:var(--acerto-soft);border-color:var(--brand-line)}
+  .alt.ok .k{background:var(--brand);color:#fff}
+  .enun{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:13px;font-size:13.5px;line-height:1.6}
+  .enun p{margin:0 0 9px}.enun p:last-child{margin:0}
+  .enun strong{font-weight:600}
+  .enun u{text-decoration-thickness:1px;text-underline-offset:2.5px}
+  /* ---- Markdown -------------------------------------------------------
+     Citação SEM barra vertical e SEM fundo: o recuo maior, o serif itálico e
+     as aspas de abertura já dizem "isto é citado" — e dizem com mais elegância
+     do que a listra cinza que todo blog usa. Código SEM fundo: a fonte
+     monoespaçada e a cor bastam para separá-lo do texto; o retângulo cinza é
+     ruído que compete com o enunciado. */
+  .md-quote{margin:14px 0;padding:2px 0 2px 26px;border:0;background:none;position:relative;
+    font-family:'Fraunces',Georgia,serif;font-style:italic;color:var(--ink-soft);font-size:.97em;line-height:1.6}
+  .md-quote::before{content:'\201C';position:absolute;left:0;top:-6px;font-family:'Fraunces',Georgia,serif;
+    font-size:34px;line-height:1;color:var(--line-strong);font-style:normal}
+  .md-quote p{margin:0 0 7px}.md-quote p:last-child{margin-bottom:0}
+  .md-quote strong{color:var(--ink);font-weight:600}
+
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em;
+    background:none;padding:0;color:var(--brand-deep);font-weight:500;letter-spacing:-.01em}
+  .md-pre{margin:13px 0;padding:12px 14px;background:none;border:1px solid var(--line-strong);
+    border-radius:9px;overflow-x:auto;position:relative}
+  .md-pre code{color:var(--ink);font-size:12.5px;line-height:1.6;font-weight:400;white-space:pre}
+  .md-pre[data-lang]::after{content:attr(data-lang);position:absolute;top:5px;right:9px;font-size:9.5px;
+    text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);font-family:'Inter',sans-serif}
+
+  .md-img{max-width:100%;height:auto;display:block;margin:13px auto;border-radius:9px;border:1px solid var(--line)}
+  .md-img-erro{display:inline-block;font-size:12px;color:var(--erro);background:var(--erro-soft);
+    border:1px dashed #eecac6;border-radius:6px;padding:2px 8px}
+  .md-table-wrap{overflow-x:auto;margin:13px 0;border:1px solid var(--line);border-radius:9px}
+  .md-table{border-collapse:collapse;width:100%;font-size:.9em}
+  .md-table th{background:var(--surface-2);text-align:left;font-weight:600;padding:8px 11px;
+    border-bottom:1px solid var(--line-strong);white-space:nowrap}
+  .md-table td{padding:8px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  .md-table tr:last-child td{border-bottom:0}
+  .md-list{margin:0 0 11px;padding-left:22px}.md-list li{margin-bottom:4px}
+  .md-list li:last-child{margin-bottom:0}
+
+
+  .cmt{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:9px;background:var(--surface)}
+  .cmt.velho{opacity:.62}
+  .cmt-h{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:7px;font-size:11.5px;color:var(--ink-soft)}
+  .cmt-txt{font-size:13px;line-height:1.6}
+  .cmt-txt p{margin:0 0 7px}.cmt-txt p:last-child{margin:0}
+  details.pr{margin-top:8px;font-size:12px}
+  details.pr summary{cursor:pointer;color:var(--ink-soft);font-size:11.5px}
+  details.pr pre{background:var(--surface-2);border:1px solid var(--line);border-radius:7px;padding:9px;overflow:auto;max-height:260px;font-size:11px;line-height:1.5;white-space:pre-wrap;word-break:break-word;margin:6px 0 0}
+
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 17px;border-radius:11px;font-size:13px;z-index:400;box-shadow:0 10px 34px rgba(0,0,0,.24);max-width:560px}
+  .modal-back{position:fixed;inset:0;background:rgba(24,32,41,.5);display:grid;place-items:center;padding:18px;z-index:300}
+  .modal{background:var(--surface);border-radius:var(--radius);padding:20px;max-width:520px;width:100%;max-height:88vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .modal h3{font-family:'Fraunces',serif;font-weight:600;margin:0 0 4px;font-size:18px}
+  .mfoot{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12.5px;margin-top:10px}
+  .kv dt{color:var(--ink-soft)}.kv dd{margin:0}
+
+  /* pílula de sincronização: espelha a do app. Toda escrita no painel passa
+     por marcaSync(), e o estado vive aqui no topo. */
+  .syncpill{font-size:11.5px;font-weight:500;padding:4px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:rgba(255,255,255,.85);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  .syncpill .dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+  .syncpill.ok{background:rgba(127,209,168,.16);color:#7FD1A8}
+  .syncpill.busy{background:rgba(160,190,255,.16);color:#AECBFF}
+  .syncpill.busy .dot{animation:pulse 1s infinite}
+  .syncpill.err{background:rgba(230,140,130,.18);color:#F0A79E}
+  @keyframes pulse{50%{opacity:.35}}
+
+  /* editor com preview lado a lado: à esquerda o Markdown, à direita o que o
+     usuário verá. Em tela estreita, empilha. */
+  .editor{display:grid;grid-template-columns:1fr 1fr;gap:11px;align-items:start}
+  @media (max-width:820px){.editor{grid-template-columns:1fr}}
+  .editor textarea{min-height:190px;font-family:ui-monospace,monospace;font-size:12.5px;line-height:1.55}
+  .editor .lado{display:flex;flex-direction:column}
+  .editor .rot{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-bottom:5px;display:flex;justify-content:space-between}
+  .editor .prev{border:1px dashed var(--line-strong);border-radius:9px;padding:12px;min-height:190px;background:var(--surface-2);font-size:13.5px;line-height:1.6;overflow:auto}
+  .salvo-flash{color:var(--brand-deep);font-weight:600}
+
+  /* métricas */
+  .mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px}
+  .metric{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 15px}
+  .metric .n{font-family:'Fraunces',serif;font-size:26px;font-weight:600;line-height:1.1}
+  .metric .l{font-size:11.5px;color:var(--ink-soft);margin-top:2px}
+  .metric .sub{font-size:11px;color:var(--ink-soft);margin-top:4px}
+  .metric.destaque{background:var(--brand-soft);border-color:var(--brand-line)}
+  .metric.destaque .n{color:var(--brand-deep)}
+  .bars{display:flex;align-items:flex-end;gap:3px;height:110px;margin-top:8px}
+  .bars .b{flex:1;background:var(--brand);border-radius:3px 3px 0 0;min-height:2px;position:relative;transition:.2s;opacity:.85}
+  .bars .b:hover{opacity:1}
+  .bars .b .cap{position:absolute;bottom:-17px;left:0;right:0;text-align:center;font-size:9px;color:var(--ink-soft)}
+  .bars .b.pico{background:var(--foco)}
+  .funil{display:flex;flex-direction:column;gap:5px;margin-top:6px}
+  .funil .f{display:flex;align-items:center;gap:9px;font-size:12.5px}
+  .funil .bar{height:22px;background:var(--brand);border-radius:5px;min-width:2px;display:flex;align-items:center;padding:0 8px;color:#fff;font-size:11px;font-weight:600;white-space:nowrap}
+  .funil .f:nth-child(2) .bar{opacity:.85}.funil .f:nth-child(3) .bar{opacity:.72}
+  .funil .f:nth-child(4) .bar{opacity:.6}.funil .f:nth-child(5) .bar{opacity:.48}
+  .funil .lab{width:100px;color:var(--ink-soft);flex:none}
+  .barlist{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+  .barlist .r{display:grid;grid-template-columns:150px 1fr 44px;gap:9px;align-items:center;font-size:12.5px}
+  .barlist .track{height:16px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+  .barlist .fill{height:100%;background:var(--brand);border-radius:5px}
+  .barlist .fill.baixo{background:var(--erro)}.barlist .fill.medio{background:var(--foco)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div><h1>Banca<span class="mark">.</span> painel</h1></div>
+  <nav class="tabs" role="tablist" aria-label="Seções do painel" id="tabs" hidden>
+    <button role="tab" data-v="painel" aria-selected="true">Visão geral</button>
+    <button role="tab" data-v="relatos" aria-selected="false">Questões e relatos<span class="badge" id="bdg" hidden>0</span></button>
+    <button role="tab" data-v="contas" aria-selected="false">Contas</button>
+    <button role="tab" data-v="conteudo" aria-selected="false">Conteúdo do site</button>
+  </nav>
+  <div class="row">
+    <span class="syncpill" id="sync" hidden><span class="dot"></span><span id="synctxt">salvo</span></span>
+    <span class="quem" id="quem"></span>
+    <a class="btn sm" href="index.html" id="voltar" hidden>← App</a>
+  </div>
+</header>
+<main class="wrap" id="main" tabindex="-1"></main>
+<div id="live" class="sr-only" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   Banca. OAB — painel administrativo
+   ------------------------------------------------------------
+   ESTE ARQUIVO NÃO VAI PARA O USUÁRIO COMUM. Mas guardar segredo em
+   arquivo separado não é segurança: quem descobrir a URL baixa o HTML.
+   A segurança está no servidor — a Edge Function "admin" confere role='admin'
+   no banco antes de cada ação e devolve 404 para quem não é. Este arquivo,
+   nas mãos erradas, é uma tela bonita que não faz nada.
+
+   Nenhuma operação privilegiada acontece aqui: a service_role nunca sai da
+   Edge Function. Este código só desenha o que ela responde.
+   ============================================================ */
+const LS_CFG="oab_cfg", LS_SESS="oab_auth";
+const cfg=()=>{try{return JSON.parse(localStorage.getItem(LS_CFG))||{}}catch(e){return{}}};
+const sess=()=>{try{return JSON.parse(localStorage.getItem(LS_SESS))}catch(e){return null}};
+const url=()=>(cfg().url||"").replace(/\/+$/,"");
+const key=()=>cfg().key||"";
+
+let view="relatos", eu=null, pronto=false;
+let relatos=[], filtroRel="novo", relSel=null;
+let questaoAberta=null, comentarios=[], carregandoQ=false;
+let usuarios=[], buscaUser="", userSel=null, acessos=[];
+let saudacoes=[], filtroSaud="todos";
+let ocupado=false;
+
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const toast=m=>{const t=el("div","toast",m);document.body.append(t);setTimeout(()=>t.remove(),3800)};
+const announce=m=>{const l=document.getElementById("live");if(l)l.textContent=m};
+
+/** Toda chamada passa por aqui. O token vai no cabeçalho; quem decide se você
+ *  pode é o servidor. */
+async function adm(acao,extra){
+  const s=sess();
+  if(!s)throw new Error("sessão ausente — entre pelo app primeiro");
+  const r=await fetch(url()+"/functions/v1/admin",{method:"POST",
+    headers:{apikey:key(),Authorization:"Bearer "+s.access_token,"Content-Type":"application/json"},
+    body:JSON.stringify(Object.assign({acao},extra||{}))});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok||d.error)throw new Error(d.error||("HTTP "+r.status));
+  return d;
+}
+/** Leitura direta pelo PostgREST, para o que a RLS já protege sozinha
+ *  (saudações: select para todos, escrita só admin). Não vale a pena passar
+ *  pela Edge Function o que o banco já sabe recusar. */
+async function rest(path,init){
+  const s=sess();
+  const r=await fetch(url()+"/rest/v1/"+path,Object.assign({},init,{
+    headers:Object.assign({apikey:key(),Authorization:"Bearer "+s.access_token,
+      "Content-Type":"application/json"},(init&&init.headers)||{})}));
+  if(!r.ok)throw new Error("HTTP "+r.status+" — "+(await r.text()).slice(0,120));
+  if(r.status===204)return null;
+  return r.json().catch(()=>null);
+}
+
+/* ---------- utilidades de formato ---------- */
+const ROMANOS=[[1000,"M"],[900,"CM"],[500,"D"],[400,"CD"],[100,"C"],[90,"XC"],[50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]];
+function romano(n){n=parseInt(n,10);if(!n||n<1||n>3999)return String(n||"");let o="";ROMANOS.forEach(([v,l])=>{while(n>=v){o+=l;n-=v}});return o}
+function quando(iso){
+  if(!iso)return "—";
+  const d=new Date(iso), ag=new Date(), min=Math.round((ag-d)/60000);
+  if(min<1)return "agora";
+  if(min<60)return min+" min";
+  if(min<1440)return Math.round(min/60)+" h";
+  if(min<10080)return Math.round(min/1440)+" d";
+  return d.toLocaleDateString("pt-BR");
+}
+const data=iso=>iso?new Date(iso).toLocaleDateString("pt-BR"):"—";
+const dataHora=iso=>iso?new Date(iso).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"}):"—";
+
+/* ============================================================
+   Markdown — parser único, compartilhado entre o app e o painel
+   ------------------------------------------------------------
+   O banco guarda Markdown puro. A renderização é aqui, no cliente. Isso vale
+   por três razões: o texto continua legível e diffável no banco, o painel edita
+   exatamente o que o app lê, e nunca existe HTML armazenado — o que fecha, de
+   uma vez, a categoria inteira de XSS por conteúdo.
+
+   Sem biblioteca e sem innerHTML: cada pedaço vira nó de texto ou elemento
+   criado por createElement. Um renderizador que aceitasse HTML bruto seria um
+   buraco servido no acervo — o texto é escrito por administrador, mas é lido
+   por todo mundo, e "confio em quem escreve" é a frase que antecede todo
+   incidente.
+
+   Sintaxe suportada
+     **negrito**   *itálico*   ++sublinhado++   `código`
+     ```           bloco de código
+     > citação
+     - item / 1. item          listas
+     | a | b |                 tabela com cabeçalho
+     ![alt](url)               imagem
+     [texto](url)              link
+
+   O sublinhado é regra própria: o Markdown não tem sublinhado, e `__x__` no
+   padrão é negrito — usar isso quebraria texto colado de qualquer outro lugar.
+   `++x++` não colide com nada e é a convenção de várias extensões. Em texto
+   jurídico o sublinhado é frequente (destaque de dispositivo), então valia a
+   regra.
+   ============================================================ */
+
+/** Só https e imagem embutida. `javascript:` e `data:text/html` são execução
+ *  de código disfarçada de endereço; `data:image/svg+xml` é imagem para o
+ *  <img>, mas SVG carrega script em outros contextos e não vale o risco. */
+function mdUrl(u,imagem){
+  const s=String(u||"").trim();
+  if(/^https:\/\/[^\s"'<>]+$/i.test(s))return s;
+  if(imagem&&/^data:image\/(png|jpe?g|gif|webp);base64,[A-Za-z0-9+/=]+$/i.test(s))return s;
+  return null;
+}
+/** Trechos em linha. A ordem do regex importa: ** antes de *, senão o itálico
+ *  come o negrito; imagem antes de link, senão o `!` fica órfão. */
+function mdInline(str,pai){
+  const re=/(!\[[^\]]*\]\([^)\s]+\)|\[[^\]]+\]\([^)\s]+\)|\*\*[^*]+\*\*|\*[^*\n]+\*|\+\+[^+\n]+\+\+|`[^`\n]+`)/g;
+  let i=0,m;
+  while((m=re.exec(str))){
+    if(m.index>i)pai.append(document.createTextNode(str.slice(i,m.index)));
+    const t=m[0];
+    if(t.startsWith("![")){
+      const [,alt,src]=/^!\[([^\]]*)\]\(([^)\s]+)\)$/.exec(t)||[];
+      const ok=mdUrl(src,true);
+      if(ok){
+        const img=document.createElement("img");
+        img.src=ok;img.alt=alt||"";img.loading="lazy";img.className="md-img";
+        pai.append(img);
+      }else{
+        // endereço recusado: mostra o texto alternativo em vez de sumir com a
+        // figura em silêncio — numa questão, a imagem costuma ser o enunciado
+        const s=document.createElement("span");s.className="md-img-erro";
+        s.textContent="[imagem indisponível"+(alt?": "+alt:"")+"]";
+        pai.append(s);
+      }
+    }else if(t.startsWith("[")){
+      const [,txt,href]=/^\[([^\]]+)\]\(([^)\s]+)\)$/.exec(t)||[];
+      const ok=mdUrl(href,false);
+      if(ok){
+        const a=document.createElement("a");
+        a.href=ok;a.textContent=txt;a.target="_blank";a.rel="noopener noreferrer";
+        pai.append(a);
+      }else pai.append(document.createTextNode(txt));
+    }
+    else if(t.startsWith("**")){const e=document.createElement("strong");e.textContent=t.slice(2,-2);pai.append(e)}
+    else if(t.startsWith("++")){const e=document.createElement("u");e.textContent=t.slice(2,-2);pai.append(e)}
+    else if(t.startsWith("`")){const e=document.createElement("code");e.textContent=t.slice(1,-1);pai.append(e)}
+    else {const e=document.createElement("em");e.textContent=t.slice(1,-1);pai.append(e)}
+    i=m.index+t.length;
+  }
+  if(i<str.length)pai.append(document.createTextNode(str.slice(i)));
+  return pai;
+}
+/** Divide uma linha de tabela em células, respeitando | escapado (\|). */
+function mdCelulas(linha){
+  return linha.replace(/^\||\|$/g,"").split(/(?<!\\)\|/).map(c=>c.trim().replace(/\\\|/g,"|"));
+}
+const mdSepTabela=l=>/^\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?$/.test(l.trim());
+
+function markdown(txt,alvo){
+  const linhas=String(txt||"").replace(/\r\n?/g,"\n").split("\n");
+  const cria=(t,c)=>{const e=document.createElement(t);if(c)e.className=c;return e};
+  let i=0;
+  const bloco=(fim)=>{     // renderiza até `fim` (exclusivo), usado pela citação
+    while(i<(fim==null?linhas.length:fim)){
+      const bruta=linhas[i], l=bruta.trim();
+
+      if(!l){i++;continue}
+
+      // ---- bloco de código: tudo lá dentro é literal, inclusive o que
+      // parece Markdown. É o único lugar onde nada é interpretado.
+      if(/^```/.test(l)){
+        const lang=l.slice(3).trim();
+        const corpo=[];i++;
+        while(i<linhas.length&&!/^```/.test(linhas[i].trim())){corpo.push(linhas[i]);i++}
+        i++;                                   // consome o ``` de fechamento
+        const pre=cria("pre","md-pre"), code=cria("code");
+        if(lang)pre.dataset.lang=lang;
+        code.textContent=corpo.join("\n");
+        pre.append(code);alvo.append(pre);
+        continue;
+      }
+
+      // ---- citação: recolhe as linhas com > e renderiza recursivamente,
+      // para que negrito, lista e até tabela funcionem dentro dela
+      if(/^>\s?/.test(l)){
+        const dentro=[];
+        while(i<linhas.length&&/^>\s?/.test(linhas[i].trim())){
+          dentro.push(linhas[i].trim().replace(/^>\s?/,""));i++;
+        }
+        const bq=cria("blockquote","md-quote");
+        markdown(dentro.join("\n"),bq);
+        alvo.append(bq);
+        continue;
+      }
+
+      // ---- tabela: precisa da linha de separação logo abaixo do cabeçalho,
+      // senão é só um parágrafo que por acaso tem barras
+      if(l.includes("|")&&i+1<linhas.length&&mdSepTabela(linhas[i+1])){
+        const cab=mdCelulas(l);
+        i+=2;
+        const tab=cria("table","md-table"), thead=cria("thead"), trh=cria("tr");
+        cab.forEach(c=>{const th=cria("th");mdInline(c,th);trh.append(th)});
+        thead.append(trh);tab.append(thead);
+        const tb=cria("tbody");
+        while(i<linhas.length&&linhas[i].trim().includes("|")&&linhas[i].trim()){
+          const cs=mdCelulas(linhas[i].trim());
+          const tr=cria("tr");
+          for(let k=0;k<cab.length;k++){const td=cria("td");mdInline(cs[k]||"",td);tr.append(td)}
+          tb.append(tr);i++;
+        }
+        tab.append(tb);
+        // rolagem horizontal: tabela larga não pode estourar a coluna no celular
+        const env=cria("div","md-table-wrap");env.append(tab);alvo.append(env);
+        continue;
+      }
+
+      // ---- listas
+      const mUl=/^[-*+]\s+(.*)$/.exec(l), mOl=/^\d+[.)]\s+(.*)$/.exec(l);
+      if(mUl||mOl){
+        const tipo=mUl?"ul":"ol";
+        const ul=cria(tipo,"md-list");
+        if(mOl){const n=parseInt(/^(\d+)/.exec(l)[1],10);if(n!==1)ul.start=n}
+        while(i<linhas.length){
+          const t=linhas[i].trim();
+          const a=/^[-*+]\s+(.*)$/.exec(t), b=/^\d+[.)]\s+(.*)$/.exec(t);
+          if((tipo==="ul"&&!a)||(tipo==="ol"&&!b))break;
+          mdInline((a||b)[1],ul.appendChild(cria("li")));
+          i++;
+        }
+        alvo.append(ul);
+        continue;
+      }
+
+      // ---- parágrafo: junta linhas seguidas até uma vazia ou outro bloco
+      const buf=[];
+      while(i<linhas.length){
+        const t=linhas[i].trim();
+        if(!t||/^```/.test(t)||/^>\s?/.test(t)||/^[-*+]\s+/.test(t)||/^\d+[.)]\s+/.test(t))break;
+        if(t.includes("|")&&i+1<linhas.length&&mdSepTabela(linhas[i+1]))break;
+        buf.push(t);i++;
+      }
+      if(buf.length)mdInline(buf.join(" "),alvo.appendChild(cria("p")));
+    }
+  };
+  bloco(null);
+  return alvo;
+}
+
+/* ---------- modal ---------- */
+let modalAberto=false;
+function modal(build){
+  return new Promise(res=>{
+    modalAberto=true;
+    const back=el("div","modal-back"), m=el("div","modal");
+    m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");
+    const fim=v=>{modalAberto=false;back.remove();document.removeEventListener("keydown",esc,true);res(v)};
+    const esc=e=>{
+      if(e.key==="Escape"){e.preventDefault();fim(null)}
+      if(e.key==="Tab"){
+        const f=m.querySelectorAll('button:not([disabled]),input:not([disabled]),select,textarea,[href]');
+        if(!f.length)return;
+        const pri=f[0], ult=f[f.length-1];
+        if(e.shiftKey&&document.activeElement===pri){e.preventDefault();ult.focus()}
+        else if(!e.shiftKey&&document.activeElement===ult){e.preventDefault();pri.focus()}
+      }
+    };
+    const foco=build(m,fim);
+    back.append(m);back.onclick=e=>{if(e.target===back)fim(null)};
+    document.body.append(back);document.addEventListener("keydown",esc,true);
+    (foco||m.querySelector("button")).focus();
+  });
+}
+function confirmar(titulo,texto,opts){
+  const o=opts||{};
+  return modal((m,fim)=>{
+    m.append(el("h3",null,titulo),el("p","hint",texto));
+    // Ação destrutiva pede que você escreva o que vai apagar. Não é burocracia:
+    // é o intervalo entre a intenção e o arrependimento.
+    let inp=null;
+    if(o.digite){
+      m.append(Object.assign(el("label","lb","Digite “"+o.digite+"” para confirmar"),{style:"margin-top:14px"}));
+      inp=el("input");m.append(inp);
+    }
+    const f=el("div","mfoot");
+    const c=el("button","btn","Cancelar");c.onclick=()=>fim(null);
+    const ok=el("button","btn "+(o.danger?"danger":"primary"),o.ok||"Confirmar");
+    ok.onclick=()=>{
+      if(o.digite&&inp.value.trim()!==o.digite){toast("O texto não confere.");return}
+      fim(true);
+    };
+    f.append(c,ok);m.append(f);
+    return inp||ok;
+  });
+}
+/* ============================================================
+   Sincronização — a pílula
+   Toda escrita passa por aqui. `sincronizando` conta as operações em voo, para
+   que dez saves rápidos não pisquem "salvo" no meio do caminho.
+   ============================================================ */
+let sincronizando=0, houveErro=false;
+function pintaSync(){
+  const p=document.getElementById("sync"), t=document.getElementById("synctxt");
+  if(!p)return;p.hidden=false;
+  let cls="ok",txt="tudo salvo";
+  if(houveErro){cls="err";txt="erro ao salvar"}
+  else if(sincronizando>0){cls="busy";txt="salvando…"}
+  p.className="syncpill "+cls;t.textContent=txt;
+}
+/** Embrulha uma escrita: liga a pílula, executa, e a devolve ao verde — ou ao
+ *  vermelho, sem engolir o erro. Todo save do painel deve passar por aqui. */
+async function comSync(fn){
+  sincronizando++;houveErro=false;pintaSync();
+  try{const r=await fn();return r;}
+  catch(e){houveErro=true;throw e;}
+  finally{sincronizando--;pintaSync();
+    if(!sincronizando&&!houveErro){setTimeout(()=>{if(!sincronizando&&!houveErro){
+      const t=document.getElementById("synctxt");if(t)t.textContent="tudo salvo"}},1200);}}
+}
+
+/* ============================================================
+   Aba — Visão geral (métricas)
+   ============================================================ */
+let metricas=null, janelaMetrica=30;
+async function carregaMetricas(){
+  try{const d=await adm("metricas",{dias:janelaMetrica});metricas=d.metricas}
+  catch(e){toast(e.message);metricas=null}
+  render();
+}
+function mnum(n){return n==null?"—":String(n).replace(/\B(?=(\d{3})+(?!\d))/g,".")}
+function viewPainel(){
+  const w=el("div");
+  const cab=el("div","card pad");cab.style.marginBottom="14px";
+  const h=el("div","row");h.style.justifyContent="space-between";
+  const ht=el("div");
+  ht.append(el("h2","sec","Visão geral"));
+  ht.append(el("p","hint","O que está acontecendo na plataforma. “Ativo” = respondeu ao menos uma questão na janela. Horários no fuso de Brasília."));
+  h.append(ht);
+  const sel=el("select");sel.style.width="auto";
+  [[7,"7 dias"],[30,"30 dias"],[90,"90 dias"],[365,"1 ano"]].forEach(([v,l])=>{
+    const o=el("option",null,l);o.value=v;if(v===janelaMetrica)o.selected=true;sel.append(o)});
+  sel.onchange=()=>{janelaMetrica=parseInt(sel.value,10);metricas=null;carregaMetricas()};
+  h.append(sel);cab.append(h);w.append(cab);
+
+  if(!metricas){
+    const c=el("div","card pad empty");c.append(el("span","spinner"),document.createTextNode(" Calculando…"));
+    w.append(c);if(!metricas)carregaMetricas();return w;
+  }
+  const m=metricas;
+
+  /* ---- números principais ---- */
+  const g=el("div","mgrid");g.style.marginBottom="14px";
+  const cartao=(n,l,sub,destaque)=>{
+    const c=el("div","metric"+(destaque?" destaque":""));
+    c.append(el("div","n",n));c.append(el("div","l",l));
+    if(sub)c.append(el("div","sub",sub));return c;
+  };
+  const pctAtivas=m.contas?Math.round(100*m.contas_ativas/m.contas):0;
+  g.append(
+    cartao(mnum(m.contas),"Contas cadastradas",("+"+mnum(m.contas_novas)+" na janela")),
+    cartao(mnum(m.contas_ativas),"Contas ativas",(pctAtivas+"% do total"),true),
+    cartao(mnum(m.respostas),"Questões respondidas",(mnum(m.respostas_janela)+" na janela")),
+    cartao(m.media_por_conta,"Média por conta",("mediana: "+m.mediana_por_conta)),
+    cartao(m.taxa_acerto+"%","Taxa de acerto geral",("na janela: "+m.taxa_acerto_janela+"%")),
+    cartao(mnum(m.contas_sem_resposta),"Cadastraram e sumiram","nunca responderam")
+  );
+  w.append(g);
+
+  /* ---- pico de estudo ---- */
+  const ch=el("div","card pad");ch.style.marginBottom="14px";
+  ch.append(el("h2","sec","Horário de pico"));
+  ch.append(el("p","hint","Quando as questões são respondidas, somando todo o histórico. Fuso de Brasília."));
+  const horas=m.por_hora||{};
+  const maxH=Math.max(1,...Object.values(horas));
+  const picoH=Object.keys(horas).reduce((a,b)=>(horas[b]||0)>(horas[a]||0)?b:a,"0");
+  const bars=el("div","bars");bars.style.marginTop="14px";bars.style.marginBottom="20px";
+  for(let h=0;h<24;h++){
+    const n=horas[h]||0;
+    const b=el("div","b"+(String(h)===String(picoH)?" pico":""));
+    b.style.height=Math.max(2,Math.round(100*n/maxH))+"%";
+    b.title=h+"h — "+mnum(n)+" respostas";
+    if(h%3===0)b.append(Object.assign(el("span","cap",h+"h"),{}));
+    bars.append(b);
+  }
+  ch.append(bars);
+  ch.append(Object.assign(el("p","hint","Pico às "+picoH+"h. Barra âmbar. Bom momento para avisos, manutenção fora dele."),{style:"margin-top:14px"}));
+  w.append(ch);
+
+  /* ---- engajamento: funil + retorno ---- */
+  const eng=el("div");eng.style.cssText="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px";
+  eng.style.alignItems="start";
+
+  const fc=el("div","card pad");
+  fc.append(el("h2","sec","Funil de adesão"));
+  fc.append(el("p","hint","Onde as pessoas param. A queda entre 1 e 10 questões separa quem experimentou de quem começou."));
+  const f=m.funil||{};
+  const maxF=Math.max(1,f.cadastrou||0);
+  const fl=el("div","funil");fl.style.marginTop="10px";
+  [["Cadastrou",f.cadastrou],["Respondeu 1",f.respondeu_1],["Respondeu 10",f.respondeu_10],
+   ["Respondeu 50",f.respondeu_50],["Respondeu 200",f.respondeu_200]].forEach(([l,n])=>{
+    n=n||0;const r=el("div","f");
+    r.append(el("span","lab",l));
+    const bar=el("div","bar");bar.style.width=Math.max(3,Math.round(100*n/maxF))+"%";
+    bar.textContent=mnum(n);r.append(bar);fl.append(r);
+  });
+  fc.append(fl);eng.append(fc);
+
+  const rc=el("div","card pad");
+  rc.append(el("h2","sec","Retorno"));
+  rc.append(el("p","hint","Estudo vive de reincidência: quem responde num dia só e some não estava estudando."));
+  const rt=m.retorno||{};
+  const rg=el("div","mgrid");rg.style.marginTop="10px";
+  rg.append(
+    cartao(mnum(rt.voltou_2_dias),"Voltaram em 2+ dias"),
+    cartao(mnum(rt.voltou_5_dias),"Voltaram em 5+ dias"),
+    cartao(rt.dias_medios,"Dias ativos/conta","em média")
+  );
+  rc.append(rg);
+  const rev=m.revisao||{};
+  rc.append(Object.assign(el("h2","sec","Revisão espaçada"),{style:"margin-top:16px"}));
+  rc.append(el("p","hint","O recurso mais caro do app. Se a fila vencida só cresce, virou enfeite."));
+  const rg2=el("div","mgrid");rg2.style.marginTop="10px";
+  rg2.append(
+    cartao(mnum(rev.agendadas),"Questões no ciclo"),
+    cartao(mnum(rev.vencidas),"Vencidas agora",(mnum(rev.contas_com_vencida)+" contas")),
+    cartao(rev.intervalo_medio+"d","Intervalo médio")
+  );
+  rc.append(rg2);eng.append(rc);
+  w.append(eng);
+
+  /* ---- acerto por disciplina ---- */
+  const dc=el("div","card pad");dc.style.marginBottom="14px";
+  dc.append(el("h2","sec","Acerto por disciplina"));
+  dc.append(el("p","hint","Onde o público inteiro sofre. Vermelho abaixo de 50%, âmbar até 65%."));
+  const pd=(m.por_disciplina||[]).slice().sort((a,b)=>a.acerto-b.acerto);
+  const bl=el("div","barlist");bl.style.marginTop="10px";
+  pd.forEach(d=>{
+    const r=el("div","r");
+    r.append(el("div",null,d.disciplina));
+    const track=el("div","track");
+    const fill=el("div","fill"+(d.acerto<50?" baixo":d.acerto<65?" medio":""));
+    fill.style.width=d.acerto+"%";track.append(fill);
+    r.append(track);
+    r.append(Object.assign(el("div",null,d.acerto+"%"),{style:"text-align:right;font-weight:600"}));
+    r.title=mnum(d.respostas)+" respostas";
+    bl.append(r);
+  });
+  dc.append(bl);w.append(dc);
+
+  /* ---- piores questões ---- */
+  const pc=el("div","card pad");pc.style.marginBottom="14px";
+  pc.append(el("h2","sec","Questões com pior acerto na estreia"));
+  pc.append(el("p","hint","Acerto muito baixo é questão difícil — ou gabarito errado. Vale conferir antes que alguém relate. Clique para abrir."));
+  const pq=m.piores_questoes||[];
+  if(!pq.length)pc.append(el("div","empty","Sem dados suficientes ainda."));
+  else{
+    const t=el("table");t.style.marginTop="8px";
+    const tr=el("tr");["Questão","Disciplina","Respostas","Acerto"].forEach(x=>tr.append(el("th",null,x)));
+    t.append(el("thead").appendChild(tr).parentNode);
+    const tb=el("tbody");
+    pq.forEach(q=>{
+      const r=el("tr");r.style.cursor="pointer";
+      r.onclick=()=>{selectTab("relatos");setTimeout(()=>{relSel=null;abreQuestao(q.question_id)},60)};
+      r.append(el("td",null,romano(q.exame)+" · Q"+q.numero+" ("+q.question_id+")"));
+      r.append(el("td",null,q.disciplina||"—"));
+      r.append(el("td",null,mnum(q.respostas)));
+      const c=el("td");c.append(el("span","tag "+(q.acerto<40?"off":"warn"),q.acerto+"%"));r.append(c);
+      tb.append(r);
+    });
+    t.append(tb);pc.append(t);
+  }
+  w.append(pc);
+
+  /* ---- operação ---- */
+  const oc=el("div","card pad");
+  oc.append(el("h2","sec","Operação"));
+  const og=el("div","mgrid");og.style.marginTop="10px";
+  const rl=m.relatos||{}, ex=m.explicacoes||{};
+  const cob=ex.questoes_total?Math.round(100*ex.questoes_cobertas/ex.questoes_total):0;
+  og.append(
+    cartao(mnum(rl.novos),"Relatos abertos",(mnum(rl.andamento)+" em progresso")),
+    cartao(cob+"%","Questões com explicação",(mnum(ex.questoes_cobertas)+" de "+mnum(ex.questoes_total))),
+    cartao(mnum(ex.vigentes),"Explicações vigentes"),
+    cartao(mnum(m.ia_uso_janela),"Gerações de IA","na janela")
+  );
+  oc.append(og);w.append(oc);
+  return w;
+}
+
+/* ============================================================
+   Aba 1 — Questões e relatos (master-detail)
+   ============================================================ */
+const STATUS={novo:"Abertos",em_progresso:"Em progresso",resolvido:"Concluídos",improcedente:"Improcedentes"};
+const ROT_RELATO={
+  texto:"Texto errado/incompleto", visual:"Falta imagem", gabarito:"Gabarito errado",
+  classificacao:"Classificação errada", explicacao:"Explicação com problema",
+  digitacao:"erro de digitação", incompleto:"trecho faltando", estranho:"trecho de outra questão",
+  formatacao:"formatação confusa", apoio:"texto de apoio", enunciado:"enunciado",
+  alt_A:"alternativa A", alt_B:"alternativa B", alt_C:"alternativa C", alt_D:"alternativa D",
+  outro:"outra parte", geral:"explicação da questão", alt:"explicação da alternativa",
+  ambas:"as duas explicações", fundamentacao:"fundamentação errada", impreciso:"impreciso",
+  confuso:"confuso/ambíguo", omisso:"omisso", inadequado:"inadequado"
+};
+const rot=k=>ROT_RELATO[k]||k;
+
+async function carregaRelatos(){
+  try{
+    const d=await adm("relatos",filtroRel==="todos"?{}:{status:filtroRel});
+    relatos=d.relatos||[];
+  }catch(e){toast("Não consegui carregar os relatos: "+e.message);relatos=[]}
+  render();
+}
+async function abreQuestao(qid){
+  if(!qid)return;
+  carregandoQ=true;render();
+  try{
+    const d=await adm("questao",{question_id:qid});
+    questaoAberta=d.questao;comentarios=d.comentarios||[];
+  }catch(e){toast(e.message);questaoAberta=null}
+  carregandoQ=false;render();
+}
+async function mudaStatus(ids,status){
+  try{
+    await comSync(()=>adm("status_relato",{ids,status}));
+    relatos.forEach(r=>{if(ids.includes(r.id))r.status=status});
+    toast("Marcado como "+STATUS[status].toLowerCase()+".");
+    if(filtroRel!=="todos"&&filtroRel!==status)await carregaRelatos(); else render();
+    atualizaBadge();
+  }catch(e){toast(e.message)}
+}
+
+function viewRelatos(){
+  const w=el("div","split");
+
+  /* ---------- coluna esquerda: a fila ---------- */
+  const esq=el("div","card");
+  const cab=el("div","pad");cab.style.paddingBottom="12px";
+  cab.append(el("h2","sec","Relatos"));
+  cab.append(el("p","hint","Do mais recente para o mais antigo, agrupados por questão. Concluídos ficam no histórico — nada é apagado."));
+  const segs=el("div","segs");segs.style.marginTop="11px";
+  Object.keys(STATUS).concat("todos").forEach(k=>{
+    const n=k==="todos"?null:relatos.filter(r=>r.status===k).length;
+    const b=el("button",null,(k==="todos"?"Todos":STATUS[k])+(n?" ("+n+")":""));
+    b.type="button";b.setAttribute("aria-pressed",filtroRel===k?"true":"false");
+    b.onclick=()=>{filtroRel=k;carregaRelatos()};
+    segs.append(b);
+  });
+  cab.append(segs);esq.append(cab);
+
+  const lista=el("div","lista");
+  if(!relatos.length){
+    lista.append(el("div","empty",filtroRel==="novo"?"Nenhum relato aberto. Silêncio é bom sinal.":"Nada aqui."));
+  }else{
+    // Agrupar por questão: três relatos da mesma questão são um problema, não
+    // três. Ver isso junto muda a ordem do que você conserta primeiro.
+    const grupos=new Map();
+    relatos.forEach(r=>{
+      if(!grupos.has(r.question_id))grupos.set(r.question_id,[]);
+      grupos.get(r.question_id).push(r);
+    });
+    // o grupo com o relato mais recente vem primeiro
+    [...grupos.entries()]
+      .sort((a,b)=>new Date(b[1][0].created_at)-new Date(a[1][0].created_at))
+      .forEach(([qid,rs])=>{
+        const q=rs[0].questao;
+        const g=el("div","grupo");
+        g.append(el("span",null,q?(q.banca+" · "+romano(q.exame)+" · Q"+q.numero):qid));
+        g.append(el("span",null,rs.length>1?rs.length+" relatos":"1 relato"));
+        lista.append(g);
+        rs.forEach(r=>{
+          const it=el("div","item");
+          it.setAttribute("aria-current",relSel===r.id?"true":"false");
+          it.onclick=()=>{relSel=r.id;abreQuestao(r.question_id)};
+          const top=el("div","row");top.style.justifyContent="space-between";
+          top.append(el("span","qid",r.question_id),el("span","quando",quando(r.created_at)));
+          it.append(top);
+          const marcas=Object.keys(r.dados||{}).filter(k=>r.dados[k]===true);
+          it.append(el("h4",null,marcas.length?marcas.map(rot).join(" · "):"(sem marcação)"));
+          if(r.texto)it.append(Object.assign(el("p","hint",r.texto.slice(0,90)+(r.texto.length>90?"…":"")),{style:"margin:0"}));
+          const tg=el("div","row");tg.style.marginTop="6px";
+          const cls={novo:"off",em_progresso:"warn",resolvido:"on",improcedente:""}[r.status]||"";
+          tg.append(el("span","tag "+cls,STATUS[r.status]||r.status));
+          it.append(tg);
+          lista.append(it);
+        });
+      });
+  }
+  esq.append(lista);w.append(esq);
+
+  /* ---------- coluna direita: a questão ---------- */
+  const dir=el("div");
+  const busca=el("div","card pad");busca.style.marginBottom="14px";
+  const br=el("div","row");
+  const bi=el("input");bi.placeholder="ID da questão (ex.: e32q9) ou parte do enunciado";
+  bi.style.flex="1 1 240px";
+  bi.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();procura(bi.value)}};
+  const bb=el("button","btn primary","Abrir");bb.onclick=()=>procura(bi.value);
+  br.append(bi,bb);busca.append(br);
+  const bh=el("p","hint","Digite o ID direto, ou use os filtros para achar pela classificação.");
+  bh.style.marginTop="7px";busca.append(bh);
+  const bf=el("div","row");bf.style.marginTop="9px";
+  const selEx=el("select");selEx.style.width="auto";
+  selEx.append(Object.assign(el("option",null,"Exame…"),{value:""}));
+  for(let i=32;i<=42;i++)selEx.append(Object.assign(el("option",null,romano(i)+" ("+i+")"),{value:String(i)}));
+  const selN=el("input");selN.type="number";selN.min="1";selN.max="80";selN.placeholder="nº";selN.style.width="80px";
+  const bg=el("button","btn","Ir");
+  bg.onclick=()=>{if(selEx.value&&selN.value)procura("e"+selEx.value+"q"+selN.value);else toast("Escolha o exame e o número.")};
+  bf.append(selEx,selN,bg);busca.append(bf);
+  dir.append(busca);
+
+  if(carregandoQ){
+    const c=el("div","card pad empty");
+    c.append(el("span","spinner"),document.createTextNode(" Carregando…"));
+    dir.append(c);w.append(dir);return w;
+  }
+  if(!questaoAberta){
+    dir.append(Object.assign(el("div","card pad empty","Escolha um relato à esquerda, ou busque uma questão acima."),{}));
+    w.append(dir);return w;
+  }
+  dir.append(painelQuestao());
+  w.append(dir);return w;
+}
+async function procura(v){
+  const t=String(v||"").trim();
+  if(!t)return;
+  if(/^e\d+q\d+$/i.test(t)){relSel=null;return abreQuestao(t.toLowerCase())}
+  try{
+    const r=await rest("questions?select=id,exame,numero,enunciado&enunciado=ilike."+encodeURIComponent("*"+t+"*")+"&limit=12");
+    if(!r||!r.length)return toast("Nada encontrado.");
+    if(r.length===1)return abreQuestao(r[0].id);
+    const esc=await modal((m,fim)=>{
+      m.append(el("h3",null,"Achei "+r.length),el("p","hint","Escolha qual abrir."));
+      const l=el("div");l.style.marginTop="12px";
+      r.forEach(q=>{
+        const b=el("button","btn");b.style.cssText="display:block;width:100%;text-align:left;margin-bottom:5px;white-space:normal";
+        b.append(el("div","qid",q.id+" · "+romano(q.exame)+" Q"+q.numero));
+        b.append(el("div",null,q.enunciado.slice(0,110)+"…"));
+        b.onclick=()=>fim(q.id);l.append(b);
+      });
+      m.append(l);
+      const f=el("div","mfoot");const c=el("button","btn","Fechar");c.onclick=()=>fim(null);f.append(c);m.append(f);
+      return l.querySelector("button");
+    });
+    if(esc)abreQuestao(esc);
+  }catch(e){toast(e.message)}
+}
+
+function painelQuestao(){
+  const q=questaoAberta;
+  const c=el("div","card pad");
+
+  /* --- identificação --- */
+  const top=el("div","row");top.style.justifyContent="space-between";
+  const ident=el("div");
+  ident.append(el("h2","sec",(q.banca||"FGV")+" · "+romano(q.exame)+" Exame · questão "+q.numero));
+  ident.append(el("p","hint",[q.ano,"Caderno "+(q.caderno||"?"),q.id].join(" · ")));
+  top.append(ident);
+  const tg=el("div","row");
+  if(q.anulada)tg.append(el("span","tag off","anulada"));
+  tg.append(el("span","tag","gabarito "+(q.gabarito||"—")));
+  top.append(tg);c.append(top);
+
+  /* --- relato selecionado --- */
+  const r=relatos.find(x=>x.id===relSel);
+  if(r)c.append(caixaRelato(r));
+
+  /* --- classificação --- */
+  const cl=el("div");cl.style.marginTop="16px";
+  const g2=el("div");g2.style.cssText="display:grid;grid-template-columns:1fr 1fr;gap:9px";
+  const wd=el("div");wd.append(el("label","lb","Disciplina"));
+  const sd=el("select");
+  const discs=taxDisc();
+  discs.forEach(d=>{const o=el("option",null,d);o.value=d;if(d===q.disciplina)o.selected=true;sd.append(o)});
+  // se a questão usa um rótulo que saiu do catálogo, ele ainda aparece, marcado
+  if(q.disciplina&&!discs.includes(q.disciplina)){const o=el("option",null,q.disciplina+" (fora do catálogo)");o.value=q.disciplina;o.selected=true;sd.append(o)}
+  wd.append(sd);
+  const wt=el("div");wt.append(el("label","lb","Tema"));
+  const st=el("select");
+  const fill=()=>{st.innerHTML="";taxTemas(sd.value).forEach(t=>{const o=el("option",null,t);o.value=t;if(t===q.tema)o.selected=true;st.append(o)});
+    if(q.tema&&!taxTemas(sd.value).includes(q.tema)){const o=el("option",null,q.tema);o.value=q.tema;o.selected=true;st.append(o)}};
+  fill();sd.onchange=fill;wt.append(st);
+  g2.append(wd,wt);cl.append(g2);c.append(cl);
+
+  /* --- enunciado, com Markdown --- */
+  // Editor lado a lado: Markdown à esquerda, o que o usuário verá à direita.
+  // O preview atualiza ao sair do foco (você digita, clica fora, vê o resultado
+  // exato — sem recarregar, sem trocar de aba). Foi o pedido; e é o jeito certo
+  // de editar algo que só faz sentido renderizado.
+  const en=el("div");en.style.marginTop="14px";
+  en.append(el("label","lb","Enunciado"));
+  const ed=el("div","editor");
+  const ladoE=el("div","lado");
+  ladoE.append(Object.assign(el("div","rot"),{},el("span",null,"Markdown")));
+  const ta=el("textarea");ta.value=q.enunciado||"";
+  ladoE.append(ta);
+  const ladoP=el("div","lado");
+  const rotP=el("div","rot");rotP.append(el("span",null,"Como o usuário vê"));
+  const flash=el("span","salvo-flash");flash.style.opacity="0";flash.textContent="✓ salvo";
+  rotP.append(flash);ladoP.append(rotP);
+  const pv=el("div","enun prev");markdown(q.enunciado,pv);
+  ladoP.append(pv);
+  const repinta=()=>{pv.innerHTML="";markdown(ta.value,pv)};
+  // blur = "saiu do foco": é o gatilho que o pedido pede. input também, para
+  // quem quer ver ao vivo — mas com folga, senão repinta a cada tecla.
+  ta.onblur=repinta;
+  let tp=null;ta.oninput=()=>{clearTimeout(tp);tp=setTimeout(repinta,400)};
+  ed.append(ladoE,ladoP);en.append(ed);
+  en.append(Object.assign(el("p","hint","Suporta negrito, itálico, ++sublinhado++, código, listas, tabelas, citações e imagens (![alt](url) com https). O preview à direita é exatamente o que o usuário verá."),{style:"margin-top:6px"}));
+  c.append(en);
+
+  /* --- alternativas, com a correta em verde --- */
+  const al=el("div");al.style.marginTop="14px";
+  al.append(el("label","lb","Alternativas — a correta aparece em verde"));
+  const campos={};
+  ["A","B","C","D"].forEach(k=>{
+    if(!q.alternativas||!q.alternativas[k])return;
+    const d=el("div","alt"+(k===q.gabarito?" ok":""));
+    d.append(el("span","k",k));
+    const t=el("textarea");t.rows=2;t.value=q.alternativas[k];
+    t.style.cssText="border:0;background:transparent;padding:0;font-size:13.5px";
+    campos[k]=t;d.append(t);al.append(d);
+  });
+  c.append(al);
+
+  const sv=el("div","row");sv.style.marginTop="12px";
+  const bs=el("button","btn primary","Salvar alterações");
+  bs.onclick=async()=>{
+    bs.disabled=true;const rot=bs.textContent;bs.innerHTML='<span class="spinner"></span> Salvando';
+    try{
+      const alts={};Object.keys(campos).forEach(k=>alts[k]=campos[k].value.trim());
+      const d=await comSync(()=>adm("salvar_questao",{question_id:q.id,disciplina:sd.value,tema:st.value,
+        enunciado:ta.value.trim()||q.enunciado,alternativas:alts}));
+      questaoAberta=d.questao;comentarios=comentarios;   // preserva
+      // feedback no lugar: o preview pisca "✓ salvo", sem recarregar a página
+      repinta();flash.style.transition="opacity .2s";flash.style.opacity="1";
+      setTimeout(()=>{flash.style.opacity="0"},2200);
+      bs.innerHTML="✓ Salvo";setTimeout(()=>{bs.textContent=rot;bs.disabled=false},1600);
+    }catch(e){toast(e.message);bs.textContent=rot;bs.disabled=false}
+  };
+  sv.append(bs);
+  sv.append(Object.assign(el("p","hint","O gabarito não se edita por aqui: é o oficial da banca. Trocar exige SQL na mão."),{style:"margin:0;flex:1 1 200px"}));
+  c.append(sv);
+
+  /* --- explicações --- */
+  const ex=el("div");ex.style.marginTop="20px";
+  const xh=el("div","row");xh.style.justifyContent="space-between";
+  xh.append(el("h2","sec","Explicações no acervo"));
+  const xb=el("div","row");
+  const bf2=el("button","btn sm","Pedir análise nova");
+  bf2.title="Ignora a validade e escreve por cima. A versão atual é desativada.";
+  bf2.onclick=()=>forcarAnalise(q,null);
+  const bd=el("button","btn sm danger","Apagar todas");
+  bd.onclick=()=>apagarComentarios(q);
+  xb.append(bf2,bd);xh.append(xb);ex.append(xh);
+  ex.append(Object.assign(el("p","hint","O que o usuário vê é a versão ativa e dentro da validade. As demais ficam como histórico."),{style:"margin:2px 0 11px"}));
+
+  if(!comentarios.length){
+    ex.append(el("div","empty","Nenhuma explicação gerada para esta questão."));
+  }else{
+    comentarios.forEach(x=>{
+      const vig=new Date(x.expires_at)>new Date();
+      const card=el("div","cmt"+((x.ativo&&vig)?"":" velho"));
+      const h=el("div","cmt-h");
+      h.append(el("span","tag"+((x.ativo&&vig)?" on":""),x.alternativa?("alternativa "+x.alternativa):"geral"));
+      h.append(el("span","tag adm",(x.provider==="claude"?"Claude":"Gemini")+(x.modelo?" · "+x.modelo:"")));
+      h.append(el("span",null,"gerado em "+dataHora(x.created_at)));
+      h.append(el("span",null,"· vence "+data(x.expires_at)));
+      if(!x.ativo)h.append(el("span","tag","substituída"));
+      else if(!vig)h.append(el("span","tag warn","vencida"));
+      if(x.prompt&&x.prompt.forcado)h.append(el("span","tag warn","forçada"));
+      card.append(h);
+      const t=el("div","cmt-txt");markdown(x.texto,t);card.append(t);
+      if(x.prompt){
+        const p=el("details","pr");
+        p.append(el("summary",null,"Ver o que foi pedido ao provedor"));
+        const pre=el("pre");
+        pre.textContent="=== SISTEMA ===\n"+(x.prompt.sistema||"(vazio)")+
+                        "\n\n=== PEDIDO ===\n"+(x.prompt.user||"(vazio)");
+        p.append(pre);card.append(p);
+      }
+      const ab=el("div","row");ab.style.marginTop="9px";
+      const b1=el("button","btn sm","Pedir esta de novo");
+      b1.onclick=()=>forcarAnalise(q,x.alternativa);
+      const b2=el("button","btn sm danger","Apagar esta");
+      b2.onclick=async()=>{
+        if(!await confirmar("Apagar esta explicação?","Ela some para todo mundo. Se for a única da questão, o app pedirá uma nova na próxima abertura.",{ok:"Apagar",danger:true}))return;
+        try{await adm("apagar_comentarios",{ids:[x.id]});toast("Apagada.");abreQuestao(q.id)}
+        catch(e){toast(e.message)}
+      };
+      ab.append(b1,b2);card.append(ab);
+      ex.append(card);
+    });
+  }
+  c.append(ex);
+  return c;
+}
+function caixaRelato(r){
+  const b=el("div");
+  b.style.cssText="margin-top:14px;background:var(--foco-soft);border:1px solid #e6d3a8;border-radius:10px;padding:13px";
+  const h=el("div","row");h.style.justifyContent="space-between";
+  h.append(Object.assign(el("b",null,"O que foi relatado"),{style:"color:var(--foco);font-size:13px"}));
+  h.append(el("span","hint",dataHora(r.created_at)));
+  b.append(h);
+  const ul=el("ul");ul.style.cssText="margin:8px 0 0;padding-left:18px;font-size:13px;line-height:1.6";
+  const d=r.dados||{};
+  Object.keys(d).forEach(k=>{
+    if(d[k]===true){
+      const li=el("li");li.append(el("b",null,rot(k)));
+      // subníveis: texto_vicio, texto_onde, explicacao_qual…
+      const subs=Object.keys(d).filter(s=>s.startsWith(k+"_")&&Array.isArray(d[s]));
+      if(subs.length){
+        const partes=subs.map(s=>d[s].map(rot).join(", "));
+        li.append(document.createTextNode(" — "+partes.join(" · ")));
+      }
+      ul.append(li);
+    }
+  });
+  if(d.classificacao_disciplina||d.classificacao_tema){
+    const li=el("li");li.append(el("b",null,"sugestão de classificação"));
+    li.append(document.createTextNode(" — "+[d.classificacao_disciplina,d.classificacao_tema].filter(Boolean).join(" › ")));
+    ul.append(li);
+  }
+  if(!ul.children.length)ul.append(el("li",null,"(nenhuma marcação — só o aviso)"));
+  b.append(ul);
+  if(r.texto){
+    const t=el("p");t.style.cssText="margin:10px 0 0;font-size:13px;font-style:italic;line-height:1.6";
+    t.textContent="“"+r.texto+"”";b.append(t);
+  }
+  if(d.alternativa_marcada){
+    b.append(Object.assign(el("p","hint","Quem relatou tinha marcado a alternativa "+d.alternativa_marcada+
+      (d.gabarito_na_tela?" (gabarito: "+d.gabarito_na_tela+")":"")),{style:"margin:8px 0 0"}));
+  }
+  const ac=el("div","row");ac.style.marginTop="11px";
+  const opts=[["em_progresso","Em progresso"],["resolvido","Concluir"],["improcedente","Improcedente"],["novo","Reabrir"]];
+  opts.forEach(([v,l])=>{
+    if(r.status===v)return;
+    const bt=el("button","btn sm",l);bt.onclick=()=>mudaStatus([r.id],v);ac.append(bt);
+  });
+  const outros=relatos.filter(x=>x.question_id===r.question_id&&x.id!==r.id&&x.status!=="resolvido");
+  if(outros.length){
+    const bt=el("button","btn sm","Concluir os "+(outros.length+1)+" desta questão");
+    bt.onclick=()=>mudaStatus([r.id].concat(outros.map(x=>x.id)),"resolvido");
+    ac.append(bt);
+  }
+  b.append(ac);return b;
+}
+async function forcarAnalise(q,alt){
+  const qual=alt?("da alternativa "+alt):"da questão";
+  if(!await confirmar("Pedir uma análise nova?",
+    "Escreve por cima da explicação "+qual+", mesmo que a atual ainda esteja na validade. A anterior vira histórico. Consome uma geração da sua cota.",
+    {ok:"Pedir agora"}))return;
+  toast("Pedindo… isso leva alguns segundos.");
+  try{
+    const s=sess();
+    const r=await fetch(url()+"/functions/v1/ia",{method:"POST",
+      headers:{apikey:key(),Authorization:"Bearer "+s.access_token,"Content-Type":"application/json"},
+      body:JSON.stringify({question_id:q.id,alternativa:alt||undefined,forcar:true})});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok||d.error)throw new Error(d.error||("HTTP "+r.status));
+    toast("Pronto. Versão nova no topo.");
+    abreQuestao(q.id);
+  }catch(e){toast("Não deu: "+e.message)}
+}
+async function apagarComentarios(q){
+  if(!await confirmar("Apagar TODAS as explicações desta questão?",
+    "Some tudo, inclusive o histórico. Serve para limpar o contexto quando as versões antigas estão contaminando as novas — a próxima análise começa do zero.",
+    {ok:"Apagar tudo",danger:true,digite:q.id}))return;
+  try{
+    const d=await adm("apagar_comentarios",{question_id:q.id});
+    toast(d.apagados+" apagada(s).");abreQuestao(q.id);
+  }catch(e){toast(e.message)}
+}
+
+/* ============================================================
+   Aba 2 — Contas
+   ============================================================ */
+async function carregaUsuarios(){
+  try{const d=await adm("usuarios",{busca:buscaUser});usuarios=d.usuarios||[]}
+  catch(e){toast(e.message);usuarios=[]}
+  render();
+}
+function viewContas(){
+  const w=el("div");
+  const c=el("div","card");
+  const cab=el("div","pad");
+  cab.append(el("h2","sec","Contas"));
+  cab.append(el("p","hint","Todo acesso a esta lista passa pelo servidor, que confere se você é admin. Senha nunca aparece aqui — nem para você: o banco guarda um hash, e é assim que deve ser."));
+  const br=el("div","row");br.style.marginTop="11px";
+  const bi=el("input");bi.placeholder="Buscar por nome ou e-mail…";bi.value=buscaUser;bi.style.flex="1 1 220px";
+  let t=null;
+  bi.oninput=()=>{clearTimeout(t);t=setTimeout(()=>{buscaUser=bi.value.trim();carregaUsuarios()},350)};
+  const rl=el("button","btn","Recarregar");rl.onclick=carregaUsuarios;
+  br.append(bi,rl);cab.append(br);c.append(cab);
+
+  if(!usuarios.length){
+    c.append(el("div","empty",buscaUser?"Ninguém com esse nome ou e-mail.":"Nenhuma conta."));
+    w.append(c);return w;
+  }
+  const tb=el("table");
+  const thead=el("thead"),tr=el("tr");
+  ["Pessoa","Plano","Criada em","Último acesso","Respondidas","Termos",""].forEach(h=>tr.append(el("th",null,h)));
+  thead.append(tr);tb.append(thead);
+  const tbody=el("tbody");
+  usuarios.forEach(u=>{
+    const r=el("tr");
+    const c1=el("td");
+    const n=el("div");n.style.fontWeight="500";
+    n.append(document.createTextNode(u.nome||"(sem nome)"));
+    if(u.role==="admin")n.append(document.createTextNode(" "),el("span","tag adm","admin"));
+    if(!u.email_confirmado)n.append(document.createTextNode(" "),el("span","tag warn","e-mail não confirmado"));
+    c1.append(n,Object.assign(el("div","hint",u.email||"—"),{}));
+    r.append(c1);
+    const c2=el("td");
+    c2.append(el("span","tag"+(u.plano!=="free"?" on":""),u.plano));
+    if(u.plano_expira)c2.append(Object.assign(el("div","hint","até "+data(u.plano_expira)),{}));
+    r.append(c2);
+    r.append(el("td",null,data(u.created_at)));
+    r.append(el("td",null,quando(u.ultimo_acesso)));
+    r.append(el("td",null,String(u.respondidas)));
+    const c6=el("td");
+    // Aceite é prova. Conta sem aceite não é irregularidade: é anterior ao
+    // formulário que passou a pedir. Mas é preciso saber quais são.
+    c6.append(u.termos_em?el("span","tag on",data(u.termos_em)):el("span","tag warn","sem registro"));
+    r.append(c6);
+    const c7=el("td");c7.style.textAlign="right";
+    const b=el("button","btn sm","Abrir");b.onclick=()=>fichaUsuario(u);
+    c7.append(b);r.append(c7);
+    tbody.append(r);
+  });
+  tb.append(tbody);
+  const sc=el("div");sc.style.cssText="overflow:auto;max-height:calc(100vh - 260px)";
+  sc.append(tb);c.append(sc);w.append(c);return w;
+}
+async function fichaUsuario(u){
+  let logs=[];
+  try{logs=(await adm("acessos",{user_id:u.user_id})).acessos||[]}catch(e){}
+  await modal((m,fim)=>{
+    m.append(el("h3",null,u.nome||"(sem nome)"));
+    m.append(el("p","hint",u.email||"—"));
+
+    const dl=el("dl","kv");
+    const par=(k,v)=>{dl.append(el("dt",null,k),el("dd",null,v))};
+    par("Conta criada",dataHora(u.created_at));
+    par("Último acesso",u.ultimo_acesso?dataHora(u.ultimo_acesso):"nunca");
+    par("Plano",u.plano+(u.plano_expira?" · vence "+data(u.plano_expira):""));
+    par("Papel",u.role);
+    par("E-mail confirmado",u.email_confirmado?"sim":"não");
+    par("Aceitou os termos",u.termos_em?dataHora(u.termos_em):"sem registro");
+    par("Questões respondidas",String(u.respondidas));
+    par("ID",u.user_id);
+    dl.querySelectorAll("dd")[dl.querySelectorAll("dd").length-1].className="mono";
+    m.append(dl);
+
+    /* --- log de segurança --- */
+    const lg=el("div");lg.style.marginTop="16px";
+    lg.append(el("label","lb","Acessos recentes"));
+    if(!logs.length){
+      lg.append(el("p","hint","Nenhum acesso registrado. O log começou a rodar agora: entradas anteriores não existem."));
+    }else{
+      const t=el("table");t.style.fontSize="12px";
+      const th=el("tr");["Quando","IP","Aparelho"].forEach(h=>th.append(el("th",null,h)));
+      t.append(el("thead").appendChild(th).parentNode);
+      const tb=el("tbody");
+      logs.slice(0,12).forEach(l=>{
+        const r=el("tr");
+        r.append(el("td",null,dataHora(l.criado_em)));
+        r.append(Object.assign(el("td","mono",l.ip||"—"),{}));
+        const ua=(l.user_agent||"").replace(/\(.*?\)/g,"").slice(0,42);
+        r.append(el("td",null,ua||"—"));
+        tb.append(r);
+      });
+      t.append(tb);
+      const sc=el("div");sc.style.cssText="max-height:180px;overflow:auto;border:1px solid var(--line);border-radius:8px;margin-top:6px";
+      sc.append(t);lg.append(sc);
+      lg.append(Object.assign(el("p","hint","IP é dado pessoal: guardamos 90 dias e apagamos. É o suficiente para investigar um acesso indevido, e mais do que isso não teria por quê."),{style:"margin-top:6px"}));
+    }
+    m.append(lg);
+
+    /* --- edição --- */
+    const ed=el("div");ed.style.marginTop="16px";
+    ed.append(el("label","lb","Nome"));
+    const inN=el("input");inN.value=u.nome||"";inN.maxLength=60;ed.append(inN);
+    ed.append(Object.assign(el("label","lb","E-mail"),{style:"margin-top:9px"}));
+    const inE=el("input");inE.type="email";inE.value=u.email||"";ed.append(inE);
+    ed.append(Object.assign(el("p","hint","Trocar o e-mail troca o login. A pessoa passa a entrar com o novo endereço."),{style:"margin-top:5px"}));
+    m.append(ed);
+
+    const f=el("div","mfoot");f.style.justifyContent="space-between";
+    const esq=el("div","row");
+    const bp=el("button","btn sm","Enviar redefinição de senha");
+    bp.onclick=async()=>{
+      bp.disabled=true;
+      try{await adm("resetar_senha",{email:inE.value.trim()||u.email});toast("Link enviado para "+(u.email)+".")}
+      catch(e){toast(e.message)}
+      bp.disabled=false;
+    };
+    const bx=el("button","btn sm","Exportar dados");
+    bx.onclick=async()=>{
+      try{
+        const d=await adm("exportar_usuario",{user_id:u.user_id});
+        const b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
+        const a=el("a");a.href=URL.createObjectURL(b);
+        a.download="dados-"+(u.email||u.user_id).replace(/[^a-z0-9]/gi,"-")+".json";
+        document.body.append(a);a.click();a.remove();URL.revokeObjectURL(a.href);
+        toast("Baixado. É isto que se entrega quando alguém pede os próprios dados.");
+      }catch(e){toast(e.message)}
+    };
+    const bl=el("button","btn sm danger","Limpar progresso");
+    bl.onclick=async()=>{
+      if(!await confirmar("Apagar o progresso desta conta?",
+        "Respostas e agendamento de revisão somem, em todos os aparelhos. Cadernos, marcadas e a conta continuam. Os votos dela voltam para as estatísticas públicas.",
+        {ok:"Apagar progresso",danger:true}))return;
+      try{await adm("limpar_progresso",{user_id:u.user_id});toast("Progresso apagado.");fim(true)}
+      catch(e){toast(e.message)}
+    };
+    esq.append(bp,bx,bl);
+    const dir=el("div","row");
+    const bd=el("button","btn sm danger","Excluir conta");
+    bd.onclick=async()=>{
+      if(!await confirmar("Excluir a conta de "+(u.nome||u.email)+"?",
+        "Definitivo. Some tudo: acesso, progresso, cadernos, relatos. Os votos dela voltam para as estatísticas. Não há desfazer.",
+        {ok:"Excluir para sempre",danger:true,digite:u.email}))return;
+      try{await adm("excluir_usuario",{user_id:u.user_id});toast("Conta excluída.");fim(true)}
+      catch(e){toast(e.message)}
+    };
+    const bs=el("button","btn primary","Salvar");
+    bs.onclick=async()=>{
+      const nn=inN.value.trim(), ne=inE.value.trim();
+      if(nn===(u.nome||"")&&ne===(u.email||""))return fim(null);
+      bs.disabled=true;
+      try{await adm("editar_usuario",{user_id:u.user_id,nome:nn,email:ne});toast("Salvo.");fim(true)}
+      catch(e){toast(e.message);bs.disabled=false}
+    };
+    dir.append(bd,bs);
+    f.append(esq,dir);m.append(f);
+    return inN;
+  }).then(r=>{if(r)carregaUsuarios()});
+}
+
+/* ============================================================
+   Aba — Conteúdo do site (saudações + taxonomia)
+   Duas coisas que são "texto do site, não código": as frases de boas-vindas e
+   o catálogo de matérias/assuntos. Juntas numa aba com sub-abas.
+   ============================================================ */
+let subConteudo="saudacoes";
+let taxonomia={disciplinas:[],temas:[],uso_disciplina:{},uso_tema:{}};
+async function carregaTaxonomia(){
+  try{
+    const d=await adm("taxonomia");
+    // defaults defensivos: se um campo não vier, o painel desenha "0 questões"
+    // em vez de estourar no primeiro forEach
+    taxonomia={disciplinas:d.disciplinas||[],temas:d.temas||[],
+      uso_disciplina:d.uso_disciplina||{},uso_tema:d.uso_tema||{}};
+  }catch(e){toast(e.message)}
+  render();
+}
+/* Espelhos usados pelo editor de questões: a lista de disciplinas/temas agora
+   vem daqui, não do TAX estático. */
+function taxDisc(){return (taxonomia.disciplinas||[]).filter(d=>d.ativo).map(d=>d.nome)}
+function taxTemas(disc){
+  const d=(taxonomia.disciplinas||[]).find(x=>x.nome===disc);
+  if(!d)return [];
+  return (taxonomia.temas||[]).filter(t=>t.discipline_id===d.id&&t.ativo).map(t=>t.nome);
+}
+function viewConteudo(){
+  const w=el("div");
+  const sub=el("div","segs");sub.style.maxWidth="360px";sub.style.marginBottom="14px";
+  [["saudacoes","Saudações"],["taxonomia","Matérias e assuntos"]].forEach(([k,l])=>{
+    const b=el("button",null,l);b.type="button";
+    b.setAttribute("aria-pressed",subConteudo===k?"true":"false");
+    b.onclick=()=>{subConteudo=k;if(k==="taxonomia"&&!taxonomia.disciplinas.length)carregaTaxonomia();else render()};
+    sub.append(b);
+  });
+  w.append(sub);
+  w.append(subConteudo==="taxonomia"?viewTaxonomia():viewSaudacoes());
+  return w;
+}
+function viewTaxonomia(){
+  const w=el("div","card");
+  const cab=el("div","pad");
+  cab.append(el("h2","sec","Matérias e assuntos"));
+  cab.append(el("p","hint","O catálogo que classifica as questões. Renomear aqui muda em TODAS as questões na hora. Excluir uma matéria em uso é bloqueado — nenhuma questão é apagada junto."));
+  const bn=el("button","btn primary","+ Nova matéria");bn.style.marginTop="11px";
+  bn.onclick=()=>editaTax("disciplina","criar",null);
+  cab.append(bn);w.append(cab);
+
+  if(!taxonomia.disciplinas.length){
+    w.append(el("div","empty","Carregando… ou rode o 05-taxonomia-metricas.sql."));
+    return w;
+  }
+  const lista=el("div");lista.style.padding="0 4px 10px";
+  taxonomia.disciplinas.forEach(d=>{
+    const usoD=taxonomia.uso_disciplina[d.nome]||0;
+    const det=el("details");det.style.cssText="border-bottom:1px solid var(--line)";
+    const sum=el("summary");sum.style.cssText="padding:11px 13px;cursor:pointer;display:flex;align-items:center;gap:9px;list-style:none";
+    sum.append(Object.assign(el("span",null,d.nome),{style:"font-weight:500;flex:1"}));
+    if(!d.ativo)sum.append(el("span","tag off","oculta"));
+    sum.append(el("span","tag",usoD+" quest."));
+    const temas=(taxonomia.temas||[]).filter(t=>t.discipline_id===d.id);
+    sum.append(el("span","tag",temas.length+" temas"));
+    det.append(sum);
+    const corpo=el("div");corpo.style.cssText="padding:2px 13px 13px 26px";
+    // ações da disciplina
+    const ad=el("div","row");ad.style.marginBottom="9px";
+    const bR=el("button","btn sm","Renomear");bR.onclick=()=>editaTax("disciplina","renomear",d);
+    const bO=el("button","btn sm",d.ativo?"Ocultar":"Mostrar");
+    bO.onclick=()=>opTax("disciplina","ativar",{id:d.id,ativo:!d.ativo});
+    const bX=el("button","btn sm danger","Excluir");
+    bX.title=usoD?usoD+" questões usam — será bloqueado":"vazia, pode excluir";
+    bX.onclick=()=>excluiTax("disciplina",d,usoD);
+    const bT=el("button","btn sm","+ Assunto");bT.onclick=()=>editaTax("tema","criar",{discipline_id:d.id});
+    ad.append(bR,bO,bX,bT);corpo.append(ad);
+    // temas
+    if(temas.length){
+      temas.forEach(t=>{
+        const usoT=taxonomia.uso_tema[d.nome+"\u0000"+t.nome]||0;
+        const tr=el("div","row");tr.style.cssText="justify-content:space-between;padding:5px 0;border-top:1px solid var(--line)";
+        const nm=el("span");nm.append(document.createTextNode(t.nome));
+        if(!t.ativo)nm.append(document.createTextNode(" "),el("span","tag off","oculto"));
+        nm.append(document.createTextNode(" "),el("span","tag",usoT+""));
+        tr.append(nm);
+        const ta=el("div","row");
+        const r2=el("button","btn sm","Renomear");r2.onclick=()=>editaTax("tema","renomear",t);
+        const x2=el("button","btn sm danger","×");x2.onclick=()=>excluiTax("tema",t,usoT);
+        ta.append(r2,x2);tr.append(ta);corpo.append(tr);
+      });
+    }else corpo.append(el("p","hint","Nenhum assunto ainda."));
+    det.append(corpo);lista.append(det);
+  });
+  w.append(lista);return w;
+}
+async function opTax(tipo,op,extra){
+  try{await comSync(()=>adm("salvar_taxonomia",Object.assign({tipo,op},extra)));
+    await carregaTaxonomia();toast("Pronto.")}
+  catch(e){toast(e.message)}
+}
+function editaTax(tipo,op,item){
+  const criar=op==="criar";
+  const titulo=criar?(tipo==="disciplina"?"Nova matéria":"Novo assunto")
+                    :"Renomear "+(tipo==="disciplina"?"matéria":"assunto");
+  modal((m,fim)=>{
+    m.append(el("h3",null,titulo));
+    if(op==="renomear")m.append(el("p","hint","O novo nome vale imediatamente em todas as questões que usam “"+item.nome+"”."));
+    const inp=el("input");inp.value=op==="renomear"?item.nome:"";inp.placeholder="Nome";
+    inp.style.marginTop="12px";inp.maxLength=80;m.append(inp);
+    const f=el("div","mfoot");
+    const c=el("button","btn","Cancelar");c.onclick=()=>fim(null);
+    const ok=el("button","btn primary","Salvar");
+    ok.onclick=async()=>{
+      const nome=inp.value.trim();
+      if(nome.length<2)return toast("Nome muito curto.");
+      ok.disabled=true;
+      const extra=op==="renomear"?{id:item.id,nome}:criar?{nome,discipline_id:item&&item.discipline_id}:{};
+      try{await comSync(()=>adm("salvar_taxonomia",Object.assign({tipo,op},extra)));
+        toast("Salvo.");fim(true)}
+      catch(e){toast(e.message);ok.disabled=false}
+    };
+    f.append(c,ok);m.append(f);return inp;
+  }).then(r=>{if(r)carregaTaxonomia()});
+}
+async function excluiTax(tipo,item,uso){
+  if(uso>0){
+    // não chega nem a tentar: o gatilho bloquearia, mas avisar antes é melhor
+    // do que deixar o servidor recusar
+    await confirmar("Não dá para excluir agora",
+      "“"+item.nome+"” está em "+uso+" quest"+(uso>1?"ões":"ão")+". Reclassifique-as antes — nenhuma questão é apagada por aqui, e não deve ser.",
+      {ok:"Entendi"});
+    return;
+  }
+  if(!await confirmar("Excluir “"+item.nome+"”?","Está vazia, então sai sem afetar questão nenhuma.",{ok:"Excluir",danger:true}))return;
+  try{await comSync(()=>adm("salvar_taxonomia",{tipo,op:"excluir",id:item.id}));
+    toast("Excluída.");carregaTaxonomia()}
+  catch(e){toast(e.message)}
+}
+
+const TURNOS=["manha","tarde","noite","madrugada"];
+const ROT_TURNO={manha:"manhã",tarde:"tarde",noite:"noite",madrugada:"madrugada"};
+const DIAS=["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
+async function carregaSaudacoes(){
+  try{saudacoes=await rest("greetings?select=*&order=tipo.asc,texto.asc")||[]}
+  catch(e){toast("Não consegui carregar: "+e.message);saudacoes=[]}
+  render();
+}
+function viewSaudacoes(){
+  const w=el("div");
+  const c=el("div","card");
+  const cab=el("div","pad");
+  const h=el("div","row");h.style.justifyContent="space-between";
+  const ht=el("div");
+  ht.append(el("h2","sec","Saudações"));
+  ht.append(el("p","hint","O que aparece no topo da aba Estudar. A frase é montada de duas partes: uma saudação (“Bom dia, Maria!”) e um incentivo. As condições dizem quando cada uma pode sair; o sorteio é feito no navegador, entre as elegíveis."));
+  h.append(ht);
+  const bn=el("button","btn primary","+ Nova");bn.onclick=()=>editaSaudacao(null);
+  h.append(bn);cab.append(h);
+  const segs=el("div","segs");segs.style.marginTop="11px";
+  [["todos","Todas"],["saudacao","Saudações"],["incentivo","Incentivos"],["off","Desligadas"]].forEach(([k,l])=>{
+    const n=k==="todos"?saudacoes.length:k==="off"?saudacoes.filter(s=>!s.ativo).length:saudacoes.filter(s=>s.tipo===k).length;
+    const b=el("button",null,l+" ("+n+")");b.type="button";
+    b.setAttribute("aria-pressed",filtroSaud===k?"true":"false");
+    b.onclick=()=>{filtroSaud=k;render()};segs.append(b);
+  });
+  cab.append(segs);c.append(cab);
+
+  const lista=saudacoes.filter(s=>filtroSaud==="todos"?true:filtroSaud==="off"?!s.ativo:s.tipo===filtroSaud);
+  if(!lista.length){
+    c.append(el("div","empty","Nada aqui. Rode o 04-admin.sql para popular o acervo inicial."));
+    w.append(c);return w;
+  }
+  const tb=el("table");
+  const tr=el("tr");["Texto","Tipo","Quando aparece","Peso",""].forEach(x=>tr.append(el("th",null,x)));
+  tb.append(el("thead").appendChild(tr).parentNode);
+  const tbody=el("tbody");
+  lista.forEach(s=>{
+    const r=el("tr");if(!s.ativo)r.style.opacity=".5";
+    const c1=el("td");c1.append(el("div",null,s.texto));
+    if(!s.ativo)c1.append(el("span","tag off","desligada"));
+    r.append(c1);
+    r.append(el("td",null,s.tipo==="saudacao"?"saudação":"incentivo"));
+    r.append(el("td","hint",descreveCond(s)));
+    r.append(el("td",null,String(s.peso)));
+    const c5=el("td");c5.style.textAlign="right";
+    const ba=el("button","btn sm",s.ativo?"Desligar":"Ligar");
+    ba.onclick=async()=>{
+      try{await rest("greetings?id=eq."+s.id,{method:"PATCH",headers:{Prefer:"return=minimal"},
+        body:JSON.stringify({ativo:!s.ativo})});carregaSaudacoes()}catch(e){toast(e.message)}
+    };
+    const be=el("button","btn sm","Editar");be.onclick=()=>editaSaudacao(s);
+    const bd=el("button","btn sm danger","×");bd.title="Excluir";
+    bd.onclick=async()=>{
+      if(!await confirmar("Excluir esta saudação?","“"+s.texto+"”. Se quiser só tirar do ar por um tempo, use Desligar.",{ok:"Excluir",danger:true}))return;
+      try{await rest("greetings?id=eq."+s.id,{method:"DELETE",headers:{Prefer:"return=minimal"}});toast("Excluída.");carregaSaudacoes()}
+      catch(e){toast(e.message)}
+    };
+    const rw=el("div","row");rw.style.justifyContent="flex-end";rw.append(ba,be,bd);
+    c5.append(rw);r.append(c5);tbody.append(r);
+  });
+  tb.append(tbody);
+  const sc=el("div");sc.style.cssText="overflow:auto;max-height:calc(100vh - 280px)";
+  sc.append(tb);c.append(sc);w.append(c);return w;
+}
+function descreveCond(s){
+  const p=[];
+  if(s.turnos&&s.turnos.length)p.push(s.turnos.map(t=>ROT_TURNO[t]||t).join("/"));
+  if(s.dias&&s.dias.length)p.push(s.dias.map(d=>DIAS[d]).join("/"));
+  if(s.min_respostas!=null&&s.max_respostas!=null)p.push("entre "+s.min_respostas+" e "+s.max_respostas+" respondidas");
+  else if(s.min_respostas!=null)p.push("a partir de "+s.min_respostas+" respondidas");
+  else if(s.max_respostas!=null)p.push("até "+s.max_respostas+" respondidas");
+  return p.length?p.join(" · "):"sempre";
+}
+function editaSaudacao(s){
+  const novo=!s;
+  const d=s||{tipo:"incentivo",texto:"",turnos:null,dias:null,min_respostas:null,max_respostas:null,peso:2,ativo:true};
+  modal((m,fim)=>{
+    m.append(el("h3",null,novo?"Nova saudação":"Editar"));
+    m.append(el("p","hint","Saudação é o cumprimento (“Bom dia”); incentivo é a frase abaixo. O nome entra sozinho: não escreva “Maria” no texto."));
+
+    const wt=el("div");wt.style.marginTop="14px";
+    wt.append(el("label","lb","Tipo"));
+    const st=el("select");
+    [["incentivo","Incentivo — a frase de baixo"],["saudacao","Saudação — o cumprimento"]].forEach(([v,l])=>{
+      const o=el("option",null,l);o.value=v;if(v===d.tipo)o.selected=true;st.append(o)});
+    wt.append(st);m.append(wt);
+
+    const wx=el("div");wx.style.marginTop="10px";
+    wx.append(el("label","lb","Texto"));
+    const ta=el("textarea");ta.rows=2;ta.value=d.texto;ta.maxLength=240;ta.append();
+    wx.append(ta);
+    const dica=el("p","hint");dica.style.marginTop="4px";
+    const pinta=()=>{dica.textContent=st.value==="saudacao"
+      ? "Vai virar: “"+(ta.value||"Bom dia")+", Maria!” — sem vírgula nem exclamação no fim."
+      : "Vai aparecer inteiro, abaixo do cumprimento. Termine com ponto."};
+    st.onchange=pinta;ta.oninput=pinta;pinta();
+    wx.append(dica);m.append(wx);
+
+    const wc=el("div");wc.style.marginTop="14px";
+    wc.append(el("label","lb","Turnos — nenhum marcado = qualquer hora"));
+    const rt=el("div","row");
+    const turnos=new Set(d.turnos||[]);
+    TURNOS.forEach(t=>{
+      const b=el("button","btn sm",ROT_TURNO[t]);b.type="button";
+      const up=()=>b.className="btn sm"+(turnos.has(t)?" primary":"");
+      b.onclick=()=>{turnos.has(t)?turnos.delete(t):turnos.add(t);up()};up();rt.append(b);
+    });
+    wc.append(rt);
+    wc.append(Object.assign(el("p","hint","madrugada 0–4 · manhã 5–11 · tarde 12–17 · noite 18–23"),{style:"margin-top:4px"}));
+    m.append(wc);
+
+    const wd=el("div");wd.style.marginTop="12px";
+    wd.append(el("label","lb","Dias — nenhum marcado = qualquer dia"));
+    const rd=el("div","row");
+    const dias=new Set(d.dias||[]);
+    DIAS.forEach((nome,i)=>{
+      const b=el("button","btn sm",nome.slice(0,3));b.type="button";b.title=nome;
+      const up=()=>b.className="btn sm"+(dias.has(i)?" primary":"");
+      b.onclick=()=>{dias.has(i)?dias.delete(i):dias.add(i);up()};up();rd.append(b);
+    });
+    wd.append(rd);m.append(wd);
+
+    const wr=el("div");wr.style.cssText="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:12px";
+    const mk=(lb,val,ph)=>{const x=el("div");x.append(el("label","lb",lb));
+      const i=el("input");i.type="number";i.min="0";i.placeholder=ph;i.value=val==null?"":val;x.append(i);wr.append(x);return i};
+    const iMin=mk("Mín. respondidas",d.min_respostas,"qualquer");
+    const iMax=mk("Máx. respondidas",d.max_respostas,"qualquer");
+    const iPes=mk("Peso (1–10)",d.peso,"2");
+    m.append(wr);
+    m.append(Object.assign(el("p","hint","Peso maior = sai mais vezes no sorteio. Use faixas de respondidas para falar diferente com quem está começando e com quem já tem 500 questões."),{style:"margin-top:5px"}));
+
+    const f=el("div","mfoot");
+    const c=el("button","btn","Cancelar");c.onclick=()=>fim(null);
+    const ok=el("button","btn primary","Salvar");
+    ok.onclick=async()=>{
+      const txt=ta.value.trim();
+      if(!txt)return toast("Falta o texto.");
+      if(txt.length>240)return toast("Muito longo.");
+      const body={tipo:st.value,texto:txt,
+        turnos:turnos.size?[...turnos]:null,
+        dias:dias.size?[...dias].sort():null,
+        min_respostas:iMin.value===""?null:parseInt(iMin.value,10),
+        max_respostas:iMax.value===""?null:parseInt(iMax.value,10),
+        peso:Math.min(10,Math.max(1,parseInt(iPes.value,10)||2))};
+      ok.disabled=true;
+      try{
+        if(novo)await rest("greetings",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});
+        else await rest("greetings?id=eq."+d.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});
+        toast("Salvo.");fim(true);
+      }catch(e){toast(e.message);ok.disabled=false}
+    };
+    f.append(c,ok);m.append(f);
+    return ta;
+  }).then(r=>{if(r)carregaSaudacoes()});
+}
+
+/* ============================================================
+   Estrutura
+   ============================================================ */
+function render(){
+  const m=document.getElementById("main");
+  m.innerHTML="";
+  if(!pronto){
+    const c=el("div","card pad empty");
+    c.append(el("span","spinner"),document.createTextNode(" Conferindo suas credenciais…"));
+    m.append(c);return;
+  }
+  if(!eu){
+    const c=el("div","card pad");c.style.cssText="max-width:440px;margin:60px auto";
+    c.append(el("h2","sec","Sem acesso"));
+    c.append(el("p","hint","Esta área é restrita. Se você deveria estar aqui, entre pelo app com a conta de administrador e volte."));
+    const a=el("a","btn primary","Ir para o app");a.href="index.html";
+    a.style.cssText="display:inline-block;margin-top:14px;text-decoration:none";
+    c.append(a);m.append(c);return;
+  }
+  m.append(
+    view==="painel"?viewPainel():
+    view==="relatos"?viewRelatos():
+    view==="contas"?viewContas():
+    viewConteudo());
+}
+function selectTab(v){
+  view=v;
+  document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===v?"true":"false"));
+  if(v==="painel"&&!metricas)carregaMetricas();
+  else if(v==="contas"&&!usuarios.length)carregaUsuarios();
+  else if(v==="conteudo"&&subConteudo==="saudacoes"&&!saudacoes.length)carregaSaudacoes();
+  else render();
+}
+async function atualizaBadge(){
+  try{
+    const d=await adm("resumo");
+    const b=document.getElementById("bdg");
+    b.textContent=String(d.relatos_novos||0);
+    b.hidden=!d.relatos_novos;
+  }catch(e){}
+}
+async function boot(){
+  document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>selectTab(b.dataset.v));
+  if(!cfg().url||!sess()){pronto=true;render();return}
+  try{
+    // O portão real está no servidor. Isto aqui é só para não desenhar um
+    // painel inteiro para quem vai levar 404 em toda ação.
+    const d=await adm("resumo");
+    const s=sess();
+    eu=s.email||"admin";
+    document.getElementById("quem").textContent=eu;
+    document.getElementById("tabs").hidden=false;
+    document.getElementById("voltar").hidden=false;
+    const b=document.getElementById("bdg");
+    b.textContent=String(d.relatos_novos||0);b.hidden=!d.relatos_novos;
+    document.getElementById("sync").hidden=false;pintaSync();
+    pronto=true;view="painel";
+    document.querySelectorAll("#tabs button").forEach(bt=>bt.setAttribute("aria-selected",bt.dataset.v==="painel"?"true":"false"));
+    // taxonomia é leve e o editor de questões depende dela: de fundo
+    carregaTaxonomia();
+    await carregaMetricas();
+  }catch(e){
+    pronto=true;eu=null;render();
+  }
+}
+/* A taxonomia vem do banco (carregaTaxonomia). Não há mais lista estática aqui:
+   ela divergiria do acervo no primeiro rename feito por esta mesma tela. */
+boot();
+
+</script>
+</body>
+</html>
